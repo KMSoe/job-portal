@@ -19,7 +19,8 @@
         "opcodesio/log-viewer": "^3.19",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-google-calendar": "^3.8",
-        "spatie/laravel-permission": "^6.21"
+        "spatie/laravel-permission": "^6.21",
+        "spatie/laravel-sluggable": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
