@@ -1,0 +1,110 @@
+// Company
+{
+    // Required: The common name of the company.
+    "name": "Acme Inc.", 
+
+    // Required: Unique registration number (CIN, etc.)
+    "registration_no": "CIN-U72200MH2000PTC123456",
+
+    // Required: Primary phone dial code (e.g., +1, +44)
+    "phone_dial_code": "+1",
+    
+    // Required: Primary phone number
+    "phone_no": "5551234567",
+    
+    // Required: Secondary phone dial code
+    "secondary_phone_dial_code": "+1",
+    
+    // Required: Secondary phone number
+    "secondary_phone_no": "5559876543",
+
+    // Optional: Path or URL to the company logo image, file
+    "logo": "logos/acme_inc_logo.png", 
+
+    // Optional: Official registered name (Legal Name)
+    "registration_name": "Acme Incorporated Trading",
+
+    // Optional: Date the company was founded (YYYY-MM-DD)
+    "founded_at": "2000-05-15",
+
+    // Optional: Primary email address
+    "email": "info@acmeinc.com",
+    
+    // Optional: Secondary/HR email address
+    "secondary_email": "hr@acmeinc.com",
+    
+    // Optional: ID linking to the 'countries' table
+    "country_id": 1,
+    
+    // Optional: ID linking to the 'cities' table
+    "city_id": 5,
+    
+    // Optional: Full street address or address block
+    "address": "123 Technology Drive, Suite 400"
+}
+
+
+// Department
+{
+    // Required: ID of the company this department belongs to.
+    "company_id": 1, 
+
+    // Required: The unique name of the department within the company (e.g., "Marketing", "HR").
+    "name": "Human Resources",
+
+    // Optional: Detailed description of the department's function.
+    "description": "Manages employee relations, payroll, and recruitment for the company.", 
+    
+    // Optional: Boolean indicating if the department is currently active (defaults to true).
+    "is_active": true 
+}
+
+// Designation
+{
+    // Required: The title of the designation (e.g., "Senior Developer", "VP of Sales").
+    "name": "Project Manager",
+
+    // Optional: Detailed description of the roles and responsibilities.
+    "description": "Responsible for planning, executing, and closing projects while managing budgets and teams.",
+    
+    // Optional: Boolean indicating if the designation is currently active (defaults to true).
+    "is_active": true
+    
+    /* The following fields are handled automatically by Laravel or the database and should be omitted:
+    - id
+    - created_by / updated_by (handled by system logic, though defaults are set in schema)
+    - timestamps (created_at, updated_at)
+    - softDeletes (deleted_at)
+    */
+}
+
+
+// Applicant Auth
+// Register
+{
+    "name": "Stone",
+    "email": "stone4@gmail.com",
+    "password": "Stone@123",
+    "password_confirmation": "Stone@123"
+}
+
+// Login
+{
+    "email": "stone4@gmail.com",
+    "password": "Stone@123"
+}
+
+// Forgot Password
+{
+    "email": "stone4@gmail.com"
+}
+
+// Reset Password
+{
+    "token": "", // hash string
+    "email": "stone4@gmail.com",
+    "password": "Stone@123",
+    "password_confirmation": "Stone@123"
+}
+
+// Logout
