@@ -1,17 +1,16 @@
 <?php
-
 namespace Modules\Recruitment\Entities;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Modules\Storage\App\Classes\LocalStorage;
 
-class Applicant extends Authenticatable  implements MustVerifyEmail
+class Applicant extends Authenticatable implements MustVerifyEmail
 {
-   use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -20,6 +19,7 @@ class Applicant extends Authenticatable  implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'photo',
         'email',
         'password',
     ];
@@ -41,6 +41,20 @@ class Applicant extends Authenticatable  implements MustVerifyEmail
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password'          => 'hashed',
     ];
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if ($this->logo) {
+            $storage = new LocalStorage();
+            return $storage->getUrl($this->photo);
+        }
+        return null;
+    }
+
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'applicant_skills', 'applicant_id', 'skill_id');
+    }
 }

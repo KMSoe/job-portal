@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Recruitment\Database\Seeders;
+namespace Modules\Organization\Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
-class SkillSeederTableSeeder extends Seeder
+class EmployeeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +14,6 @@ class SkillSeederTableSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        
     }
 }

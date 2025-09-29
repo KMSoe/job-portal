@@ -1,9 +1,8 @@
 <?php
-
 namespace Modules\Recruitment\Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 class RecruitmentDatabaseSeeder extends Seeder
 {
@@ -16,6 +15,11 @@ class RecruitmentDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        // $this->call("OthersTableSeeder");
+        $this->call(JobFunctionSeeder::class);
+        $this->call(ExperienceLevelSeeder::class);
+        $this->call(EducationLevelSeeder::class);
+        $this->call(JobPostingTemplateSeeder::class);
+        $this->call(JobPostingSeeder::class);
+        $this->call(ApplicantSeeder::class);
     }
 }

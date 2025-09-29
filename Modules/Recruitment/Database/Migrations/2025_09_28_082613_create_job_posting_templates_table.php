@@ -17,8 +17,7 @@ class CreateJobPostingTemplatesTable extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->text('description')->nullable();
-            $table->foreignId('company_id')->nullable()->constrained('companies')->onDelete('cascade');
-            // Core: Stores the JSON structure/content blocks
+            $table->unsignedBigInteger('company_id')->nullable();
             $table->json('template_data');
             $table->boolean('is_active')->default(true);
             $table->timestamps();

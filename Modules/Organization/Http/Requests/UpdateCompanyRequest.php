@@ -1,8 +1,8 @@
 <?php
-
 namespace Modules\Organization\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCompanyRequest extends FormRequest
 {
@@ -13,8 +13,44 @@ class UpdateCompanyRequest extends FormRequest
      */
     public function rules()
     {
+        $companyId = $this->route('company')->id ?? null;
+
         return [
-            //
+            'logo'                      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'name'                      => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('companies', 'name')->ignore($companyId),
+            ],
+            'registration_name'         => 'nullable|string|max:255',
+            'registration_no'           => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('companies', 'registration_no')->ignore($companyId),
+            ],
+
+            'founded_at'                => 'nullable|date',
+            'phone_dial_code'           => 'required|string|max:10',
+            'phone_no'                  => 'required|string|max:20',
+            'secondary_phone_dial_code' => 'nullable|string|max:10',
+            'secondary_phone_no'        => 'nullable|string|max:20',
+            'email'                     => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('companies', 'email')->ignore($companyId),
+            ],
+            'secondary_email'           => [
+                'nullable',
+                'email',
+                'max:255',
+                Rule::unique('companies', 'secondary_email')->ignore($companyId),
+            ],
+            'country_id'                => 'required|exists:countries,id',
+            'city_id'                   => 'required|exists:cities,id',
+            'address'                   => 'nullable|string',
         ];
     }
 

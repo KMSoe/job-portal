@@ -1,7 +1,7 @@
 <?php
-
 namespace Modules\Organization\Entities;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,16 +33,23 @@ class Department extends Model
         'is_active' => 'boolean',
     ];
 
-    // --- Relationships ---
+    public function getIsActiveAttribute($value)
+    {
+        return $value ? true : false;
+    }
 
-    /**
-     * A Department belongs to one Company.
-     */
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
-    
-    // You would typically add a relationship here for:
-    // - Users (Employees in this department)
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }

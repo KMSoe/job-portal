@@ -37,7 +37,7 @@ class ModuleCRUDGenerateCommand extends Command
         }
 
         Artisan::call("module:make-controller", [
-            "controller" => "Api\\{$modelName}Controller",
+            "controller" => "{$modelName}Controller",
             '--api'      => true,
             "module"     => $moduleName,
         ]);

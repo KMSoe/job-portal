@@ -15,7 +15,7 @@ class CreateDepartmentsTable extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('company_id')->default(0);
             $table->string('name');
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);

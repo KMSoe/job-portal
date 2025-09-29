@@ -1,11 +1,10 @@
 <?php
-
 namespace Modules\Recruitment\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Eloquent\Model;
+use Modules\Recruitment\Entities\Applicant;
 
-class JobFunctionSeederTableSeeder extends Seeder
+class ApplicantSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,8 +13,9 @@ class JobFunctionSeederTableSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        Applicant::create([
+            'name'  => 'Test User',
+            'email' => 'test@example.com',
+        ]);
     }
 }

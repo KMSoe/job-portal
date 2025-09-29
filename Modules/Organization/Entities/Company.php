@@ -1,10 +1,14 @@
 <?php
-
 namespace Modules\Organization\Entities;
 
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Storage\App\Classes\LocalStorage;
+use Nnjeim\World\Models\City;
+use Nnjeim\World\Models\Country;
 
 class Company extends Model
 {
@@ -42,35 +46,43 @@ class Company extends Model
     protected $casts = [
         'founded_at' => 'date',
     ];
-    
-    // --- Accessor for Logo ---
-    
-    /**
-     * Get the full URL for the company logo.
-     * * @return string|null
-     */
+
     public function getLogoUrlAttribute(): ?string
     {
-        // Assuming 'logo' stores a relative path (e.g., 'logos/company-1.png')
         if ($this->logo) {
-            // Use Laravel's Storage facade to get the URL for the 'public' disk
-            return \Illuminate\Support\Facades\Storage::disk('public')->url($this->logo);
+            $storage = new LocalStorage();
+            return $storage->getUrl($this->logo);
         }
         return null;
     }
 
-    // --- Relationships ---
-    
-    /**
-     * A Company has many Departments.
-     */
+    public function getFoundedAtAttribute(): ?string
+    {
+        return $this->founded_at ? Carbon::parse($this->founded_at) : null;
+    }
+
     public function departments()
     {
         return $this->hasMany(Department::class);
     }
 
-    // You would typically add relationships here for:
-    // - Users (Employees)
-    // - Country (belongsTo)
-    // - City (belongsTo)
+    public function country()
+    {
+        return $this->belongsTo(Country::class, 'country_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }

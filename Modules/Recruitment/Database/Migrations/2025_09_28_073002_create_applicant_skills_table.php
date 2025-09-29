@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateApplicantSkillsTable extends Migration
 {
@@ -14,8 +14,9 @@ class CreateApplicantSkillsTable extends Migration
     public function up()
     {
         Schema::create('applicant_skills', function (Blueprint $table) {
-            $table->bigIncrements('id');
-
+            $table->id();
+            $table->unsignedBigInteger('skill_id');
+            $table->unsignedBigInteger('applicant_id');
             $table->timestamps();
         });
     }

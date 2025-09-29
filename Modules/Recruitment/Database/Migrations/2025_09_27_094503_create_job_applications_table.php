@@ -17,10 +17,10 @@ class CreateJobApplicationsTable extends Migration
             $table->id();
 // --- Foreign Keys (The Core Relationship) ---
             // Links to the candidate's profile
-            $table->foreignId('applicant_id')->constrained('applicants')->onDelete('cascade');
+            $table->unsignedBigInteger('applicant_id');
 
             // Links to the specific job post
-            $table->foreignId('job_posting_id')->constrained('job_postings')->onDelete('cascade');
+            $table->unsignedBigInteger('job_posting_id');
 
             // Ensures a candidate can only apply to the same job once
             $table->unique(['applicant_id', 'job_posting_id']);
@@ -50,7 +50,7 @@ class CreateJobApplicationsTable extends Migration
             $table->text('rejection_reason')->nullable()->comment('Reason for rejection, if applicable.');
 
             // --- Auditing ---
-            $table->foreignId('reviewed_by_user_id')->nullable()->constrained('users')->onDelete('set null')->comment('HR user who last reviewed the application.');
+            $table->unsignedBigInteger('reviewed_by_user_id')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
