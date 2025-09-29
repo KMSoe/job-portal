@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Recruitment\App\Services;
 
 use Modules\Recruitment\App\Repositories\JobPostingRepository;
@@ -21,6 +20,11 @@ class JobPostingService
     public function findById($id)
     {
         return $this->jobPostingRepostitory->findById($id);
+    }
+
+    public function findByIdForApplicantSide($id)
+    {
+        return $this->jobPostingRepostitory->findByIdForApplicantSide($id);
     }
 
     public function store($data)

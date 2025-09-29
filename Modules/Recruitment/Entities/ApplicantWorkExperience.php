@@ -3,25 +3,25 @@ namespace Modules\Recruitment\Entities;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Nnjeim\World\Models\Country;
 
-class ApplicantEducation extends Model
+class ApplicantWorkExperience extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
-    protected $table = 'applicant_education';
+    protected $table = 'applicant_work_experiences';
 
     protected $fillable = [
         'applicant_id',
-        'location_division',
-        'school_university',
-        'degree_level',
-        'area_of_study',
+        'job_title',
+        'job_function_id',
+        'experience_level_id',
+        'company_name',
         'country_id',
         'from_date',
         'to_date',
         'is_current',
+        'job_description',
     ];
 
     protected $casts = [
@@ -31,16 +31,23 @@ class ApplicantEducation extends Model
     ];
 
     /**
-     * Get the applicant that owns the education record.
+     * Get the applicant that owns the experience record.
      */
     public function applicant()
     {
         return $this->belongsTo(Applicant::class);
     }
 
-    /**
-     * Get the country where the education was obtained.
-     */
+    public function jobFunction()
+    {
+        return $this->belongsTo(JobFunction::class);
+    }
+
+    public function experienceLevel()
+    {
+        return $this->belongsTo(ExperienceLevel::class);
+    }
+
     public function country()
     {
         return $this->belongsTo(Country::class);

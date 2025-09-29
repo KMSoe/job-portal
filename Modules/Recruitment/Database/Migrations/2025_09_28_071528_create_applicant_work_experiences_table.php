@@ -13,12 +13,11 @@ class CreateApplicantExperiencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('applicant_experiences', function (Blueprint $table) {
+        Schema::create('applicant_work_experiences', function (Blueprint $table) {
              $table->id();
             
             // Link to the Applicant
             $table->unsignedBigInteger('applicant_id');
-            $table->foreign('applicant_id')->references('id')->on('applicants')->onDelete('cascade');
             
             // Job Details
             $table->string('job_title');
@@ -27,7 +26,6 @@ class CreateApplicantExperiencesTable extends Migration
             
             // Company & Industry
             $table->string('company_name');
-            $table->unsignedBigInteger('industry_id')->nullable(); // Assuming an 'industries' table exists
             
             // Location
             $table->unsignedBigInteger('country_id')->nullable();
@@ -41,7 +39,6 @@ class CreateApplicantExperiencesTable extends Migration
             $table->text('job_description')->nullable();
             
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -52,6 +49,6 @@ class CreateApplicantExperiencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applicant_experiences');
+        Schema::dropIfExists('applicant_work_experiences');
     }
 }

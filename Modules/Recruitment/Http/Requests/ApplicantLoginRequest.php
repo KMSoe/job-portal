@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Recruitment\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -14,7 +13,8 @@ class ApplicantLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'email'    => 'required|email',
+            'password' => 'required',
         ];
     }
 

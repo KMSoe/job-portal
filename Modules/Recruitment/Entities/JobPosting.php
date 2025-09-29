@@ -134,4 +134,8 @@ class JobPosting extends Model
         return $this->belongsTo(Currency::class, 'salary_currency_id');
     }
 
+    public function skills()
+    {
+        return $this->belongsToMany(Skill::class, 'job_posting_skills', 'job_posting_id', 'skill_id');
+    }
 }

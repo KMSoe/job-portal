@@ -4,11 +4,9 @@ namespace Modules\Organization\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
-use App\Http\Resources\MyRoleResource;
 use App\Http\Resources\UserResource;
 use App\Mail\ResetPasswordMail;
 use App\Models\User;
-use App\Repositories\RoleRepo;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
@@ -17,65 +15,48 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Modules\Password\App\Helpers\CryptoHelper;
 
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'email'    => 'required|email',
             'password' => 'required',
         ]);
 
-        if ($validator->fails()) {
-            return $this->failureResponse("Please Fill out the required fields.", 422, $validator->errors());
-        }
-
-        $user = User::with(['createdBy'])->where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         if (! $user) {
-            return $this->failureResponse("Your email or password could potentially be incorrect.", 401);
-        }
-
-        // Check for User Enable
-        if (! $user->enable) {
-            return $this->failureResponse("This User is deleted.", 401);
+            return response()->json([
+                'status'  => false,
+                'data'    => [],
+                'message' => "Incorrect Email and/or Password.",
+            ], 401);
         }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $token                    = $user->createToken('AUTH_TOKEN')->accessToken;
-            [$privateKey, $publicKey] = CryptoHelper::generateKeyPairForUser($user->id);
+            $token = $user->createToken('AUTH_TOKEN')->accessToken;
 
             $remember_me = intval($request->remember_me) == 1 ? 1 : 0;
             Auth::login($user, $remember_me);
 
-            $roles       = $user->getRoleNames();
-            $permissions = $user->getAllPermissions();
-            //access token
-            if ($request->source != 'extension') {
-                $designation = 'Administrator';
-                $data        = [
+            return response()->json([
+                'status'  => false,
+                'data'    => [
                     'accessToken' => $token,
                     'user'        => new UserResource($user),
-                    'roles'       => collect($roles),
-                    'permissions' => $permissions,
-                    'privateKey'  => $privateKey,
-                    'publicKey'   => $publicKey,
-                    'designation' => $designation,
-                    'role'        => new MyRoleResource($this->roleRepo->getUserRole()),
-                ];
-                return $this->successResponse($data, "Logout successful.");
-            } else {
-                $data = [
-                    'accessToken' => $token,
-                    'user'        => new UserResource($user),
-                ];
-                return $this->successResponse($data, "Logout successful.");
-            }
+                    'user_type'   => 'Admin',
+                ],
+                'message' => "Success",
+            ], 200);
 
         } else {
-            return $this->failureResponse("Incorrect Email and/or Password.", 401);
+            return response()->json([
+                'status'  => false,
+                'data'    => [],
+                'message' => "Incorrect Email and/or Password.",
+            ], 401);
         }
     }
 
@@ -83,7 +64,11 @@ class AuthController extends Controller
     {
         $token = $request->user()->token();
         $token->revoke();
-        return $this->successResponse("Logout successful.", 401);
+        return response()->json([
+            'status'  => true,
+            'data'    => [],
+            'message' => "Logged out successfully."
+        ], 200);
     }
 
     public function changePassword(ChangePasswordRequest $request)

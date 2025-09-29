@@ -1,14 +1,16 @@
 <?php
-
 namespace Modules\Recruitment\Http\Controllers\Api;
 
+use Google\Service\Transcoder\JobTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Organization\Entities\Company;
+use Modules\Organization\Entities\Department;
+use Modules\Organization\Entities\Designation;
 use Modules\Recruitment\App\Services\JobPostingService;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Http\Requests\StoreJobPostingRequest;
-use Modules\Recruitment\Http\Requests\UpdateJobPostingRequest;
 use Modules\Recruitment\Transformers\JobPostingResource;
 
 class JobPostingController extends Controller
@@ -38,7 +40,10 @@ class JobPostingController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-
+                'templates'    => JobTemplate::all(),
+                'companies'    => Company::select('id', 'name')->get(),
+                'departments'  => Department::select('id', 'name', 'company_id')->get(),
+                'designations' => Designation::select('id', 'name')->get(),
             ],
             'message' => 'success',
         ], 200);
@@ -71,7 +76,7 @@ class JobPostingController extends Controller
         ], 201);
     }
 
-    public function update(UpdateJobPostingRequest $request, JobPosting $jobPosting)
+    public function update(StoreJobPostingRequest $request, JobPosting $jobPosting)
     {
         $job_posting = $this->service->update($jobPosting, $request->toArray());
 

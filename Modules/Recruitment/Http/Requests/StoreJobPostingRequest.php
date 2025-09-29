@@ -47,6 +47,9 @@ class StoreJobPostingRequest extends FormRequest
             // Conditional Location (Required if hybrid or on-site)
             'location'                               => 'required_if:work_arrangement,hybrid,on-site|nullable|string|max:255',
 
+            'skill_ids'                              => 'present|array',
+            'skill_ids.*'                            => 'required|exists:skills,id',
+
             // Compensation
             'salary_type'                            => ['required', Rule::in(JobPostingSalaryTypes::values())],
             'salary_currency_id'                     => 'required_unless:salary_type,negotiable|nullable|exists:salary_currencies,id',

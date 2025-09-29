@@ -15,42 +15,19 @@ class CreateJobApplicationsTable extends Migration
     {
         Schema::create('job_applications', function (Blueprint $table) {
             $table->id();
-// --- Foreign Keys (The Core Relationship) ---
-            // Links to the candidate's profile
             $table->unsignedBigInteger('applicant_id');
-
-            // Links to the specific job post
             $table->unsignedBigInteger('job_posting_id');
-
-            // Ensures a candidate can only apply to the same job once
             $table->unique(['applicant_id', 'job_posting_id']);
 
             // --- Application Details ---
-            $table->enum('status', [
-                'received',
-                'under_review',
-                'interview',
-                'technical_test',
-                'offer_extended',
-                'hired',
-                'rejected',
-                'withdrawn',
-            ])->default('received');
+            $table->string('status');
 
             $table->timestamp('applied_at')->useCurrent();
-            $table->string('source')->nullable()->comment('e.g., LinkedIn, Referal, Company Portal');
             $table->decimal('expected_salary', 10, 2)->nullable();
-            $table->text('cover_letter_content')->nullable();
 
             // --- Attachments (Store JSON array of file paths) ---
-            $table->json('attachments')->nullable()->comment('JSON array of file paths for CV, portfolio, etc.');
-
-            // --- Feedback/Historical Data ---
-            $table->text('internal_notes')->nullable()->comment('Notes by HR/Recruiter.');
-            $table->text('rejection_reason')->nullable()->comment('Reason for rejection, if applicable.');
-
-            // --- Auditing ---
-            $table->unsignedBigInteger('reviewed_by_user_id')->nullable();
+            $table->string('uploaded_cv_name');
+            $table->string('uploaded_cv_path');
 
             $table->timestamps();
             $table->softDeletes();

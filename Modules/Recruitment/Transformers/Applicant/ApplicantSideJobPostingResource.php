@@ -1,9 +1,9 @@
 <?php
-namespace Modules\Recruitment\Transformers;
+namespace Modules\Recruitment\Transformers\Applicant;
 
 use Illuminate\Http\Resources\Json\Resource;
 
-class JobPostingResource extends Resource
+class ApplicantSideJobPostingResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -25,6 +25,7 @@ class JobPostingResource extends Resource
             // Job Details
             'title'                                  => $this->title,
             'slug'                                   => $this->slug,
+            'already_applied'                        => ! is_null($this->application_id),
             'experience_level_id'                    => $this->experience_level_id,
             'job_function_id'                        => $this->job_function_id,
             'min_eduction_level_id'                  => $this->min_eduction_level_id,
@@ -56,12 +57,7 @@ class JobPostingResource extends Resource
             'published_at'                           => $this->published_at ? $this->published_at->toDateTimeString() : null,
             'deadline_date'                          => $this->deadline_date ? $this->deadline_date->toDateTimeString() : null,
 
-            // Auditing
-            'created_by'                             => $this->createdBy,
-            'updated_by'                             => $this->updatedBy,
-
             // Relationships (Eager Loaded)
-
             'company'                                => $this->whenLoaded('company'),
             'department'                             => $this->whenLoaded('department'),
             'designation'                            => $this->whenLoaded('designation'),
@@ -75,12 +71,6 @@ class JobPostingResource extends Resource
             // Compensation relationship
             // This is the direct call you requested, wrapped in whenLoaded
             'salary_currency'                        => $this->whenLoaded('salaryCurrency'),
-
-            // For a collection/many-to-many relationship
-            'skills'                                 => $this->whenLoaded('skills'),
-
-            'created_at'                             => $this->created_at,
-            'updated_at'                             => $this->updated_at,
         ];
     }
 }

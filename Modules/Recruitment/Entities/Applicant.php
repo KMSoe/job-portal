@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Modules\Storage\App\Classes\LocalStorage;
+use Nnjeim\World\Models\Currency;
 
 class Applicant extends Authenticatable implements MustVerifyEmail
 {
@@ -20,8 +21,16 @@ class Applicant extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'photo',
+        'job_title',
+        'phone_dial_code',
+        'phone_no',
         'email',
         'password',
+        'open_to_work',
+        'experience_level_id',
+        'job_function_id',
+        'salary_currency_id',
+        'expected_salary',
     ];
 
     /**
@@ -42,11 +51,12 @@ class Applicant extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password'          => 'hashed',
+        'open_to_work'      => 'boolean', // Cast the boolean field
     ];
 
     public function getPhotoUrlAttribute(): ?string
     {
-        if ($this->logo) {
+        if ($this->photo) {
             $storage = new LocalStorage();
             return $storage->getUrl($this->photo);
         }
@@ -56,5 +66,25 @@ class Applicant extends Authenticatable implements MustVerifyEmail
     public function skills()
     {
         return $this->belongsToMany(Skill::class, 'applicant_skills', 'applicant_id', 'skill_id');
+    }
+
+    public function salaryCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'salary_currency_id');
+    }
+
+    public function experienceLevel()
+    {
+        return $this->belongsTo(ExperienceLevel::class, 'experience_level_id');
+    }
+
+    public function jobFunction()
+    {
+        return $this->belongsTo(JobFunction::class, 'job_function_id');
+    }
+
+    public function workExperiences()
+    {
+        return $this->hasMany(ApplicantWorkExperience::class, 'applicant_id');
     }
 }

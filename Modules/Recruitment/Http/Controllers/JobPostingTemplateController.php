@@ -4,6 +4,7 @@ namespace Modules\Recruitment\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Organization\Entities\Company;
 use Modules\Recruitment\App\Services\JobPostingTemplateService;
 use Modules\Recruitment\Entities\JobPostingTemplate;
 use Modules\Recruitment\Http\Requests\StoreJobPostingTemplateRequest;
@@ -37,7 +38,7 @@ class JobPostingTemplateController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-
+                'companies' => Company::select('id', 'name')->get(),
             ],
             'message' => 'success',
         ], 200);

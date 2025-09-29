@@ -1,11 +1,11 @@
 <?php
-namespace Modules\Recruitment\App\Repositories;
+namespace Modules\Recruitment\App\Repositories\Applicant;
 
 use Illuminate\Support\Str;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Transformers\JobPostingResource;
 
-class JobPostingRepository
+class ApplicantJobPostingRepository
 {
 
     public function findByParams($request)
@@ -24,6 +24,7 @@ class JobPostingRepository
             'salaryCurrency',
             'skills',
         ])
+            ->whereNotNull('published_at')
             ->where(function ($query) use ($request, $keyword) {
                 if ($request->company_id) {
                     $query->where('company_id', $request->company_id);
@@ -73,6 +74,8 @@ class JobPostingRepository
 
     public function findById($id)
     {
+        $applicantId = auth()->guard('applicant')->id();
+
         $jobPosting = JobPosting::with([
             'company',
             'department',
@@ -83,53 +86,21 @@ class JobPostingRepository
             'minimumEducationLevel',
             'salaryCurrency',
             'skills',
-        ])->findOrFail($id);
+        ])
+            ->leftJoin('job_applications', function ($join) use ($applicantId) {
+                $join->on('job_applications.job_posting_id', '=', 'job_postings.id')
+                    ->where('job_applications.applicant_id', '=', $applicantId);
+            })
+            ->select('job_postings.*')
+            ->addSelect('job_applications.id as application_id')
+            ->findOrFail($id);
 
         return $jobPosting;
     }
 
-    public function findByIdForApplicantSide($id)
+    public function apply($data)
     {
-        $jobPosting = JobPosting::with([
-            'company',
-            'department',
-            'designation',
-            'template',
-            'experienceLevel',
-            'jobFunction',
-            'minimumEducationLevel',
-            'salaryCurrency',
-            'skills',
-        ])->findOrFail($id);
 
-        return $jobPosting;
-    }
-
-    public function store($data)
-    {
-        $data['created_by'] = auth()->id();
-        $jobPosting         = JobPosting::create($data);
-
-        $jobPosting->skills()->sync($data['skill_ids']);
-
-        return $jobPosting;
-    }
-
-    public function update($jobPosting, $data)
-    {
-        $data['updated_by'] = auth()->id();
-
-        $jobPosting->skills()->sync($data['skill_ids']);
-
-        return $jobPosting->update($data);
-    }
-
-    public function delete($id)
-    {
-        $jobPosting = JobPosting::findOrFail($id);
-
-        $jobPosting->skills()->sync([]);
-        $jobPosting->delete();
     }
 
 }

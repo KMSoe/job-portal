@@ -1,4 +1,4 @@
-// Company
+Company
 {
     // Required: The common name of the company.
     "name": "Acme Inc.", 
@@ -151,4 +151,17 @@ Applicant profile
 Skill Update
 {
     "skill_ids": [1, 2, 3, 5, 7, 8]
+}
+
+Work Experience
+{
+    "job_title": "Senior Laravel Developer",
+    "job_function_id": 5, 
+    "experience_level_id": 4, 
+    "company_name": "Acme Solutions Tech",
+    "country_id": 145, 
+    "from_date": "2021-08-01",
+    "to_date": "2024-01-31",
+    "is_current": false,
+    "job_description": "Responsible for developing, optimizing, and maintaining backend APIs and database integrity for the company's core application. Mentored 2 junior developers and led the migration to Laravel 10."
 }

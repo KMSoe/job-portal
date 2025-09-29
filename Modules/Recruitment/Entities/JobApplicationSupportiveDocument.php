@@ -4,7 +4,7 @@ namespace Modules\Recruitment\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ApplicantExperience extends Model
+class JobApplicationSupportiveDocument extends Model
 {
     protected $fillable = [];
 }
