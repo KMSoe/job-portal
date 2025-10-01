@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateJobApplicationReviewersTable extends Migration
 {
@@ -14,8 +14,14 @@ class CreateJobApplicationReviewersTable extends Migration
     public function up()
     {
         Schema::create('job_application_reviewers', function (Blueprint $table) {
-            $table->bigIncrements('id');
-
+            $table->id();
+            $table->unsignedBigInteger('application_id');
+            $table->unsignedBigInteger('reviewer_id');
+            // Numerical score given by the reviewer (e.g., 1-100)
+            $table->decimal('score')->nullable();
+            $table->text('comment')->nullable();
+            $table->timestamp('reviewed_at')->nullable();
+            $table->string('status'); // pending, draft, done
             $table->timestamps();
         });
     }

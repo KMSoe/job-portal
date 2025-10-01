@@ -4,6 +4,7 @@ namespace Modules\Recruitment\Http\Controllers\Api\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Repositories\Applicant\ApplicantJobPostingRepository;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Transformers\Applicant\ApplicantSideJobPostingResource;
@@ -58,7 +59,7 @@ class ApplicantJobPostingController extends Controller
             'expected_salary'  => $request->expected_salary,
             'uploaded_cv_path' => $cvPath,
             'uploaded_cv_name' => $cvFile->getClientOriginalName(),
-            'status' => ''
+            'status'           => RecruitmentStageTypes::SUBMITTED->value,
         ]);
 
         if ($request->hasFile('documents')) {

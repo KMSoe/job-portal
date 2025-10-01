@@ -44,6 +44,33 @@ class ApplicantProfileController extends Controller
         ], 200);
     }
 
+    public function update(Request $request)
+    {
+        $applicant = auth()->guard('applicant')->user();
+
+        $validatedData = $request->validate([
+            'name'                => 'sometimes|string|max:255',
+            'job_title'           => 'sometimes|nullable|string|max:255',
+            'phone_dial_code'     => 'sometimes|nullable|string|max:10',
+            'phone_no'            => 'sometimes|nullable|string|max:20',
+            'open_to_work'        => 'sometimes|boolean',
+            'experience_level_id' => 'sometimes|nullable|exists:experience_levels,id',
+            'job_function_id'     => 'sometimes|nullable|exists:job_functions,id',
+            'salary_currency_id'  => 'sometimes|nullable|exists:salary_currencies,id',
+            'expected_salary'     => 'sometimes|nullable|numeric',
+        ]);
+
+        $applicant->update($validatedData);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                // 'applicant' => new ApplicantProfileResource($applicant),
+            ],
+            'message' => 'Updated successfully',
+        ], 200);
+    }
+
     public function uploadPhoto(Request $request)
     {
         $applicant = auth()->guard('applicant')->user();

@@ -138,4 +138,14 @@ class JobPosting extends Model
     {
         return $this->belongsToMany(Skill::class, 'job_posting_skills', 'job_posting_id', 'skill_id');
     }
+
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class, 'job_posting_id');
+    }
+
+    public function applicants()
+    {
+        return $this->belongsToMany(Applicant::class, 'job_applications', 'job_posting_id', 'applicant_id');
+    }
 }

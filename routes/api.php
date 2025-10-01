@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WorldDataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,9 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth:sanctum'])->group(function() {
-
+     Route::get('countries', [WorldDataController::class, 'getAllCountries']);
+    Route::get('cities', [WorldDataController::class, 'getAllCities']);
+    Route::get('states', [WorldDataController::class, 'getAllStates']);
+    Route::get('currencies', [WorldDataController::class, 'getAllCurrencies']);
 });
 
