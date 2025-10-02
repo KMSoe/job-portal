@@ -15,6 +15,8 @@ class CreateJobApplicationInterviewsTable extends Migration
     {
         Schema::create('job_application_interviews', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
             $table->unsignedBigInteger('application_id');
             $table->string('interview_type', 50); // online, offline
             $table->dateTime('scheduled_at');

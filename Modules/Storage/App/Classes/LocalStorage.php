@@ -44,8 +44,8 @@ class LocalStorage implements StorageInterface
     public static function getUrl($file_path)
     {
         if (Storage::exists($file_path)) {
-            // return asset('uploads/' . $file_path);
-            return Storage::url($file_path);
+            return asset($file_path);
+            // return Storage::url($file_path);
         }
 
         return null;

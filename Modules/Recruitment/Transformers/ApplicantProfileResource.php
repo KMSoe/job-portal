@@ -1,9 +1,9 @@
 <?php
 namespace Modules\Recruitment\Transformers;
 
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class ApplicantProfileResource extends Resource
+class ApplicantProfileResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

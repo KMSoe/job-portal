@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Employee\App\Enums;
+namespace Modules\Organization\App\Enums;
 
 enum EmploymentTypes: string {
     case PERMANENT  = 'permanent';

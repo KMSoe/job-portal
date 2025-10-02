@@ -2,9 +2,9 @@
 
 namespace Modules\Recruitment\Transformers;
 
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
-class SkillResource extends Resource
+class SkillResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

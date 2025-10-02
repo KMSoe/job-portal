@@ -47,6 +47,8 @@ class Company extends Model
         'founded_at' => 'date',
     ];
 
+     protected $appends = ['logo_url'];
+
     public function getLogoUrlAttribute(): ?string
     {
         if ($this->logo) {
@@ -56,9 +58,9 @@ class Company extends Model
         return null;
     }
 
-    public function getFoundedAtAttribute(): ?string
+    public function getFoundedAtAttribute($value): ?string
     {
-        return $this->founded_at ? Carbon::parse($this->founded_at) : null;
+        return $value ? Carbon::parse($value) : null;
     }
 
     public function departments()

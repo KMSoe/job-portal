@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use Modules\Recruitment\Http\Controllers\Applicant\ApplicantProfileController;
+use Modules\Recruitment\Http\Controllers\Auth\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/recruitment', function (Request $request) {
-    return $request->user();
+Route::prefix('/v1/applicant')->group(function () {
+    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    // Route::post('password/forgot', [AuthController::class, 'forgotPassword']);
+    // Route::post('password/reset', [AuthController::class, 'resetPassword']);
+});
+
+
+Route::middleware(['auth:applicant'])->prefix('/v1')->group(function () {
+    Route::get('applicant/profile', [ApplicantProfileController::class, 'index']);
+    Route::put('applicant/profile', [ApplicantProfileController::class, 'update']);
+    Route::post('applicant/photo/upload', [ApplicantProfileController::class, 'uploadPhoto']);
 });

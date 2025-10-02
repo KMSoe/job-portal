@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Recruitment\Http\Controllers\Api\Applicant;
+namespace Modules\Recruitment\Http\Controllers\Applicant;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -56,7 +56,7 @@ class ApplicantProfileController extends Controller
             'open_to_work'        => 'sometimes|boolean',
             'experience_level_id' => 'sometimes|nullable|exists:experience_levels,id',
             'job_function_id'     => 'sometimes|nullable|exists:job_functions,id',
-            'salary_currency_id'  => 'sometimes|nullable|exists:salary_currencies,id',
+            'salary_currency_id'  => 'sometimes|nullable|exists:currencies,id',
             'expected_salary'     => 'sometimes|nullable|numeric',
         ]);
 

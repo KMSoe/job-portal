@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Recruitment\Http\Controllers\Api\Applicant;
+namespace Modules\Recruitment\Http\Controllers\Applicant;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

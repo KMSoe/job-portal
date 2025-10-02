@@ -27,7 +27,7 @@ class CompanyController extends Controller
 
     public function index(Request $request)
     {
-        $companies = $this->service->all($request);
+        $companies = $this->service->findByParams($request);
 
         if ($request->export) {
             $format = strtolower($request->format) ?? 'excel';
@@ -87,7 +87,7 @@ class CompanyController extends Controller
             $data['logo'] = null;
         }
 
-        $company = $this->service->store($request);
+        $company = $this->service->store($request->toArray());
 
         return response()->json([
             'status'  => true,
@@ -131,7 +131,7 @@ class CompanyController extends Controller
             $data['logo'] = $company->logo;
         }
 
-        $company = $this->service->update($company, $request);
+        $company = $this->service->update($company, $request->toArray());
 
         return response()->json([
             'status'  => true,

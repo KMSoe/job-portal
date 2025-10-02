@@ -33,6 +33,6 @@ class CreateJobApplicationInterviewParticipantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('job_application_interview_participants');
+        Schema::dropIfExists('job_application_interview_interviewers');
     }
 }

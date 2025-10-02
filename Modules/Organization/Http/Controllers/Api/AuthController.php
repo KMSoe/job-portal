@@ -36,13 +36,13 @@ class AuthController extends Controller
         }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $token = $user->createToken('AUTH_TOKEN')->accessToken;
+            $token = $user->createToken('AUTH_TOKEN')->plainTextToken;
 
             $remember_me = intval($request->remember_me) == 1 ? 1 : 0;
             Auth::login($user, $remember_me);
 
             return response()->json([
-                'status'  => false,
+                'status'  => true,
                 'data'    => [
                     'accessToken' => $token,
                     'user'        => new UserResource($user),

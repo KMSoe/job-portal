@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Recruitment\Http\Controllers\Api;
+namespace Modules\Recruitment\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

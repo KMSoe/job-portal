@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Recruitment\Http\Controllers\Api;
+namespace Modules\Recruitment\Http\Controllers;
 
 use Google\Service\Transcoder\JobTemplate;
 use Illuminate\Http\Request;

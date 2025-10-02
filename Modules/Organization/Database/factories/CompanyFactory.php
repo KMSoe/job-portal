@@ -1,12 +1,12 @@
 <?php
 namespace Modules\Organization\Database\Factories;
 
-use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
-use Nnjeim\World\Models\Country;
+use Modules\Organization\Entities\Company;
 use Nnjeim\World\Models\City;
+use Nnjeim\World\Models\Country;
 
 class CompanyFactory extends Factory
 {
@@ -42,32 +42,59 @@ class CompanyFactory extends Factory
         $country = Country::first();
         $city    = City::where('country_id', $country->id ?? 0)->first();
 
+        // return [
+        //     'logo'                      => $logoPath,
+        //     'name'                      => $this->faker->unique()->company,
+        //     'registration_name'         => $this->faker->unique()->company . ' Inc.',
+        //     'registration_no'           => $this->faker->unique()->numerify('RNG-########'),
+        //     'founded_at'                => $this->faker->dateTimeBetween('-30 years', 'now')->format('Y-m-d'),
+
+        //     // Phone numbers
+        //     'phone_dial_code'           => '+1',
+        //     'phone_no'                  => $this->faker->numerify('555-####'),
+        //     'secondary_phone_dial_code' => '+44',
+        //     'secondary_phone_no'        => $this->faker->numerify('77####-####'),
+
+        //     // Emails
+        //     'email'                     => $this->faker->unique()->companyEmail,
+        //     'secondary_email'           => $this->faker->unique()->safeEmail,
+
+        //     // Relationships (Assuming Country and City seeders run first)
+        //     'country_id'                => $country->id ?? 1,
+        //     'city_id'                   => $city->id ?? 1,
+
+        //     'address'                   => $this->faker->streetAddress . ', ' . $this->faker->city,
+
+        //     // Audit columns
+        //     'created_by'                => $createdBy->id,
+        //     'updated_by'                => $createdBy->id,
+        // ];
         return [
-            'logo'                      => $logoPath,
-            'name'                      => $this->faker->unique()->company,
-            'registration_name'         => $this->faker->unique()->company . ' Inc.',
-            'registration_no'           => $this->faker->unique()->numerify('RNG-########'),
-            'founded_at'                => $this->faker->dateTimeBetween('-30 years', 'now')->format('Y-m-d'),
+            'logo'                      => '/images/default/company_logo.png',
+            'name'                      => 'Example Corp',
+            'registration_name'         => 'Example Corp Solutions Inc.',
+            'registration_no'           => 'RNG-98765432',
+            'founded_at'                => '2005-08-15',
 
             // Phone numbers
             'phone_dial_code'           => '+1',
-            'phone_no'                  => $this->faker->numerify('555-####'),
+            'phone_no'                  => '555-1234',
             'secondary_phone_dial_code' => '+44',
-            'secondary_phone_no'        => $this->faker->numerify('77####-####'),
+            'secondary_phone_no'        => '77000-0001',
 
             // Emails
-            'email'                     => $this->faker->unique()->companyEmail,
-            'secondary_email'           => $this->faker->unique()->safeEmail,
+            'email'                     => 'contact@examplecorp.com',
+            'secondary_email'           => 'support@examplecorp.net',
 
-            // Relationships (Assuming Country and City seeders run first)
-            'country_id'                => $country->id ?? 1,
-            'city_id'                   => $city->id ?? 1,
+                                              // Relationships (Assuming Country and City seeders run first)
+            'country_id'                => 1, // Example ID for a Country
+            'city_id'                   => 1, // Example ID for a City
 
-            'address'                   => $this->faker->streetAddress . ', ' . $this->faker->city,
+            'address'                   => '123 Main St, Anytown',
 
-            // Audit columns
-            'created_by'                => $createdBy->id,
-            'updated_by'                => $createdBy->id,
+                                              // Audit columns
+            'created_by'                => 1, // Example ID for a User
+            'updated_by'                => 1, // Example ID for a User
         ];
     }
 }

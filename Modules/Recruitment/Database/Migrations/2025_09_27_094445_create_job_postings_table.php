@@ -40,8 +40,10 @@ class CreateJobPostingsTable extends Migration
             $table->text('what_we_can_offer_career_opportunities')->nullable();
 
             // --- Type and Location ---
-            $table->enum('job_type', ['full-time', 'part-time', 'contract', 'internship'])->default('full-time');
-            $table->enum('work_arrangement', ['remote', 'hybrid', 'on-site'])->default('on-site');
+            // ['full-time', 'part-time', 'contract', 'internship']
+            $table->string('job_type');
+            // ['remote', 'hybrid', 'on-site']
+            $table->string('work_arrangement');
             // if work_arrangement = 'hybrid', 'on-site'
             $table->string('location')->nullable();
 

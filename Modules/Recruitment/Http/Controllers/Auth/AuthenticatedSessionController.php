@@ -1,10 +1,11 @@
 <?php
-namespace App\Http\Controllers\Auth;
+namespace Modules\Recruitment\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Modules\Recruitment\Entities\Applicant;
 use Modules\Recruitment\Http\Requests\ApplicantLoginRequest;
 use Modules\Recruitment\Transformers\ApplicantResource;
@@ -18,7 +19,8 @@ class AuthenticatedSessionController extends Controller
     {
         $applicant = Applicant::where('email', $request->email)->first();
 
-        if (! $applicant) {
+        // 1. Check if applicant exists AND verify password manually (most secure API way)
+        if (! $applicant || ! Hash::check($request->password, $applicant->password)) {
             return response()->json([
                 'status'  => false,
                 'data'    => [],
@@ -26,29 +28,21 @@ class AuthenticatedSessionController extends Controller
             ], 401);
         }
 
-        if (Auth::guard('applicant')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            $token = $applicant->createToken('AUTH_TOKEN')->accessToken;
+        $token = $applicant->createToken('AUTH_TOKEN')->plainTextToken;
 
-            $remember_me = intval($request->remember_me) == 1 ? 1 : 0;
-            Auth::guard('applicant')->login($applicant, $remember_me);
+        // $remember_me = intval($request->remember_me) == 1 ? 1 : 0;
+        // Auth::guard('applicant')->login($applicant, $remember_me);
 
-            return response()->json([
-                'status'  => false,
-                'data'    => [
-                    'accessToken' => $token,
-                    'user'        => new ApplicantResource($applicant),
-                    'user_type'   => 'Admin',
-                ],
-                'message' => "Success",
-            ], 200);
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'accessToken' => $token,
+                'user'        => new ApplicantResource($applicant),
+                'user_type'   => 'Admin',
+            ],
+            'message' => "Success",
+        ], 200);
 
-        } else {
-            return response()->json([
-                'status'  => false,
-                'data'    => [],
-                'message' => "Incorrect Email and/or Password.",
-            ], 401);
-        }
     }
 
     /**

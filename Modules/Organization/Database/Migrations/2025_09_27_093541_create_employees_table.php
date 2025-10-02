@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Modules\Employee\App\Enums\EmploymentTypes;
+use Modules\Organization\App\Enums\EmploymentTypes;
 
 class CreateEmployeesTable extends Migration
 {

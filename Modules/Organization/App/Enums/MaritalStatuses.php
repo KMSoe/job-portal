@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Employee\App\Enums;
+namespace Modules\Organization\App\Enums;
 
 enum MaritalStatuses: string
 {

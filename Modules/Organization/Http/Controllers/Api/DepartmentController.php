@@ -77,7 +77,7 @@ class DepartmentController extends Controller
     public function store(StoreDepartmentRequest $request)
     {
 
-        $department = $this->service->store($request);
+        $department = $this->service->store($request->toArray());
 
         return response()->json([
             'status'  => true,
@@ -108,7 +108,7 @@ class DepartmentController extends Controller
 
     public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        $department = $this->service->update($department, $request);
+        $department = $this->service->update($department, $request->toArray());
 
         return response()->json([
             'status'  => true,
