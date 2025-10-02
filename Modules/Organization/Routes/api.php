@@ -25,5 +25,6 @@ Route::middleware(['auth:sanctum'])->prefix('/v1')->group(function () {
     Route::post('/hrm/password/change', [AuthController::class, 'changePassword']);
     Route::resource('companies', CompanyController::class);
     Route::resource('departments', DepartmentController::class);
+    Route::get('departments-page-data', [DepartmentController::class, 'getPageData']);
     Route::resource('designations', DesignationController::class);
 });

@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Modules\CRM\App\Exports\DepartmentExport;
 use Modules\CRM\App\Imports\DepartmentImport;
 use Modules\Organization\App\Services\DepartmentService;
+use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Http\Requests\StoreDepartmentRequest;
 use Modules\Organization\Http\Requests\UpdateDepartmentRequest;
@@ -51,12 +52,12 @@ class DepartmentController extends Controller
         ], 200);
     }
 
-    public function pageData()
+    public function getPageData()
     {
         return response()->json([
             'status'  => true,
             'data'    => [
-
+                'companies' => Company::all(),
             ],
             'message' => 'success',
         ], 200);
