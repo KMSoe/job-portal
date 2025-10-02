@@ -1,15 +1,21 @@
 <?php
 namespace Modules\Recruitment\Http\Controllers;
 
-use Google\Service\Transcoder\JobTemplate;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Entities\Designation;
+use Modules\Recruitment\App\Enums\JobPostingSalaryTypes;
+use Modules\Recruitment\App\Enums\JobTypes;
+use Modules\Recruitment\App\Enums\WorkArrangementTypes;
 use Modules\Recruitment\App\Services\JobPostingService;
+use Modules\Recruitment\Entities\EducationLevel;
+use Modules\Recruitment\Entities\ExperienceLevel;
+use Modules\Recruitment\Entities\JobFunction;
 use Modules\Recruitment\Entities\JobPosting;
+use Modules\Recruitment\Entities\JobPostingTemplate;
 use Modules\Recruitment\Http\Requests\StoreJobPostingRequest;
 use Modules\Recruitment\Transformers\JobPostingResource;
 
@@ -35,15 +41,23 @@ class JobPostingController extends Controller
         ], 200);
     }
 
-    public function pageData()
+    public function getPageData()
     {
         return response()->json([
             'status'  => true,
             'data'    => [
-                'templates'    => JobTemplate::all(),
-                'companies'    => Company::select('id', 'name')->get(),
-                'departments'  => Department::select('id', 'name', 'company_id')->get(),
-                'designations' => Designation::select('id', 'name')->get(),
+                'templates'         => JobPostingTemplate::all(),
+                'companies'         => Company::select('id', 'name')->get(),
+                'departments'       => Department::select('id', 'name', 'company_id')->get(),
+                'designations'      => Designation::select('id', 'name')->get(),
+                'experience_levels' => ExperienceLevel::all(),
+                'job_functions'     => JobFunction::all(),
+                'education_levels'   => EducationLevel::all(),
+                'job_types'         => JobTypes::values(),
+                'work_arrangements' => WorkArrangementTypes::values(),
+                'salary_types'      => JobPostingSalaryTypes::values(),
+                'statuses'          => JobPostingSalaryTypes::values(),
+
             ],
             'message' => 'success',
         ], 200);
@@ -64,8 +78,7 @@ class JobPostingController extends Controller
 
     public function store(StoreJobPostingRequest $request)
     {
-
-        $job_posting = $this->service->store($request);
+        $job_posting = $this->service->store($request->toArray());
 
         return response()->json([
             'status'  => true,

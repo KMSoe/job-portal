@@ -33,7 +33,7 @@ class JobPostingTemplateController extends Controller
         ], 200);
     }
 
-    public function pageData()
+    public function getPageData()
     {
         return response()->json([
             'status'  => true,
@@ -59,8 +59,7 @@ class JobPostingTemplateController extends Controller
 
     public function store(StoreJobPostingTemplateRequest $request)
     {
-
-        $job_posting_template = $this->service->store($request);
+        $job_posting_template = $this->service->store($request->toArray());
 
         return response()->json([
             'status'  => true,
@@ -73,12 +72,12 @@ class JobPostingTemplateController extends Controller
 
     public function update(UpdateJobPostingTemplateRequest $request, JobPostingTemplate $jobPostingTemplate)
     {
-        $job_posting_template = $this->service->update($jobPostingTemplate, $request->toArray());
+        $this->service->update($jobPostingTemplate, $request->toArray());
 
         return response()->json([
             'status'  => true,
             'data'    => [
-                'job_posting_template' => new JobPostingTemplateResource($job_posting_template),
+
             ],
             'message' => 'Successfully updated',
         ], 200);

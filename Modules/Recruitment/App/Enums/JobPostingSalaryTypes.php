@@ -2,10 +2,11 @@
 namespace Modules\Recruitment\App\Enums;
 
 enum JobPostingSalaryTypes: string {
-    case MONTHLY = 'Monthly';
-    case WEEKLY  = 'Weekly';
-    case DAILY   = 'Daily';
-    case HOURLY  = 'Hourly';
+    case RANGE      = 'Range';
+    case UP_TO      = 'Up_To';
+    case AROUND     = 'Around';
+    case FIXED      = 'Fixed';
+    case NEGOTIABLE = 'Negotiable';
 
     public static function values(): array
     {

@@ -6,6 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\CRM\App\Exports\DepartmentExport;
+use Modules\CRM\App\Imports\DepartmentImport;
 use Modules\Organization\App\Services\DepartmentService;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Http\Requests\StoreDepartmentRequest;
@@ -98,7 +99,7 @@ class DepartmentController extends Controller
 
         $user = auth()->user();
 
-        Excel::import(new CompanyImport($user), $request->file('file'));
+        Excel::import(new DepartmentImport($user), $request->file('file'));
 
         return response()->json([
             'status'  => true,

@@ -27,7 +27,7 @@ class CreateJobPostingsTable extends Migration
             $table->string('slug')->unique();
             $table->unsignedBigInteger('experience_level_id');
             $table->unsignedBigInteger('job_function_id');
-            $table->unsignedBigInteger('min_eduction_level_id');
+            $table->unsignedBigInteger('min_education_level_id');
 
             $table->longText('summary');
             $table->string('open_to')->nullable();
@@ -48,7 +48,7 @@ class CreateJobPostingsTable extends Migration
             $table->string('location')->nullable();
 
             // --- Compensation ---
-            $table->enum('salary_type', ['range', 'up_to', 'around', 'fixed', 'negotiable'])->default('range');
+            $table->string('salary_type');
 
             // currency
             $table->unsignedBigInteger('salary_currency_id')->nullable();
@@ -66,7 +66,7 @@ class CreateJobPostingsTable extends Migration
 
             // --- Status and Dates ---
             $table->integer('vacancies')->default(1);
-            $table->enum('status', ['draft', 'pending_approval', 'published', 'archived', 'closed'])->default('draft');
+            $table->string('status');
             $table->timestamp('published_at')->nullable()->index(); // Index for quick lookup of live jobs
             $table->timestamp('deadline_date')->nullable();
 

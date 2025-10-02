@@ -18,6 +18,7 @@ class JobPostingTemplateSeeder extends Seeder
         $companyId = $company ? $company->id : null;
 
         $templateData = [
+            "title"                      => "Senior Developer",
             "summary"                    => "An Excellent Opportunity for a Mid Level Web Application Developer to join our team.",
             "open_to"                    => "Male/Female",
             "roles_and_responsibilities" => [

@@ -47,7 +47,7 @@ class JobPostingSeeder extends Seeder
                 'title'                                  => $title,
                 'experience_level_id'                    => $expLevel->id,
                 'job_function_id'                        => $jobFunction->id,
-                'min_eduction_level_id'                  => $eduLevel->id,
+                'min_education_level_id'                  => $eduLevel->id,
                 'summary'                                => 'Design, build, and maintain efficient, reusable, and reliable PHP code.',
                 'open_to'                                => 'Male/Female',
                 'roles_and_responsibilities'             => "Design, Code, Review, Mentor.",
@@ -58,12 +58,12 @@ class JobPostingSeeder extends Seeder
                 'what_we_can_offer_career_opportunities' => 'Pathway to Principal Engineer.',
 
                 // Type and Location
-                'job_type'                               => 'full-time',
-                'work_arrangement'                       => 'hybrid',
+                'job_type'                               => 'Full-Time',
+                'work_arrangement'                       => 'Hybrid',
                 'location'                               => 'New York, NY',
 
                 // Compensation (Example: Range Salary)
-                'salary_type'                            => 'range',
+                'salary_type'                            => 'Range',
                 'salary_currency_id'                     => $currency->id,
                 'min_salary'                             => 90000.00,
                 'max_salary'                             => 130000.00,
@@ -71,7 +71,7 @@ class JobPostingSeeder extends Seeder
 
                 // Status and Dates
                 'vacancies'                              => 2,
-                'status'                                 => 'published',
+                'status'                                 => 'Published',
                 'published_at'                           => now(),
                 'deadline_date'                          => now()->addDays(30),
 

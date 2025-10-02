@@ -4,6 +4,9 @@ namespace Modules\Recruitment\Http\Controllers\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Recruitment\Entities\EducationLevel;
+use Modules\Recruitment\Entities\ExperienceLevel;
+use Modules\Recruitment\Entities\JobFunction;
 use Modules\Recruitment\Transformers\ApplicantProfileResource;
 use Modules\Storage\App\Classes\LocalStorage;
 
@@ -14,6 +17,24 @@ class ApplicantProfileController extends Controller
     public function __construct(LocalStorage $storage)
     {
         $this->storage = $storage;
+    }
+
+     public function getPageData()
+    {
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'experience_levels' => ExperienceLevel::all(),
+                'job_functions'     => JobFunction::all(),
+                'education_levels'   => EducationLevel::all(),
+                'job_types'         => JobTypes::values(),
+                'work_arrangements' => WorkArrangementTypes::values(),
+                'salary_types'      => JobPostingSalaryTypes::values(),
+                'statuses'          => JobPostingSalaryTypes::values(),
+
+            ],
+            'message' => 'success',
+        ], 200);
     }
 
     public function index(Request $request)

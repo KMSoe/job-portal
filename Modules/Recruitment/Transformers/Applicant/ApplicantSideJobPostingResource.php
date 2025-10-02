@@ -28,7 +28,7 @@ class ApplicantSideJobPostingResource extends JsonResource
             'already_applied'                        => ! is_null($this->application_id),
             'experience_level_id'                    => $this->experience_level_id,
             'job_function_id'                        => $this->job_function_id,
-            'min_eduction_level_id'                  => $this->min_eduction_level_id,
+            'min_education_level_id'                  => $this->min_education_level_id,
             'summary'                                => $this->summary,
             'open_to'                                => $this->open_to,
             'roles_and_responsibilities'             => $this->roles_and_responsibilities,

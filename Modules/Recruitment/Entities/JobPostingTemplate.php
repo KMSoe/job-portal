@@ -1,7 +1,7 @@
 <?php
-
 namespace Modules\Recruitment\Entities;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -33,7 +33,7 @@ class JobPostingTemplate extends Model
      */
     protected $casts = [
         'template_data' => 'array', // Casts the JSON column to a PHP array/object
-        'is_active' => 'boolean',
+        'is_active'     => 'boolean',
     ];
 
     // --- Relationships ---
@@ -44,5 +44,15 @@ class JobPostingTemplate extends Model
     public function company()
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

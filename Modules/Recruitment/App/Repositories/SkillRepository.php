@@ -48,7 +48,7 @@ class SkillRepository
 
     public function store($data)
     {
-        $data['created_by'] = auth()->id();
+        // $data['created_by'] = auth()->id();
 
         $skill = Skill::create($data);
 
@@ -57,7 +57,7 @@ class SkillRepository
 
     public function update($id, $data)
     {
-        $data['updated_by'] = auth()->id();
+        // $data['updated_by'] = auth()->id();
 
         $skill = Skill::findOrFail($id);
         return $skill->update($data);

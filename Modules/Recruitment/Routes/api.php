@@ -1,7 +1,12 @@
 <?php
 
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantProfileController;
+use Modules\Recruitment\Http\Controllers\Applicant\ApplicantSkillController;
+use Modules\Recruitment\Http\Controllers\Applicant\ApplicantWorkExperienceController;
 use Modules\Recruitment\Http\Controllers\Auth\AuthenticatedSessionController;
+use Modules\Recruitment\Http\Controllers\JobPostingController;
+use Modules\Recruitment\Http\Controllers\JobPostingTemplateController;
+use Modules\Recruitment\Http\Controllers\SkillController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +25,26 @@ Route::prefix('/v1/applicant')->group(function () {
     // Route::post('password/reset', [AuthController::class, 'resetPassword']);
 });
 
+Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function () {
+    Route::get('profile-page-data', [ApplicantProfileController::class, 'getPageData']);
+    Route::get('profile', [ApplicantProfileController::class, 'index']);
+    Route::put('profile', [ApplicantProfileController::class, 'update']);
+    Route::post('photo/upload', [ApplicantProfileController::class, 'uploadPhoto']);
 
-Route::middleware(['auth:applicant'])->prefix('/v1')->group(function () {
-    Route::get('applicant/profile', [ApplicantProfileController::class, 'index']);
-    Route::put('applicant/profile', [ApplicantProfileController::class, 'update']);
-    Route::post('applicant/photo/upload', [ApplicantProfileController::class, 'uploadPhoto']);
+    Route::post('skills', [ApplicantSkillController::class, 'store']);
+    Route::resource('work-experiences', ApplicantWorkExperienceController::class);
+});
+
+Route::middleware(['auth:sanctum'])->prefix('/v1')->group(function () {
+    Route::resource('skills', SkillController::class);
+});
+
+
+Route::middleware(['auth:sanctum'])->prefix('/v1/recruitment')->group(function () {
+    Route::resource('skills', SkillController::class);
+
+    Route::resource('job-posting-templates', JobPostingTemplateController::class);
+    Route::get('job-posting-templates-page-data', [JobPostingTemplateController::class, 'getPageData']);
+    Route::resource('job-postings', JobPostingController::class);
+    Route::get('job-postings-page-data', [JobPostingController::class, 'getPageData']);
 });

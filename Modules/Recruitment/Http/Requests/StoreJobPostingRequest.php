@@ -4,6 +4,7 @@ namespace Modules\Recruitment\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Recruitment\App\Enums\JobPostingSalaryTypes;
+use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Modules\Recruitment\App\Enums\JobTypes;
 use Modules\Recruitment\App\Enums\WorkArrangementTypes;
 
@@ -25,10 +26,9 @@ class StoreJobPostingRequest extends FormRequest
 
             // Job Details
             'title'                                  => 'required|string|max:255',
-            'slug'                                   => 'required|string|max:255|unique:job_postings,slug',
             'experience_level_id'                    => 'required|exists:experience_levels,id',
             'job_function_id'                        => 'required|exists:job_functions,id',
-            'min_eduction_level_id'                  => 'required|exists:education_levels,id',
+            'min_education_level_id'                  => 'required|exists:education_levels,id',
             'summary'                                => 'required|string|max:65535', // longText
             'open_to'                                => 'nullable|string|max:255',
             'roles_and_responsibilities'             => 'nullable|string|max:65535',
@@ -52,7 +52,7 @@ class StoreJobPostingRequest extends FormRequest
 
             // Compensation
             'salary_type'                            => ['required', Rule::in(JobPostingSalaryTypes::values())],
-            'salary_currency_id'                     => 'required_unless:salary_type,negotiable|nullable|exists:salary_currencies,id',
+            'salary_currency_id'                     => 'required_unless:salary_type,negotiable|nullable|exists:currencies,id',
             'salary_notes'                           => 'nullable|string|max:255',
 
             // Conditional Salary Fields
@@ -64,7 +64,7 @@ class StoreJobPostingRequest extends FormRequest
 
             // Status and Dates
             'vacancies'                              => 'required|integer|min:1',
-            'status'                                 => ['required', Rule::in(['draft', 'pending_approval', 'published', 'archived', 'closed'])],
+            'status'                                 => ['required', Rule::in(JobPostingStatusTypes::values())],
             'published_at'                           => 'nullable|date',
             'deadline_date'                          => 'nullable|date|after_or_equal:published_at',
         ];

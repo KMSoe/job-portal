@@ -34,7 +34,7 @@ class JobPosting extends Model
         'slug',
         'experience_level_id',
         'job_function_id',
-        'min_eduction_level_id',
+        'min_education_level_id',
         'summary',
         'open_to',
         'roles_and_responsibilities',
@@ -126,7 +126,7 @@ class JobPosting extends Model
 
     public function minimumEducationLevel()
     {
-        return $this->belongsTo(EducationLevel::class, 'min_eduction_level_id'); // Assuming EducationLevel model exists
+        return $this->belongsTo(EducationLevel::class, 'min_education_level_id'); // Assuming EducationLevel model exists
     }
 
     public function salaryCurrency()

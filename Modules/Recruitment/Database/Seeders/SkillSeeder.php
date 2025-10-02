@@ -1,6 +1,7 @@
 <?php
 namespace Modules\Recruitment\Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Modules\Recruitment\Entities\Skill;
 
@@ -13,7 +14,7 @@ class SkillSeeder extends Seeder
      */
     public function run()
     {
-        $user   = User::first() ?? User::factory()->create();
+        $user   = User::first();
         $userId = $user->id;
 
         $sampleSkills = [

@@ -6,6 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use Modules\CRM\App\Exports\DesignationExport;
+use Modules\CRM\App\Imports\DesignationImport;
 use Modules\Organization\App\Services\DesignationService;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Http\Requests\StoreDesignationRequest;
@@ -98,7 +99,7 @@ class DesignationController extends Controller
 
         $user = auth()->user();
 
-        Excel::import(new CompanyImport($user), $request->file('file'));
+        Excel::import(new DesignationImport($user), $request->file('file'));
 
         return response()->json([
             'status'  => true,

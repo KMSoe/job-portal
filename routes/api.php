@@ -19,7 +19,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:sanctum'])->group(function() {
+Route::middleware(['auth:sanctum'])->prefix('v1/')->group(function() {
      Route::get('countries', [WorldDataController::class, 'getAllCountries']);
     Route::get('cities', [WorldDataController::class, 'getAllCities']);
     Route::get('states', [WorldDataController::class, 'getAllStates']);
