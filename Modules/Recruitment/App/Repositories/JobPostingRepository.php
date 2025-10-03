@@ -23,7 +23,9 @@ class JobPostingRepository
             'minimumEducationLevel',
             'salaryCurrency',
             'skills',
+            'applicants',
         ])
+            ->withCount(['applicants'])
             ->where(function ($query) use ($request, $keyword) {
                 if ($request->company_id) {
                     $query->where('company_id', $request->company_id);
@@ -83,7 +85,10 @@ class JobPostingRepository
             'minimumEducationLevel',
             'salaryCurrency',
             'skills',
-        ])->findOrFail($id);
+            'applicants',
+        ])
+            ->withCount(['applicants'])
+            ->findOrFail($id);
 
         return $jobPosting;
     }

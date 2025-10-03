@@ -27,7 +27,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (! $user) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status'  => false,
                 'data'    => [],
@@ -35,29 +35,44 @@ class AuthController extends Controller
             ], 401);
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $token = $user->createToken('AUTH_TOKEN')->plainTextToken;
+        $token = $user->createToken('AUTH_TOKEN')->plainTextToken;
 
-            $remember_me = intval($request->remember_me) == 1 ? 1 : 0;
-            Auth::login($user, $remember_me);
+        // $remember_me = intval($request->remember_me) == 1 ? 1 : 0;
+        // Auth::guard('applicant')->login($applicant, $remember_me);
 
-            return response()->json([
-                'status'  => true,
-                'data'    => [
-                    'accessToken' => $token,
-                    'user'        => new UserResource($user),
-                    'user_type'   => 'Admin',
-                ],
-                'message' => "Success",
-            ], 200);
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'accessToken' => $token,
+                'user'        => new UserResource($user),
+                'user_type'   => 'Admin',
+            ],
+            'message' => "Success",
+        ], 200);
 
-        } else {
-            return response()->json([
-                'status'  => false,
-                'data'    => [],
-                'message' => "Incorrect Email and/or Password.",
-            ], 401);
-        }
+        // if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        //     $token = $user->createToken('AUTH_TOKEN')->plainTextToken;
+
+        //     $remember_me = intval($request->remember_me) == 1 ? 1 : 0;
+        //     Auth::login($user, $remember_me);
+
+        //     return response()->json([
+        //         'status'  => true,
+        //         'data'    => [
+        //             'accessToken' => $token,
+        //             'user'        => new UserResource($user),
+        //             'user_type'   => 'Admin',
+        //         ],
+        //         'message' => "Success",
+        //     ], 200);
+
+        // } else {
+        //     return response()->json([
+        //         'status'  => false,
+        //         'data'    => [],
+        //         'message' => "Incorrect Email and/or Password.",
+        //     ], 401);
+        // }
     }
 
     public function logout(Request $request)
@@ -67,7 +82,7 @@ class AuthController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [],
-            'message' => "Logged out successfully."
+            'message' => "Logged out successfully.",
         ], 200);
     }
 

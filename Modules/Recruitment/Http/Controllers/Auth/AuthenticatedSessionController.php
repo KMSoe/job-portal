@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
             'data'    => [
                 'accessToken' => $token,
                 'user'        => new ApplicantResource($applicant),
-                'user_type'   => 'Admin',
+                'user_type'   => 'Applicant',
             ],
             'message' => "Success",
         ], 200);
