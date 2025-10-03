@@ -1,9 +1,12 @@
 <?php
 namespace Modules\Recruitment\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Http\Response;
 use Modules\Recruitment\App\Services\JobApplicationInterviewService;
+use Modules\Recruitment\Http\Requests\JobApplicationInterviewRequest;
+use Modules\Recruitment\Transformers\JobApplicationInterviewResource;
 
 class JobApplicationInterviewController extends Controller
 {
@@ -14,19 +17,78 @@ class JobApplicationInterviewController extends Controller
         $this->service = $service;
     }
 
-    public function store(Request $request)
+    public function index(Request $request)
     {
-        $this->service->createInterview();
+        $interviews = $this->service->findByParams($request);
 
         return response()->json([
             'status'  => true,
-            'data'    => [],
+            'data'    => [
+                'interviews' => $interviews,
+            ],
             'message' => 'success',
         ], 200);
     }
 
-    public function createInterview(Request $request, $job_application_id)
+    public function store(JobApplicationInterviewRequest $request)
     {
+        $validatedData = $request->validated();
 
+        try {
+            $interview = $this->service->createInterview($validatedData);
+            return new JobApplicationInterviewResource($interview);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function show($id)
+    {
+        $interview = $this->service->findById($id);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'interview' => new JobApplicationInterviewResource($interview),
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
+    public function update(JobApplicationInterviewRequest $request, $id)
+    {
+        $validatedData = $request->validated();
+
+        try {
+            $interview = $this->service->updateInterview($id, $validatedData);
+            return new JobApplicationInterviewResource($interview);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $this->service->delete($id);
+            return response()->json([], 204);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function updateFeedback(Request $request, $id)
+    {
+        $request->validate([
+            'score' => 'nullable|integer|min:1|max:10',
+            'feedback' => 'nullable|string'
+        ]);
+
+        try {
+            $interviewer = $this->service->updateFeedback($request->all(), $id);
+            return new JobApplicationInterviewResource($interviewer);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

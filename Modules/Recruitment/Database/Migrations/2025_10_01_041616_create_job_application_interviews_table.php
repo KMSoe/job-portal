@@ -24,6 +24,8 @@ class CreateJobApplicationInterviewsTable extends Migration
             $table->string('location')->nullable();
             $table->string('status', 20)->default('scheduled');
             $table->text('notes')->nullable();
+            $table->string('google_event_id')->nullable();
+            $table->text('google_meet_link')->nullable();
             $table->timestamps();
         });
     }

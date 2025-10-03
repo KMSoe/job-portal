@@ -19,7 +19,7 @@ class CreateJobApplicationInterviewParticipantsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('attendance_status', 20)->default('confirmed');
             $table->decimal('score')->nullable();
-            $table->text('feedbak')->nullable();
+            $table->text('feedback')->nullable();
             $table->timestamp('commented_at')->nullable();
             $table->string('comment_status')->nullable(); // pending, draft, done
             $table->timestamps();

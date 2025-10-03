@@ -1,9 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantProfileController;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantSkillController;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantWorkExperienceController;
 use Modules\Recruitment\Http\Controllers\Auth\AuthenticatedSessionController;
+use Modules\Recruitment\Http\Controllers\GoogleOAuthController;
+use Modules\Recruitment\Http\Controllers\JobApplicationInterviewController;
 use Modules\Recruitment\Http\Controllers\JobPostingController;
 use Modules\Recruitment\Http\Controllers\JobPostingTemplateController;
 use Modules\Recruitment\Http\Controllers\SkillController;
@@ -47,4 +50,12 @@ Route::middleware(['auth:sanctum'])->prefix('/v1/recruitment')->group(function (
     Route::get('job-posting-templates-page-data', [JobPostingTemplateController::class, 'getPageData']);
     Route::resource('job-postings', JobPostingController::class);
     Route::get('job-postings-page-data', [JobPostingController::class, 'getPageData']);
+
+    // Google OAuth
+    Route::get('/auth/google', [GoogleOAuthController::class, 'redirect']);
+    Route::get('/auth/google/callback', [GoogleOAuthController::class, 'callback']);
+    
+    // Application Interview
+    Route::resource('job-interviews', JobApplicationInterviewController::class);
+    Route::post('interview-feedback/{id}', [JobApplicationInterviewController::class, 'updateFeedback']);
 });
