@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Recruitment\Http\Controllers\Applicant\ApplicantJobPostingController;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantProfileController;
+use Modules\Recruitment\Http\Controllers\Applicant\ApplicantResumeController;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantSkillController;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantWorkExperienceController;
 use Modules\Recruitment\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -33,6 +35,11 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
     Route::get('profile', [ApplicantProfileController::class, 'index']);
     Route::put('profile', [ApplicantProfileController::class, 'update']);
     Route::post('photo/upload', [ApplicantProfileController::class, 'uploadPhoto']);
+    Route::post('resumes', [ApplicantResumeController::class, 'store']);
+    Route::delete('resumes/{id}', [ApplicantResumeController::class, 'destroy']);
+
+    Route::post('job-postings/{id}/apply', [ApplicantJobPostingController::class, 'apply']);
+    Route::get('applications', [ApplicantJobPostingController::class, 'applications']);
 
     Route::post('skills', [ApplicantSkillController::class, 'store']);
     Route::resource('work-experiences', ApplicantWorkExperienceController::class);
@@ -40,6 +47,9 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
 
 Route::middleware(['auth:sanctum'])->prefix('/v1')->group(function () {
     Route::resource('skills', SkillController::class);
+
+    Route::get('job-postings', [ApplicantJobPostingController::class, 'index']);
+    Route::get('job-postings/{id}', [ApplicantJobPostingController::class, 'show']);
 });
 
 

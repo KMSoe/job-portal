@@ -87,4 +87,9 @@ class Applicant extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(ApplicantWorkExperience::class, 'applicant_id');
     }
+
+    public function resumes()
+    {
+        return $this->hasMany(Resume::class, 'applicant_id');
+    }
 }

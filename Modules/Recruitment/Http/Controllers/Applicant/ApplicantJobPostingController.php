@@ -4,21 +4,17 @@ namespace Modules\Recruitment\Http\Controllers\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Repositories\Applicant\ApplicantJobPostingRepository;
-use Modules\Recruitment\Entities\JobApplication;
+use Modules\Recruitment\Http\Requests\JobApplyRequest;
 use Modules\Recruitment\Transformers\Applicant\ApplicantSideJobPostingResource;
-use Modules\Storage\App\Classes\LocalStorage;
 
 class ApplicantJobPostingController extends Controller
 {
     private $service;
-    private $storage;
 
-    public function __construct(ApplicantJobPostingRepository $service, LocalStorage $storage)
+    public function __construct(ApplicantJobPostingRepository $service)
     {
         $this->service = $service;
-        $this->storage = $storage;
     }
 
     public function index(Request $request)
@@ -47,40 +43,31 @@ class ApplicantJobPostingController extends Controller
         ], 200);
     }
 
-    public function apply(Request $request, $job_posting_id)
+    public function apply(JobApplyRequest $request, $job_posting_id)
+    {
+        try {
+            $this->service->applyJob($job_posting_id, $request->validated());
+
+            return response()->json([
+                'status'  => true,
+                'message' => 'Job Applied Successfully!',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function applications(Request $request)
     {
         $applicant_id = auth()->guard('applicant')->id();
-        $cvFile       = $request->file('cv');
-        $cvPath       = $this->storage->store('resumes', $cvFile);
-
-        $application = JobApplication::create([
-            'job_posting_id'   => $job_posting_id,
-            'applicant_id'     => $applicant_id,
-            'expected_salary'  => $request->expected_salary,
-            'uploaded_cv_path' => $cvPath,
-            'uploaded_cv_name' => $cvFile->getClientOriginalName(),
-            'status'           => RecruitmentStageTypes::SUBMITTED->value,
-        ]);
-
-        if ($request->hasFile('documents')) {
-            foreach ($request->file('documents') as $document) {
-                $docPath = $this->storage->store('resumes', $document);
-
-                $application->supportiveDocuments()->create([
-                    'path'      => $docPath,
-                    'filename'  => $document->getClientOriginalName(),
-                    'mime_type' => $document->getMimeType(),
-                ]);
-            }
-        }
+        $applications = $this->service->getApplications($applicant_id, $request);
 
         return response()->json([
             'status'  => true,
             'data'    => [
-
+                'applications' => $applications,
             ],
             'message' => 'success',
         ], 200);
     }
-
 }

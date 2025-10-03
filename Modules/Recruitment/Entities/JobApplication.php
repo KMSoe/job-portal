@@ -28,8 +28,7 @@ class JobApplication extends Model
         'status',
         'applied_at',
         'expected_salary',
-        'uploaded_cv_name',
-        'uploaded_cv_path',
+        'resume_id',
     ];
 
     /**
@@ -69,5 +68,10 @@ class JobApplication extends Model
     public function supportiveDocuments()
     {
         return $this->hasMany(JobApplicationSupportiveDocument::class);
+    }
+
+    public function resume()
+    {
+        return $this->belongsTo(Resume::class, 'resume_id');
     }
 }

@@ -2,6 +2,8 @@
 namespace Modules\Recruitment\App\Repositories\Applicant;
 
 use Illuminate\Support\Str;
+use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
+use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Transformers\JobPostingResource;
 
@@ -98,9 +100,90 @@ class ApplicantJobPostingRepository
         return $jobPosting;
     }
 
-    public function apply($data)
+    public function applyJob($job_posting_id, $request)
     {
+        $applicant_id = auth()->guard('applicant')->id();
 
+        $existingApplication = JobApplication::where('job_posting_id', $job_posting_id)
+                                ->where('applicant_id', $applicant_id)
+                                ->first();
+
+        if ($existingApplication) {
+            throw new \Exception('You have already applied for this job.');
+        }
+
+        $application = JobApplication::create([
+            'job_posting_id'   => $job_posting_id,
+            'applicant_id'     => $applicant_id,
+            'expected_salary'  => $request->expected_salary,
+            'resume_id'        => $request->resume_id,
+            'status'           => RecruitmentStageTypes::SUBMITTED->value,
+            'applied_at'       => now(),
+        ]);
+
+        if ($request->supportive_documents) {
+            foreach ($request->supportive_documents as $document) {
+                $application->supportiveDocuments()->create([
+                    'path'      => $document['path'],
+                    'filename'  => $document['filename'],
+                    'mime_type' => $document['mime_type'],
+                ]);
+            }
+        }
+
+        return $application;
+    }
+
+    public function getApplications($applicant_id, $request)
+    {
+        $perPage = $request->perPage ? $request->perPage : 20;
+
+        $data = JobPosting::with([
+            'company',
+            'department',
+            'designation',
+            'template',
+            'experienceLevel',
+            'jobFunction',
+            'minimumEducationLevel',
+            'salaryCurrency',
+            'skills',
+            'applications' => function ($query) use ($applicant_id) {
+                $query->where('applicant_id', $applicant_id);
+            },
+        ])
+            ->join('job_applications', 'job_applications.job_posting_id', '=', 'job_postings.id')
+            ->where('job_applications.applicant_id', $applicant_id)
+            ->where(function ($query) use ($request) {
+                if ($request->status) {
+                    $query->where('job_applications.status', $request->status);
+                }
+            });
+
+        if ($request->sort != null && $request->sort != '') {
+            $sorts = explode(',', $request->input('sort', ''));
+
+            foreach ($sorts as $sortColumn) {
+                $sortDirection = Str::startsWith($sortColumn, '-') ? 'DESC' : 'ASC';
+                $sortColumn    = ltrim($sortColumn, '-');
+
+                $data->orderBy($sortColumn, $sortDirection);
+            }
+        } else {
+            $data->orderBy('job_applications.applied_at', 'DESC');
+        }
+
+        $data = $data->paginate($perPage);
+
+        $items = $data->getCollection();
+
+        $items = collect($items)->map(function ($item) {
+            return new JobPostingResource($item);
+        });
+
+        $data = $data->setCollection($items);
+
+        return $data;
     }
 
 }

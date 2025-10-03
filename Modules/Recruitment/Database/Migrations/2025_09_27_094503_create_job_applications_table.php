@@ -26,8 +26,7 @@ class CreateJobApplicationsTable extends Migration
             $table->decimal('expected_salary', 10, 2)->nullable();
 
             // --- Attachments (Store JSON array of file paths) ---
-            $table->string('uploaded_cv_name');
-            $table->string('uploaded_cv_path');
+            $table->unsignedBigInteger('resume_id')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
