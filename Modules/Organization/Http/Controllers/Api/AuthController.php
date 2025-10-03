@@ -35,7 +35,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // $token = $user->createToken('AUTH_TOKEN')->plainTextToken;
+        $token = $user->createToken('AUTH_TOKEN')->plainTextToken;
 
         // $remember_me = intval($request->remember_me) == 1 ? 1 : 0;
         // Auth::guard('applicant')->login($applicant, $remember_me);
@@ -43,7 +43,7 @@ class AuthController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'accessToken' => "sdfs",
+                'accessToken' => $token,
                 'user'        => new UserResource($user),
                 'user_type'   => 'Admin',
             ],
