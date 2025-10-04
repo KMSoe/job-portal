@@ -9,6 +9,7 @@ use Modules\Recruitment\Http\Controllers\Applicant\ApplicantWorkExperienceContro
 use Modules\Recruitment\Http\Controllers\Auth\AuthenticatedSessionController;
 use Modules\Recruitment\Http\Controllers\GoogleOAuthController;
 use Modules\Recruitment\Http\Controllers\JobApplicationInterviewController;
+use Modules\Recruitment\Http\Controllers\JobApplicationTrackingController;
 use Modules\Recruitment\Http\Controllers\JobPostingController;
 use Modules\Recruitment\Http\Controllers\JobPostingTemplateController;
 use Modules\Recruitment\Http\Controllers\SkillController;
@@ -60,6 +61,13 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::get('job-posting-templates-page-data', [JobPostingTemplateController::class, 'getPageData']);
     Route::resource('job-postings', JobPostingController::class);
     Route::get('job-postings-page-data', [JobPostingController::class, 'getPageData']);
+
+    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/mark-as-received', [JobApplicationTrackingController::class, 'makedAsReceived']);
+    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-review-state', [JobApplicationTrackingController::class, 'updateToReviewStage']);
+    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-shortlist-stage', [JobApplicationTrackingController::class, 'updateToShortlistStage']);
+    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-interview-stage', [JobApplicationTrackingController::class, 'updateToInterviewStage']);
+    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-reference-and-background-check-stage', [JobApplicationTrackingController::class, 'updateToReferneceAndBackgroundCheckStage']);
+    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-offer-stage', [JobApplicationTrackingController::class, 'updateToOfferStage']);
 
     // Google OAuth
     Route::get('/auth/google', [GoogleOAuthController::class, 'redirect']);
