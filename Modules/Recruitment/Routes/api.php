@@ -45,7 +45,7 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
     Route::resource('work-experiences', ApplicantWorkExperienceController::class);
 });
 
-Route::middleware(['auth:sanctum'])->prefix('/v1')->group(function () {
+Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::resource('skills', SkillController::class);
 
     Route::get('job-postings', [ApplicantJobPostingController::class, 'index']);
@@ -53,7 +53,7 @@ Route::middleware(['auth:sanctum'])->prefix('/v1')->group(function () {
 });
 
 
-Route::middleware(['auth:sanctum'])->prefix('/v1/recruitment')->group(function () {
+Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::resource('skills', SkillController::class);
 
     Route::resource('job-posting-templates', JobPostingTemplateController::class);

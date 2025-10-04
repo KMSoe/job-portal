@@ -21,7 +21,7 @@ Route::prefix('/v1/hrm')->name('api.auth.')->group(function () {
     Route::post('password/reset', [AuthController::class, 'resetPassword']);
 });
 
-Route::middleware(['auth:sanctum'])->prefix('/v1')->group(function () {
+Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::post('/hrm/password/change', [AuthController::class, 'changePassword']);
     Route::resource('companies', CompanyController::class);
     Route::resource('departments', DepartmentController::class);
