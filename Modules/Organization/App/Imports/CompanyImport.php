@@ -1,120 +1,78 @@
 <?php
 
-namespace Modules\CRM\App\Imports;
+namespace Modules\Organization\App\Imports;
 
-use App\Modules\Countries\Country;
-use Modules\Organization\App\Repositories\CompanyRepository;
-use Modules\Organization\App\Services\CompanyService;
-use Modules\Project\App\Models\Currency;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithStartRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
-use Modules\CRM\App\Models\Industry;
-use Illuminate\Support\Str;
+use Maatwebsite\Excel\Validators\Failure;
+use Modules\Organization\App\Services\CompanyService;
+use Modules\Organization\Http\Requests\StoreCompanyRequest;
+use Nnjeim\World\Models\City;
+use Nnjeim\World\Models\Country;
 
-class CompanyImport implements WithStartRow, ToCollection, WithHeadingRow, WithChunkReading, WithValidation
+class CompanyImport implements WithHeadingRow, SkipsEmptyRows, ToCollection, SkipsOnFailure
 {
-    private $user;
-    private $service;
+    use SkipsFailures;
+    protected $service;
 
-    public function __construct($user)
-    {
-        $this->user = $user;
-        $this->service = new CompanyService(new CompanyRepository());
+    public function __construct(CompanyService $service) {
+        $this->service = $service;
     }
 
-    /**
-     * @return int
-     */
+    public function collection(Collection $rows)
+    {
+        foreach ($rows as $index => $row) 
+        {
+            $rules = (new StoreCompanyRequest())->rules(); 
+            $data = $row->toArray();
+
+            $data['logo'] = $row['logo'] ?? null;
+            $data['name'] = $row['name'] ?? null;
+            $data['registration_name'] = $row['registration_name'] ?? null;
+            $data['registration_no'] = $row['registration_no'] ?? null;
+            $data['founded_at'] = $row['founded_at'] ?? null;
+            $data['phone_dial_code'] = $row['phone_dial_code'] ?? null;
+            $data['phone_no'] = $row['phone_no'] ?? null;
+            $data['secondary_phone_dial_code'] = $row['secondary_phone_dial_code'] ?? null;
+            $data['secondary_phone_no'] = $row['secondary_phone_no'] ?? null;
+            $data['email'] = $row['email'] ?? null;
+            $data['secondary_email'] = $row['secondary_email'] ?? null;
+            $data['country_id'] = Country::where('name', $row['country'])->first()->id ?? null;
+            $data['city_id'] = City::where('name', $row['city'])->first()->id ?? null;
+            $data['address'] = $row['address'] ?? null;
+
+            $validator = Validator::make($data, $rules);
+
+            if ($validator->fails()) 
+            {
+                  foreach ($validator->errors()->messages() as $field => $messages) 
+                  {
+                    $this->onFailure(new Failure(
+                        $index + 2,
+                        $field,      
+                        $messages,
+                        $row->toArray()
+                    ));
+                  }
+                continue;
+            }
+
+            $this->service->store($data);
+        }
+    }
+
     public function startRow(): int
     {
         return 2;
     }
 
-    public function rules(): array
-    {
-        return [
-            'name'                  => 'required|string|unique:companies,name',
-            // 'industry'              => 'required|exists:industries,name',
-            'industry'              => 'required|string',
-            'brand_value'           => 'required|numeric|min:0',
-            'number_of_employees'   => 'required|numeric|min:0',
-            // 'country'               => 'required|exists:countries,name',
-            'country'               => 'required|string',
-            'city'                  => 'required|string',
-            'address'               => 'nullable',
-            'email'                 => 'required|email',
-            'hotline_prefix'        => 'required',
-            'hotline_number'        => 'required',
-            'account_revenue'       => 'nullable|numeric',
-            'annual_revenue'        => 'nullable|numeric',
-            'first_project_created' => 'nullable',
-            'domain_name'           => 'nullable',
-            'description'           => 'nullable',
-        ];
-
-    }
-
-    // public function customValidationMessages()
-    // {
-    //     return [
-
-    //     ];
-    // }
-
-    public function collection(Collection $rows)
-    {
-
-        foreach ($rows as $row) {
-            $industry                 = Industry::where('name', trim($row["industry"] ?? ''))->select('id', 'name')->first();
-            $country                  = Country::where('name', trim($row["country"] ?? ''))->select('id', 'name')->first();
-            $account_revenue_currency = Currency::where('currency_code', $row['account_revenue_currency'] ?? '')->first();
-            $annual_revenue_currency  = Currency::where('currency_code', $row['annual_revenue_currency'] ?? '')->first();
-
-            if(!$industry && (trim($row["industry"] ?? '')) != '') {
-                $industry = Industry::create([
-                    'name'        => $row["industry"],
-                    'slug'        => Str::slug($row["industry"]),
-                    'created_by'  => $this->user->id,
-                ]);
-            }
-
-            if(!$country && ($row["country"] ?? '') != '') {
-                $country = Country::create([
-                    'name'        => $row["country"]
-                ]);
-            }
-
-            $data = [
-                "name"                        => $row["name"],
-                "industry_id"                 => $industry->id ?? 0,
-                "brand_value"                 => $row["brand_value"],
-                "number_of_employees"         => $row["number_of_employees"],
-                "country_id"                  => $country->id ?? 0,
-                "city"                        => $row["city"],
-                "address"                     => $row["address"],
-                "email"                       => $row["email"],
-                "hotline_prefix"              => $row["hotline_prefix"],
-                "hotline_number"              => $row["hotline_number"],
-                "account_revenue_currency_id" => $account_revenue_currency->id ?? 0,
-                "account_revenue"             => $row["account_revenue"],
-                "annual_revenue_currency_id"  => $annual_revenue_currency->id ?? 0,
-                "annual_revenue"              => $row["annual_revenue"],
-                "first_project_created"       => $row["first_project_created"],
-                "domain_name"                 => $row["domain_name"],
-                "description"                 => $row["description"],
-                "profile_photo"               => null,
-            ];
-
-           $this->service->store($data);
-        }
-    }
-
-    public function chunkSize(): int
+    public function chunkSize():int
     {
         return 100;
-    }
+    }    
 }

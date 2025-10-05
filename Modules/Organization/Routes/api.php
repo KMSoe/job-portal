@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use Modules\Organization\Http\Controllers\Api\AuthController;
 use Modules\Organization\Http\Controllers\Api\CompanyController;
 use Modules\Organization\Http\Controllers\Api\DepartmentController;
@@ -24,7 +25,13 @@ Route::prefix('/v1/hrm')->name('api.auth.')->group(function () {
 Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::post('/hrm/password/change', [AuthController::class, 'changePassword']);
     Route::resource('companies', CompanyController::class);
+    Route::get('company-sample-download', [CompanyController::class, 'downloadSampleExcelFile']);
+    Route::post('company/import', [CompanyController::class, 'import'])->name('company.import');
     Route::resource('departments', DepartmentController::class);
+    Route::get('department-sample-download', [DepartmentController::class, 'downloadSampleExcelFile']);
+    Route::post('department/import', [DepartmentController::class, 'import'])->name('department.import');
     Route::get('departments-page-data', [DepartmentController::class, 'getPageData']);
     Route::resource('designations', DesignationController::class);
+    Route::get('designation-sample-download', [DesignationController::class, 'downloadSampleExcelFile']);
+    Route::post('designation/import', [DesignationController::class, 'import'])->name('designation.import');
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\CRM\App\Exports;
+namespace Modules\Organization\App\Exports;
 
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;

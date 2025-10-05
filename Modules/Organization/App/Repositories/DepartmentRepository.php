@@ -44,11 +44,11 @@ class DepartmentRepository
         }
 
         if ($request->export) {
-            if ($request->only_this_page) {
-                $data = $data->skip(($request->page - 1) * $perPage)->take($perPage)->get();
-            } else {
-                $data = $data->get();
-            }
+            $items = isset($request->only_this_page) && $request->only_this_page == 1
+                ? $data->skip(($request->page - 1) * $perPage)->take($perPage)->get()
+                : $data->get();
+
+            return DepartmentResource::collection($items);
         } else {
             $data = $data->paginate($perPage);
 

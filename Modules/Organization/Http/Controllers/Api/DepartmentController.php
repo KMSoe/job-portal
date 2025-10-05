@@ -5,8 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Maatwebsite\Excel\Facades\Excel;
-use Modules\CRM\App\Exports\DepartmentExport;
-use Modules\CRM\App\Imports\DepartmentImport;
+use Modules\Organization\App\Exports\DepartmentExport;
+use Modules\Organization\App\Imports\DepartmentImport;
 use Modules\Organization\App\Services\DepartmentService;
 use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
@@ -90,24 +90,6 @@ class DepartmentController extends Controller
         ], 201);
     }
 
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,csv',
-        ], [
-            "file" => "The file is required with excel(xlsx) or csv format",
-        ]);
-
-        $user = auth()->user();
-
-        Excel::import(new DepartmentImport($user), $request->file('file'));
-
-        return response()->json([
-            'status'  => true,
-            'message' => "Successfully imported",
-        ], 200);
-    }
-
     public function update(UpdateDepartmentRequest $request, Department $department)
     {
         $department = $this->service->update($department, $request->toArray());
@@ -128,10 +110,70 @@ class DepartmentController extends Controller
         return response()->json([], 204);
     }
 
-    public function downloadSampleExcel()
+    public function downloadSampleExcelFile()
     {
         $file = public_path('sample_import_data/departments.xlsx');
-
         return response()->download($file);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv',
+        ], [
+            "file" => "The file is required with excel(xlsx) or csv format",
+        ]);
+
+        $import = new DepartmentImport($this->service);
+        Excel::import($import, $request->file('file'));
+
+        $failures = $import->failures();
+
+        if ($failures->isNotEmpty()) {
+            $field_messages = [];
+
+            foreach ($failures as $failure) {
+                $row       = $failure->row();
+                $attribute = $failure->attribute();
+                $messages  = $failure->errors();
+                $value     = $failure->values()[$attribute] ?? '[unknown]';
+
+                foreach ($messages as $msg) {
+                    $key = $msg;
+                    if (! isset($field_messages[$attribute][$key])) {
+                        $field_messages[$attribute][$key] = [];
+                    }
+                    $field_messages[$attribute][$key][] = "$value of row $row";
+                }
+            }
+
+            $error_messages = [];
+
+            foreach ($field_messages as $attribute => $message_group) {
+                foreach ($message_group as $base_message => $entries) {
+                    $entries = array_unique($entries);
+
+                    if (count($entries) > 1) {
+                        $last   = array_pop($entries);
+                        $joined = implode(', ', $entries) . ' and ' . $last;
+                    } else {
+                        $joined = $entries[0];
+                    }
+
+                    $error_messages[$attribute][] = "[$joined] — $base_message";
+                }
+            }
+
+            return response()->json([
+                'status'  => false,
+                'message' => 'Validation failed.',
+                'errors'  => $error_messages,
+            ], 422);
+        }
+
+        return response()->json([
+            'status'  => true,
+            'message' => "Successfully imported",
+        ], 200);
     }
 }

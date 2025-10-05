@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\CRM\App\Exports;
+namespace Modules\Organization\App\Exports;
 
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -19,6 +19,6 @@ class DepartmentExport implements FromView, ShouldAutoSize
     {
         $items = $this->items;
 
-        return view('organization::exports.company_export', compact('items'));
+        return view('organization::exports.department_export', compact('items'));
     }
 }
