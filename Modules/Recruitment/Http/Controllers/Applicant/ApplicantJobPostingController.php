@@ -4,9 +4,11 @@ namespace Modules\Recruitment\Http\Controllers\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Modules\Recruitment\App\Repositories\Applicant\ApplicantJobPostingRepository;
+use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Http\Requests\JobApplyRequest;
-use Modules\Recruitment\Transformers\Applicant\ApplicantSideJobPostingResource;
+use Modules\Recruitment\Transformers\Applicant\ApplicantSideJobPostingDetailResource;
 
 class ApplicantJobPostingController extends Controller
 {
@@ -24,7 +26,8 @@ class ApplicantJobPostingController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'job_postings' => $job_postings,
+                'total_job_postings' => JobPosting::where('status', JobPostingStatusTypes::PUBLISHED)->count(),
+                'job_postings'       => $job_postings,
             ],
             'message' => 'success',
         ], 200);
@@ -37,7 +40,7 @@ class ApplicantJobPostingController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'job_posting' => new ApplicantSideJobPostingResource($job_posting),
+                'job_posting' => new ApplicantSideJobPostingDetailResource($job_posting),
             ],
             'message' => 'success',
         ], 200);

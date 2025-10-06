@@ -6,9 +6,17 @@ use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Transformers\JobPostingResource;
+use Modules\Storage\App\Classes\LocalStorage;
+use Modules\Storage\App\Interfaces\StorageInterface;
 
 class ApplicantJobPostingRepository
 {
+    private StorageInterface $storage;
+
+    public function __construct(LocalStorage $storage)
+    {
+        $this->storage = $storage;
+    }
 
     public function findByParams($request)
     {
@@ -105,28 +113,30 @@ class ApplicantJobPostingRepository
         $applicant_id = auth()->guard('applicant')->id();
 
         $existingApplication = JobApplication::where('job_posting_id', $job_posting_id)
-                                ->where('applicant_id', $applicant_id)
-                                ->first();
+            ->where('applicant_id', $applicant_id)
+            ->first();
 
         if ($existingApplication) {
             throw new \Exception('You have already applied for this job.');
         }
 
         $application = JobApplication::create([
-            'job_posting_id'   => $job_posting_id,
-            'applicant_id'     => $applicant_id,
-            'expected_salary'  => $request->expected_salary,
-            'resume_id'        => $request->resume_id,
-            'status'           => RecruitmentStageTypes::SUBMITTED->value,
-            'applied_at'       => now(),
+            'job_posting_id'  => $job_posting_id,
+            'applicant_id'    => $applicant_id,
+            'expected_salary' => $request->expected_salary,
+            'resume_id'       => $request->resume_id,
+            'status'          => RecruitmentStageTypes::SUBMITTED->value,
+            'applied_at'      => now(),
         ]);
 
         if ($request->supportive_documents) {
             foreach ($request->supportive_documents as $document) {
+                $filePath = $this->storage->store('supportive_documents', $document);
+
                 $application->supportiveDocuments()->create([
-                    'path'      => $document['path'],
-                    'filename'  => $document['filename'],
-                    'mime_type' => $document['mime_type'],
+                    'path'      => $filePath,
+                    'filename'  => $document->getClientOriginalName(),
+                    'mime_type' => $document->getMimeType(),
                 ]);
             }
         }

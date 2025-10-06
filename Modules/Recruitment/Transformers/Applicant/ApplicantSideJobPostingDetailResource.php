@@ -3,7 +3,7 @@ namespace Modules\Recruitment\Transformers\Applicant;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ApplicantSideJobPostingResource extends JsonResource
+class ApplicantSideJobPostingDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -13,6 +13,8 @@ class ApplicantSideJobPostingResource extends JsonResource
      */
     public function toArray($request)
     {
+        $applicant = auth()->guard('applicant')->user();
+
         return [
             'id'                                     => $this->id,
 
@@ -25,10 +27,11 @@ class ApplicantSideJobPostingResource extends JsonResource
             // Job Details
             'title'                                  => $this->title,
             'slug'                                   => $this->slug,
-            'already_applied'                        => ! is_null($this->application_id),
+            'is_login'                               => $applicant ? true : false,
+            'is_already_applied'                     => ! is_null($this->application_id),
             'experience_level_id'                    => $this->experience_level_id,
             'job_function_id'                        => $this->job_function_id,
-            'min_education_level_id'                  => $this->min_education_level_id,
+            'min_education_level_id'                 => $this->min_education_level_id,
             'summary'                                => $this->summary,
             'open_to'                                => $this->open_to,
             'roles_and_responsibilities'             => $this->roles_and_responsibilities,

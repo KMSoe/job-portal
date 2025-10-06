@@ -73,6 +73,11 @@ class Applicant extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Currency::class, 'salary_currency_id');
     }
 
+    public function defaultResume()
+    {
+        return $this->hasOne(Resume::class, 'applicant_id')->where('is_default', 1);
+    }
+
     public function experienceLevel()
     {
         return $this->belongsTo(ExperienceLevel::class, 'experience_level_id');
