@@ -90,9 +90,9 @@ class DepartmentController extends Controller
         ], 201);
     }
 
-    public function update(UpdateDepartmentRequest $request, Department $department)
+    public function update(UpdateDepartmentRequest $request, $id)
     {
-        $department = $this->service->update($department->id, $request->toArray());
+        $department = $this->service->update($id, $request->toArray());
 
         return response()->json([
             'status'  => true,

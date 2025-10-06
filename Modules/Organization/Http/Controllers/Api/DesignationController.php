@@ -89,9 +89,9 @@ class DesignationController extends Controller
         ], 201);
     }
 
-    public function update(UpdateDesignationRequest $request, Department $designation)
+    public function update(UpdateDesignationRequest $request, $id)
     {
-        $designation = $this->service->update($designation->id, $request->toArray());
+        $designation = $this->service->update($id, $request->toArray());
 
         return response()->json([
             'status'  => true,
