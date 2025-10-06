@@ -13,22 +13,20 @@ class UpdateCompanyRequest extends FormRequest
      */
     public function rules()
     {
-        $companyId = $this->route('company')->id ?? null;
-
         return [
             'logo'                      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'name'                      => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('companies', 'name')->ignore($companyId),
+                Rule::unique('companies', 'name')->ignore($this->company),
             ],
             'registration_name'         => 'nullable|string|max:255',
             'registration_no'           => [
                 'nullable',
                 'string',
                 'max:255',
-                Rule::unique('companies', 'registration_no')->ignore($companyId),
+                Rule::unique('companies', 'registration_no')->ignore($this->company),
             ],
 
             'founded_at'                => 'nullable|date',
@@ -40,13 +38,13 @@ class UpdateCompanyRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('companies', 'email')->ignore($companyId),
+                Rule::unique('companies', 'email')->ignore($this->company),
             ],
             'secondary_email'           => [
                 'nullable',
                 'email',
                 'max:255',
-                Rule::unique('companies', 'secondary_email')->ignore($companyId),
+                Rule::unique('companies', 'secondary_email')->ignore($this->company),
             ],
             'country_id'                => 'required|exists:countries,id',
             'city_id'                   => 'required|exists:cities,id',
