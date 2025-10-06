@@ -97,7 +97,7 @@ class DepartmentController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'department' => new DepartmentResource($department),
+                // 'department' => new DepartmentResource($department),
             ],
             'message' => 'Successfully updated',
         ], 200);

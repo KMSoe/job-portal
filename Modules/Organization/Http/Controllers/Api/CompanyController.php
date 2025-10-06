@@ -118,7 +118,7 @@ class CompanyController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'company' => new CompanyResource($company),
+                // 'company' => new CompanyResource($company),
             ],
             'message' => 'Successfully updated',
         ], 200);

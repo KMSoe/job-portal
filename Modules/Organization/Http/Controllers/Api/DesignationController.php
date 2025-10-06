@@ -96,7 +96,7 @@ class DesignationController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'designation' => new DesignationResource($designation),
+                // 'designation' => new DesignationResource($designation),
             ],
             'message' => 'Successfully updated',
         ], 200);
