@@ -17,6 +17,7 @@ use Modules\Recruitment\Entities\ExperienceLevel;
 use Modules\Recruitment\Entities\JobFunction;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Entities\JobPostingTemplate;
+use Modules\Recruitment\Entities\Skill;
 use Modules\Recruitment\Http\Requests\StoreJobPostingRequest;
 use Modules\Recruitment\Transformers\JobPostingResource;
 use Nnjeim\World\Models\Currency;
@@ -60,7 +61,7 @@ class JobPostingController extends Controller
                 'salary_types'      => JobPostingSalaryTypes::values(),
                 'statuses'          => JobPostingStatusTypes::values(),
                 'currencies'        => Currency::all(),
-
+                'skills'            => Skill::all(),
             ],
             'message' => 'success',
         ], 200);
