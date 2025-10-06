@@ -78,7 +78,7 @@ class DesignationController extends Controller
     public function store(StoreDesignationRequest $request)
     {
 
-        $designation = $this->service->store($request);
+        $designation = $this->service->store($request->toArray());
 
         return response()->json([
             'status'  => true,
@@ -91,7 +91,7 @@ class DesignationController extends Controller
 
     public function update(UpdateDesignationRequest $request, Department $designation)
     {
-        $designation = $this->service->update($designation, $request);
+        $designation = $this->service->update($designation->id, $request->toArray());
 
         return response()->json([
             'status'  => true,
