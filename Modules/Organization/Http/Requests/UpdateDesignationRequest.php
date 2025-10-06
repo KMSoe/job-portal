@@ -13,15 +13,8 @@ class UpdateDesignationRequest extends FormRequest
      */
     public function rules()
     {
-        $designationId = $this->route('designation')->id ?? null;
-
         return [
-            'name'        => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('designations', 'name')->ignore($designationId),
-            ],
+            'name'        => ['required', 'string', Rule::unique('designations', 'name')->ignore($this->designation)->whereNull('deleted_at')],
             'description' => 'nullable|string',
         ];
     }
