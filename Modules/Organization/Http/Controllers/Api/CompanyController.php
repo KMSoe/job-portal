@@ -80,6 +80,8 @@ class CompanyController extends Controller
 
     public function store(StoreCompanyRequest $request)
     {
+        $data = $request->except(['logo']);
+
         if ($request->hasFile('logo')) {
             // Store the file in the 'public' disk under the 'company_logos' folder
             $data['logo'] = $this->storage->store('company_logos', $request->file('logo'));
@@ -87,7 +89,7 @@ class CompanyController extends Controller
             $data['logo'] = null;
         }
 
-        $company = $this->service->store($request->toArray());
+        $company = $this->service->store($data);
 
         return response()->json([
             'status'  => true,
@@ -100,6 +102,8 @@ class CompanyController extends Controller
 
     public function update(UpdateCompanyRequest $request, Company $company)
     {
+        $data = $request->except(['logo']);
+
         if ($request->hasFile('logo')) {
 
             if ($company->logo) {
@@ -113,7 +117,7 @@ class CompanyController extends Controller
             $data['logo'] = $company->logo;
         }
 
-        $company = $this->service->update($company, $request->toArray());
+        $company = $this->service->update($company, $data);
 
         return response()->json([
             'status'  => true,

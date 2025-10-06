@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return ['Laravel' => app()->version()];
-});
-
-require __DIR__.'/auth.php';
+Route::get('uploads/{any}', function ($any) {
+    return Storage::response($any);
+})->where('any', '.*');
+// require __DIR__.'/auth.php';

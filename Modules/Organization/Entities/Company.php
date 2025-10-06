@@ -49,7 +49,7 @@ class Company extends Model
 
      protected $appends = ['logo_url'];
 
-    public function getLogoUrlAttribute(): ?string
+    public function getLogoUrlAttribute()
     {
         if ($this->logo) {
             $storage = new LocalStorage();
@@ -58,7 +58,7 @@ class Company extends Model
         return null;
     }
 
-    public function getFoundedAtAttribute($value): ?string
+    public function getFoundedAtAttribute($value)
     {
         return $value ? Carbon::parse($value) : null;
     }

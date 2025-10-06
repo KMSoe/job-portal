@@ -36,6 +36,7 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
     Route::get('profile', [ApplicantProfileController::class, 'index']);
     Route::put('profile', [ApplicantProfileController::class, 'update']);
     Route::post('photo/upload', [ApplicantProfileController::class, 'uploadPhoto']);
+    Route::get('resumes', [ApplicantResumeController::class, 'index']);
     Route::post('resumes', [ApplicantResumeController::class, 'store']);
     Route::delete('resumes/{id}', [ApplicantResumeController::class, 'destroy']);
 

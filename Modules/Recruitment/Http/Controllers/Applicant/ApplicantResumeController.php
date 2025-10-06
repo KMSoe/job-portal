@@ -52,7 +52,7 @@ class ApplicantResumeController extends Controller
 
         $uploadedFile = $request->file('file');
 
-        $filePath = $this->storage->store('resumes', $uploadedFile->store('resumes'));
+        $filePath = $this->storage->store('resumes', $uploadedFile);
 
         $resume = Resume::create([
             'applicant_id' => $applicant->id,
@@ -65,7 +65,7 @@ class ApplicantResumeController extends Controller
 
         if ($request->is_default == true) {
             Resume::where('applicant_id', $applicant->id)->whereNot('id', $resume->id)->update([
-                'is_default' => true,
+                'is_default' => false,
             ]);
         }
 
