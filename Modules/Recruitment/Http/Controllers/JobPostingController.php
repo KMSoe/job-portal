@@ -8,6 +8,7 @@ use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Entities\Designation;
 use Modules\Recruitment\App\Enums\JobPostingSalaryTypes;
+use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Modules\Recruitment\App\Enums\JobTypes;
 use Modules\Recruitment\App\Enums\WorkArrangementTypes;
 use Modules\Recruitment\App\Services\JobPostingService;
@@ -18,6 +19,7 @@ use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Entities\JobPostingTemplate;
 use Modules\Recruitment\Http\Requests\StoreJobPostingRequest;
 use Modules\Recruitment\Transformers\JobPostingResource;
+use Nnjeim\World\Models\Currency;
 
 class JobPostingController extends Controller
 {
@@ -52,11 +54,12 @@ class JobPostingController extends Controller
                 'designations'      => Designation::select('id', 'name')->get(),
                 'experience_levels' => ExperienceLevel::all(),
                 'job_functions'     => JobFunction::all(),
-                'education_levels'   => EducationLevel::all(),
+                'education_levels'  => EducationLevel::all(),
                 'job_types'         => JobTypes::values(),
                 'work_arrangements' => WorkArrangementTypes::values(),
                 'salary_types'      => JobPostingSalaryTypes::values(),
-                'statuses'          => JobPostingSalaryTypes::values(),
+                'statuses'          => JobPostingStatusTypes::values(),
+                'currencies'        => Currency::all(),
 
             ],
             'message' => 'success',
