@@ -49,9 +49,6 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
 
 Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::resource('skills', SkillController::class);
-
-    Route::get('job-postings', [ApplicantJobPostingController::class, 'index']);
-    Route::get('job-postings/{id}', [ApplicantJobPostingController::class, 'show']);
 });
 
 Route::prefix('/v1')->group(function () {
@@ -65,7 +62,7 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
 
     Route::resource('job-posting-templates', JobPostingTemplateController::class);
     Route::get('job-posting-templates-page-data', [JobPostingTemplateController::class, 'getPageData']);
-    Route::resource('job-postings', JobPostingController::class);
+    // Route::resource('job-postings', JobPostingController::class);
     Route::get('job-postings-page-data', [JobPostingController::class, 'getPageData']);
 
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/mark-as-received', [JobApplicationTrackingController::class, 'makedAsReceived']);
