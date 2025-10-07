@@ -4,6 +4,9 @@ namespace Modules\Recruitment\Http\Controllers\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Recruitment\App\Enums\JobPostingSalaryTypes;
+use Modules\Recruitment\App\Enums\JobTypes;
+use Modules\Recruitment\App\Enums\WorkArrangementTypes;
 use Modules\Recruitment\Entities\EducationLevel;
 use Modules\Recruitment\Entities\ExperienceLevel;
 use Modules\Recruitment\Entities\JobFunction;
@@ -30,7 +33,6 @@ class ApplicantProfileController extends Controller
                 'job_types'         => JobTypes::values(),
                 'work_arrangements' => WorkArrangementTypes::values(),
                 'salary_types'      => JobPostingSalaryTypes::values(),
-                'statuses'          => JobPostingSalaryTypes::values(),
 
             ],
             'message' => 'success',
@@ -42,6 +44,7 @@ class ApplicantProfileController extends Controller
         $applicant = auth()->guard('applicant')->user();
 
         $applicant->load([
+            'defaultResume',
             'skills',
             'salaryCurrency',
             'experienceLevel',

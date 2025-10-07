@@ -24,6 +24,7 @@ class ApplicantProfileResource extends JsonResource
             'phone_dial_code'  => $this->phone_dial_code,
             'phone_no'         => $this->phone_no,
             'open_to_work'     => $this->open_to_work,
+            'default_resume'   => $this->defaultResume,
             'experience_level' => $this->experienceLevel,
             'job_function'     => $this->jobFunction,
             'salary_currency'  => $this->salaryCurrency,
