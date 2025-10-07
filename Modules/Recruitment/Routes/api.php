@@ -54,6 +54,11 @@ Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::get('job-postings/{id}', [ApplicantJobPostingController::class, 'show']);
 });
 
+Route::prefix('/v1')->group(function () {
+    Route::get('job-postings', [ApplicantJobPostingController::class, 'index']);
+    Route::get('job-postings/{id}', [ApplicantJobPostingController::class, 'show']);
+});
+
 
 Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::resource('skills', SkillController::class);
