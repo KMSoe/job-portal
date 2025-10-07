@@ -183,7 +183,7 @@ class ApplicantJobPostingRepository
             $data->orderBy('job_applications.applied_at', 'DESC');
         }
 
-        $data = $data->select('job_postings.*', 'job_applications.status')->paginate($perPage);
+        $data = $data->select('job_postings.*', 'job_applications.status AS application_status')->paginate($perPage);
 
         $items = $data->getCollection();
 
