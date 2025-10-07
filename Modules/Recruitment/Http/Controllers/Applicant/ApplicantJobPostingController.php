@@ -49,7 +49,7 @@ class ApplicantJobPostingController extends Controller
     public function apply(JobApplyRequest $request, $job_posting_id)
     {
         try {
-            $this->service->applyJob($job_posting_id, $request->validated());
+            $this->service->applyJob($job_posting_id, $request);
 
             return response()->json([
                 'status'  => true,
