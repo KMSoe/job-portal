@@ -5,6 +5,7 @@ use Illuminate\Support\Str;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobPosting;
+use Modules\Recruitment\Transformers\Applicant\JobApplicationResource;
 use Modules\Recruitment\Transformers\JobPostingResource;
 use Modules\Storage\App\Classes\LocalStorage;
 use Modules\Storage\App\Interfaces\StorageInterface;
@@ -188,7 +189,7 @@ class ApplicantJobPostingRepository
         $items = $data->getCollection();
 
         $items = collect($items)->map(function ($item) {
-            return new JobPostingResource($item);
+            return new JobApplicationResource($item);
         });
 
         $data = $data->setCollection($items);
