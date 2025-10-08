@@ -5,8 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Recruitment\App\Services\JobApplicationBoardService;
-use Modules\Recruitment\Http\Requests\StoreSkillRequest;
-use Modules\Recruitment\Http\Requests\UpdateSkillRequest;
+use Modules\Recruitment\Transformers\JobPostingApplicationDetailResource;
 
 class JobApplicationBoardController extends Controller
 {
@@ -57,11 +56,37 @@ class JobApplicationBoardController extends Controller
     public function getApplicants(Request $request, $job_posting_id)
     {
         $applicants = $this->service->getApplicants($request, $job_posting_id);
-        
+
         return response()->json([
             'status'  => true,
             'data'    => [
                 'applicants' => $applicants,
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
+    public function getApplications(Request $request, $job_posting_id)
+    {
+        $applications = $this->service->getApplicants($request, $job_posting_id);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'applications' => $applications,
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
+    public function getApplicationDetail($job_posting_id, $job_application_id)
+    {
+        $application = $this->service->getApplicationDetail($job_application_id);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'application' => new JobPostingApplicationDetailResource($application),
             ],
             'message' => 'success',
         ], 200);

@@ -60,7 +60,7 @@ class JobApplicationTrackingController extends Controller
         $this->service->updateStatus($job_application, $request->status);
     }
 
-    public function makedAsReceived(Request $request, $job_posting_id, $job_application_id)
+    public function markAsReceived(Request $request, $job_posting_id, $job_application_id)
     {
         $job_application = $this->service->findById($job_application_id);
 

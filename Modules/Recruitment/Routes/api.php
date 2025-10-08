@@ -69,8 +69,10 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::resource('job-postings', JobPostingController::class);
     Route::get('job-postings-page-data', [JobPostingController::class, 'getPageData']);
     Route::get('job-postings/{job_posting_id}/applicants', [JobApplicationBoardController::class, 'getApplicants']);
+    Route::get('job-postings/{job_posting_id}/job-applications', [JobApplicationBoardController::class, 'getApplications']);
+    Route::get('job-postings/{job_posting_id}/job-applications/{job_application_id}', [JobApplicationBoardController::class, 'getApplicationDetail']);
 
-    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/mark-as-received', [JobApplicationTrackingController::class, 'makedAsReceived']);
+    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/mark-as-received', [JobApplicationTrackingController::class, 'markAsReceived']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-review-state', [JobApplicationTrackingController::class, 'updateToReviewStage']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-shortlist-stage', [JobApplicationTrackingController::class, 'updateToShortlistStage']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-interview-stage', [JobApplicationTrackingController::class, 'updateToInterviewStage']);
