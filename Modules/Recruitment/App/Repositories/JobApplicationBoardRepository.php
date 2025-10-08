@@ -94,12 +94,15 @@ class JobApplicationBoardRepository
         $data = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
             ->where('job_applications.job_posting_id', $job_posting_id)
             ->where(function ($query) use ($keyword) {
-                $query->whereHas('applicant', function ($query) use ($keyword) {
-                    $query->where('name', 'LIKE', '%' . $keyword . '%');
-                })
-                    ->whereHas('applicant.skills', function ($query) use ($keyword) {
+                if($keyword != '') {
+                    $query->whereHas('applicant', function ($query) use ($keyword) {
                         $query->where('name', 'LIKE', '%' . $keyword . '%');
-                    });
+                    })
+                        ->orWhereHas('applicant.skills', function ($query) use ($keyword) {
+                            $query->where('name', 'LIKE', '%' . $keyword . '%');
+                        });
+                }
+               
             })
             ->orderByDesc('job_applications.applied_at')
             ->paginate($perPage);
