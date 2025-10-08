@@ -40,15 +40,6 @@ class JobApplication extends Model
         'applied_at' => 'datetime',
     ];
 
-    public function getUploadedCvUrlAttribute(): ?string
-    {
-        if ($this->uploaded_cv) {
-            $storage = new LocalStorage();
-            return $storage->getUrl($this->uploaded_cv);
-        }
-        return null;
-    }
-
     /**
      * Get the applicant that owns the job application.
      */

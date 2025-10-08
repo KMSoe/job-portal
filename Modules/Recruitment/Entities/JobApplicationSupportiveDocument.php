@@ -3,6 +3,7 @@
 namespace Modules\Recruitment\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Storage\App\Classes\LocalStorage;
 
 class JobApplicationSupportiveDocument extends Model
 {
@@ -12,6 +13,17 @@ class JobApplicationSupportiveDocument extends Model
         'filename',
         'mime_type'
     ];
+
+    protected $appends = ['path_url'];
+
+    public function getPathUrlAttribute(): ?string
+    {
+        if ($this->path) {
+            $storage = new LocalStorage();
+            return $storage->getUrl($this->path);
+        }
+        return null;
+    }
 
     public function application()
     {

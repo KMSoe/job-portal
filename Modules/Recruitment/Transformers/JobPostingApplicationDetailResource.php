@@ -2,8 +2,9 @@
 namespace Modules\Recruitment\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Recruitment\App\Helpers\RecruitmentHelper;
 
-class JobPostingApplicantResource extends JsonResource
+class JobPostingApplicationDetailResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -13,7 +14,9 @@ class JobPostingApplicantResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        $actions = RecruitmentHelper::getJobApplicationActions($this->status);
+
+        return array_merge([
             'id'                  => $this->id,
             'applicant'           => new ApplicantResource($this->applicant),
             'expected_salary'     => $this->expected_salary,
@@ -22,6 +25,6 @@ class JobPostingApplicantResource extends JsonResource
             'supportiveDocuments' => $this->supportiveDocuments,
             'applied_at'          => $this->applied_at,
             'application_status'  => $this->status,
-        ];
+        ], $actions);
     }
 }

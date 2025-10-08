@@ -93,7 +93,11 @@ class JobApplicationBoardRepository
 
         $data = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
             ->where('job_applications.job_posting_id', $job_posting_id)
-            ->where(function ($query) use ($keyword) {
+            ->where(function ($query) use ($request, $keyword) {
+                if($request->status != null) {
+                    $query->where('job_applications.status', $request->status);
+                }
+
                 if($keyword != '') {
                     $query->whereHas('applicant', function ($query) use ($keyword) {
                         $query->where('name', 'LIKE', '%' . $keyword . '%');
@@ -116,6 +120,14 @@ class JobApplicationBoardRepository
         $data = $data->setCollection($items);
 
         return $data;
+    }
+
+    public function getApplicationDetail($job_application_id)
+    {
+        $job_application = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
+            ->findOrFail($job_application_id);
+
+        return $job_application;
     }
 
     public function findByIdForApplicantSide($id)
