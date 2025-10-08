@@ -15,6 +15,7 @@ use Modules\Recruitment\Http\Controllers\JobApplicationReviewController;
 use Modules\Recruitment\Http\Controllers\JobApplicationTrackingController;
 use Modules\Recruitment\Http\Controllers\JobPostingController;
 use Modules\Recruitment\Http\Controllers\JobPostingTemplateController;
+use Modules\Recruitment\Http\Controllers\OfferLetterTemplateController;
 use Modules\Recruitment\Http\Controllers\SkillController;
 
 /*
@@ -84,6 +85,9 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::get('job-application-reviews', [JobApplicationReviewController::class, 'index']);
     Route::get('job-application-reviews/{id}', [JobApplicationReviewController::class, 'show']);
     Route::post('job-application-reviews/{id}/review', [JobApplicationReviewController::class, 'submitReview']);
+
+    Route::resource('offer-letter-templates', OfferLetterTemplateController::class);
+    Route::get('offer-letter-templates-page-data', [OfferLetterTemplateController::class, 'getPageData']);
 
     // Google OAuth
     Route::get('/auth/google', [GoogleOAuthController::class, 'redirect']);
