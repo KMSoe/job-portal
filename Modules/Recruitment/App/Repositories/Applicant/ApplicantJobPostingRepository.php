@@ -35,7 +35,7 @@ class ApplicantJobPostingRepository
             'salaryCurrency',
             'skills',
         ])
-            ->whereNotNull('published_at')
+            // ->whereNotNull('published_at')
             ->where(function ($query) use ($request, $keyword) {
                 if ($request->company_id) {
                     $query->where('company_id', $request->company_id);
