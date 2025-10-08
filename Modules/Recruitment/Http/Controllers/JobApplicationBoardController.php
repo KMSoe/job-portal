@@ -56,6 +56,14 @@ class JobApplicationBoardController extends Controller
 
     public function getApplicants(Request $request, $job_posting_id)
     {
-
+        $applicants = $this->service->getApplicants($request, $job_posting_id);
+        
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'applicants' => $applicants,
+            ],
+            'message' => 'success',
+        ], 200);
     }
 }

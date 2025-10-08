@@ -2,7 +2,9 @@
 namespace Modules\Recruitment\App\Repositories;
 
 use Illuminate\Support\Str;
+use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobPosting;
+use Modules\Recruitment\Transformers\JobPostingApplicantResource;
 use Modules\Recruitment\Transformers\JobPostingBoardResource;
 
 class JobApplicationBoardRepository
@@ -82,6 +84,35 @@ class JobApplicationBoardRepository
         ])->findOrFail($id);
 
         return $jobPosting;
+    }
+
+    public function getApplicants($request, $job_posting_id)
+    {
+        $keyword = $request->search ? $request->search : '';
+        $perPage = $request->perPage ? $request->perPage : 20;
+
+        $data = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
+            ->where('job_applications.job_posting_id', $job_posting_id)
+            ->where(function ($query) use ($keyword) {
+                $query->whereHas('applicant', function ($query) use ($keyword) {
+                    $query->where('name', 'LIKE', '%' . $keyword . '%');
+                })
+                    ->whereHas('applicant.skills', function ($query) use ($keyword) {
+                        $query->where('name', 'LIKE', '%' . $keyword . '%');
+                    });
+            })
+            ->orderByDesc('job_applications.applied_at')
+            ->paginate($perPage);
+
+        $items = $data->getCollection();
+
+        $items = collect($items)->map(function ($item) {
+            return new JobPostingApplicantResource($item);
+        });
+
+        $data = $data->setCollection($items);
+
+        return $data;
     }
 
     public function findByIdForApplicantSide($id)

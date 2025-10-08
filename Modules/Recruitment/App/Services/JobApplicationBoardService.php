@@ -22,6 +22,11 @@ class JobApplicationBoardService
         return $this->jobApplicationBoardRepository->findById($id);
     }
 
+    public function getApplicants($request, $job_posting_id)
+    {
+        return $this->jobApplicationBoardRepository->getApplicants($request, $job_posting_id);
+    }
+
     public function findByIdForApplicantSide($id)
     {
         return $this->jobApplicationBoardRepository->findByIdForApplicantSide($id);
