@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorldDataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,10 +20,10 @@ Route::middleware(['auth:api'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::middleware(['auth:api'])->prefix('v1/')->group(function() {
-     Route::get('countries', [WorldDataController::class, 'getAllCountries']);
+Route::middleware(['auth:api'])->prefix('v1/')->group(function () {
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('countries', [WorldDataController::class, 'getAllCountries']);
     Route::get('cities', [WorldDataController::class, 'getAllCities']);
     Route::get('states', [WorldDataController::class, 'getAllStates']);
     Route::get('currencies', [WorldDataController::class, 'getAllCurrencies']);
 });
-
