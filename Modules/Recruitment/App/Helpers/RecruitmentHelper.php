@@ -24,6 +24,7 @@ class RecruitmentHelper
             $review_action = true;
         } else if ($current_status == RecruitmentStageTypes::SCREENING_REVIEW->value) {
             $assign_review_action = true;
+            $shortlist_action = true;
         } else if ($current_status == RecruitmentStageTypes::SHORTLISTING->value) {
             $accessment_testing_action = true;
             $interview_action          = true;
