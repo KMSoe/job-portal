@@ -43,7 +43,6 @@ class JobApplicationReviewer extends Model
      */
     public function reviewer()
     {
-        // Assuming your User model is named 'User'
         return $this->belongsTo(User::class, 'reviewer_id');
     }
 }

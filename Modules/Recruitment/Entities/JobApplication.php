@@ -65,4 +65,9 @@ class JobApplication extends Model
     {
         return $this->belongsTo(Resume::class, 'resume_id');
     }
+
+    public function reviewers()
+    {
+        return $this->hasMany(JobApplicationReviewer::class, 'application_id')->where('status', 'done');
+    }
 }
