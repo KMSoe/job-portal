@@ -10,6 +10,7 @@ use Modules\Recruitment\Http\Controllers\Auth\AuthenticatedSessionController;
 use Modules\Recruitment\Http\Controllers\GoogleOAuthController;
 use Modules\Recruitment\Http\Controllers\JobApplicationBoardController;
 use Modules\Recruitment\Http\Controllers\JobApplicationInterviewController;
+use Modules\Recruitment\Http\Controllers\JobApplicationReviewController;
 use Modules\Recruitment\Http\Controllers\JobApplicationTrackingController;
 use Modules\Recruitment\Http\Controllers\JobPostingController;
 use Modules\Recruitment\Http\Controllers\JobPostingTemplateController;
@@ -71,10 +72,15 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
 
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/mark-as-received', [JobApplicationTrackingController::class, 'markAsReceived']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-review-state', [JobApplicationTrackingController::class, 'updateToReviewStage']);
+    Route::post('job-postings/{job_posting_id}/job-applications/{job_application_id}/reviewers', [JobApplicationTrackingController::class, 'assignReviewers']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-shortlist-stage', [JobApplicationTrackingController::class, 'updateToShortlistStage']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-interview-stage', [JobApplicationTrackingController::class, 'updateToInterviewStage']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-reference-and-background-check-stage', [JobApplicationTrackingController::class, 'updateToReferneceAndBackgroundCheckStage']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-offer-stage', [JobApplicationTrackingController::class, 'updateToOfferStage']);
+
+    Route::get('job-application-reviews', [JobApplicationReviewController::class, 'index']);
+    Route::get('job-application-reviews/{id}', [JobApplicationReviewController::class, 'show']);
+    Route::post('job-application-reviews/{id}/review', [JobApplicationReviewController::class, 'submitReview']);
 
     // Google OAuth
     Route::get('/auth/google', [GoogleOAuthController::class, 'redirect']);

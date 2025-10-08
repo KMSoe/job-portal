@@ -16,48 +16,19 @@ class JobApplicationTrackingController extends Controller
         $this->service = $service;
     }
 
-    public function index(Request $request)
-    {
-        $skills = $this->service->findByParams($request);
-
-        return response()->json([
-            'status'  => true,
-            'data'    => [
-                'skills' => $skills,
-            ],
-            'message' => 'success',
-        ], 200);
-    }
-
-    public function pageData()
-    {
-        return response()->json([
-            'status'  => true,
-            'data'    => [
-
-            ],
-            'message' => 'success',
-        ], 200);
-    }
-
-    public function show($id)
-    {
-        $skill = $this->service->findById($id);
-
-        return response()->json([
-            'status'  => true,
-            'data'    => [
-                'skill' => $skill,
-            ],
-            'message' => 'success',
-        ], 200);
-    }
-
     public function updateStatus(Request $request, $job_posting_id, $job_application_id)
     {
         $job_application = $this->service->findById($job_application_id);
 
         $this->service->updateStatus($job_application, $request->status);
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+
+            ],
+            'message' => 'success'
+        ], 200);
     }
 
     public function markAsReceived(Request $request, $job_posting_id, $job_application_id)
@@ -65,20 +36,46 @@ class JobApplicationTrackingController extends Controller
         $job_application = $this->service->findById($job_application_id);
 
         $this->service->updateStatus($job_application, RecruitmentStageTypes::RECEIVED->value);
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+
+            ],
+            'message' => 'success'
+        ], 200);
     }
 
     public function updateToReviewStage(Request $request, $job_posting_id, $job_application_id)
     {
+        // $request->validate([
+        //     'application_id' => 'required|exists:job_applications,id',
+        //     'reviewer_ids'   => 'required|array|min:1',
+        //     'reviewer_ids.*' => 'required|exists:users,id',
+        // ]);
+
+        $job_application = $this->service->findById($job_application_id);
+
+        // $this->service->assignReviewers($job_application_id, $request->reviewer_ids);
+        $this->service->updateStatus($job_application, RecruitmentStageTypes::SCREENING_REVIEW->value);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
+    public function assignReviewers(Request $request, $job_posting_id, $job_application_id)
+    {
         $request->validate([
-            'application_id' => 'required|exists:job_applications,id',
             'reviewer_ids'   => 'required|array|min:1',
             'reviewer_ids.*' => 'required|exists:users,id',
         ]);
 
-        $job_application = $this->service->findById($job_application_id);
-
         $this->service->assignReviewers($job_application_id, $request->reviewer_ids);
-        $this->service->updateStatus($job_application, RecruitmentStageTypes::SCREENING_REVIEW->value);
 
         return response()->json([
             'status'  => true,
@@ -87,7 +84,6 @@ class JobApplicationTrackingController extends Controller
             ],
             'message' => 'Reviewer successfully assigned to the job application.',
         ], 200);
-
     }
 
     public function updateToShortlistStage(Request $request, $job_posting_id, $job_application_id)

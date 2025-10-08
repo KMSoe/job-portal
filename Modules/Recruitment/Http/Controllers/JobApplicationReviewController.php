@@ -4,27 +4,29 @@ namespace Modules\Recruitment\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Recruitment\App\Services\JobApplicationReviewService;
 use Modules\Recruitment\App\Services\JobApplicationTrackingService;
 use Modules\Recruitment\Entities\JobApplicationReviewer;
 use Modules\Recruitment\Http\Requests\StoreJobApplicationReviewRequest;
+use Modules\Recruitment\Transformers\JobApplicationReviewReviewerSideResource;
 
 class JobApplicationReviewController extends Controller
 {
     private $service;
 
-    public function __construct(JobApplicationTrackingService $service)
+    public function __construct(JobApplicationReviewService $service)
     {
         $this->service = $service;
     }
 
     public function index(Request $request)
     {
-        $skills = $this->service->findByParams($request);
+        $job_application_reviews = $this->service->findByParams($request);
 
         return response()->json([
             'status'  => true,
             'data'    => [
-                'skills' => $skills,
+                'job_application_reviews' => $job_application_reviews,
             ],
             'message' => 'success',
         ], 200);
@@ -43,12 +45,12 @@ class JobApplicationReviewController extends Controller
 
     public function show($id)
     {
-        $skill = $this->service->findById($id);
+        $job_application_review = $this->service->findById($id);
 
         return response()->json([
             'status'  => true,
             'data'    => [
-                'skill' => $skill,
+                'job_application_review' => new JobApplicationReviewReviewerSideResource($job_application_review),
             ],
             'message' => 'success',
         ], 200);
