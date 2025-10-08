@@ -54,7 +54,6 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
 
 Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::resource('skills', SkillController::class);
-    Route::get('users', SkillController::class);
 });
 
 Route::prefix('/v1')->group(function () {
