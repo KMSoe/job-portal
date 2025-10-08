@@ -15,6 +15,7 @@ class JobApplicationReviewReviewerSideResource extends JsonResource
     {
         return [
             'id'                   => $this->id,
+            'reviewer_id'          => $this->reviewer_id,
             'jobPosting'           => $this->application?->jobPosting,
             'score'                => $this->score,
             'comment'              => $this->comment,

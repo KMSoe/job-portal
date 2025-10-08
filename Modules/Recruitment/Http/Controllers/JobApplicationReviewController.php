@@ -56,10 +56,14 @@ class JobApplicationReviewController extends Controller
         ], 200);
     }
 
-    public function submitReview(StoreJobApplicationReviewRequest $request, JobApplicationReviewer $review)
+    public function submitReview(StoreJobApplicationReviewRequest $request, $id)
     {
+        $review = JobApplicationReviewer::findOrFail($id);
+
         if ($review->reviewer_id !== auth()->id()) {
             return response()->json([
+                'status' => false,
+                'data' => [],
                 'message' => 'You are not authorized to submit this review.',
             ], 403);
         }
