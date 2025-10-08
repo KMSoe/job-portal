@@ -71,6 +71,9 @@ class ApplicantResumeController extends Controller
 
         return response()->json([
             'status'  => true,
+            'data' => [
+                'resume' => $resume
+            ],
             'message' => 'Resume uploaded successfully!',
         ], 201);
     }
