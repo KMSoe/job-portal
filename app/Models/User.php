@@ -48,6 +48,10 @@ class User extends Authenticatable
         'password'          => 'hashed',
     ];
 
+    protected $appends = [
+        'photo_url'
+    ];
+
     public function getPhotoUrlAttribute(): ?string
     {
         if ($this->photo) {
