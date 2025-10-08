@@ -7,6 +7,7 @@ use Modules\Recruitment\Http\Controllers\Applicant\ApplicantResumeController;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantSkillController;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantWorkExperienceController;
 use Modules\Recruitment\Http\Controllers\Auth\AuthenticatedSessionController;
+use Modules\Recruitment\Http\Controllers\Auth\RegisteredUserController;
 use Modules\Recruitment\Http\Controllers\GoogleOAuthController;
 use Modules\Recruitment\Http\Controllers\JobApplicationBoardController;
 use Modules\Recruitment\Http\Controllers\JobApplicationInterviewController;
@@ -28,8 +29,10 @@ use Modules\Recruitment\Http\Controllers\SkillController;
 
 Route::prefix('/v1/applicant')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
-    // Route::post('password/forgot', [AuthController::class, 'forgotPassword']);
-    // Route::post('password/reset', [AuthController::class, 'resetPassword']);
+    Route::post('/register', [RegisteredUserController::class, 'applicantRegister']);
+    Route::get('verify-email/{id}/{hash}', [RegisteredUserController::class, 'verifyEmail']);
+    Route::post('forgot-password', [RegisteredUserController::class, 'forgotPassword']);
+    Route::post('reset-password', [RegisteredUserController::class, 'resetPassword']);
 });
 
 Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function () {
