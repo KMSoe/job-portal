@@ -12,6 +12,7 @@ use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Modules\Recruitment\App\Enums\JobTypes;
 use Modules\Recruitment\App\Enums\WorkArrangementTypes;
 use Modules\Recruitment\App\Services\JobPostingService;
+use Modules\Recruitment\Entities\Applicant;
 use Modules\Recruitment\Entities\EducationLevel;
 use Modules\Recruitment\Entities\ExperienceLevel;
 use Modules\Recruitment\Entities\JobFunction;

@@ -4,11 +4,14 @@ namespace Modules\Recruitment\Http\Controllers\Applicant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Modules\Organization\Entities\Company;
 use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Modules\Recruitment\App\Repositories\Applicant\ApplicantJobPostingRepository;
+use Modules\Recruitment\Entities\Applicant;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Http\Requests\JobApplyRequest;
 use Modules\Recruitment\Transformers\Applicant\ApplicantSideJobPostingDetailResource;
+use Modules\Recruitment\Transformers\JobPostingResource;
 
 class ApplicantJobPostingController extends Controller
 {
@@ -28,6 +31,20 @@ class ApplicantJobPostingController extends Controller
             'data'    => [
                 'total_job_postings' => JobPosting::where('status', JobPostingStatusTypes::PUBLISHED)->count(),
                 'job_postings'       => $job_postings,
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
+    public function getCareerPageData()
+    {
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'num_of_job_postings' => JobPosting::where('status', JobPostingStatusTypes::PUBLISHED)->count(),
+                'num_of_companies'    => Company::count(),
+                'num_of_candicates'   => Applicant::count(),
+                'latest_job_postings' => JobPostingResource::collection($this->service->getLatestJobPosting(6)),
             ],
             'message' => 'success',
         ], 200);

@@ -83,6 +83,26 @@ class ApplicantJobPostingRepository
         return $data;
     }
 
+    public function getLatestJobPosting($count)
+    {
+
+        $data = JobPosting::with([
+            'company',
+            'department',
+            'designation',
+            'template',
+            'experienceLevel',
+            'jobFunction',
+            'minimumEducationLevel',
+            'salaryCurrency',
+            'skills',
+        ])
+            ->take($count)->get();
+        // ->whereNotNull('published_at')
+
+        return $data;
+    }
+
     public function findById($id)
     {
         $applicantId = auth()->guard('applicant')->id();
