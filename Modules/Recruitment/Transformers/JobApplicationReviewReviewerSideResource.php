@@ -14,12 +14,14 @@ class JobApplicationReviewReviewerSideResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'          => $this->id,
-            'score'       => $this->score,
-            'comment'     => $this->comment,
-            'application' => $this->application,
-            'applicant'   => new ApplicantResource($this->application?->applicant),
-            'jobPosting'  => $this->application?->jobPosting,
+            'id'                   => $this->id,
+            'jobPosting'           => $this->application?->jobPosting,
+            'score'                => $this->score,
+            'comment'              => $this->comment,
+            'application'          => $this->application,
+            'resume'               => $this->resume,
+            'supportive_documents' => $this->supportiveDocuments,
+            'applicant'            => new ApplicantResource($this->application?->applicant),
         ];
     }
 }

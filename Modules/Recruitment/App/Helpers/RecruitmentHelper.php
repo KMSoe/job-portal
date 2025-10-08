@@ -9,6 +9,7 @@ class RecruitmentHelper
     {
         $markAsReceived_action     = false;
         $review_action             = false;
+        $assign_review_action      = false;
         $shortlist_action          = false;
         $accessment_testing_action = false;
         $interview_action          = false;
@@ -21,6 +22,8 @@ class RecruitmentHelper
             $markAsReceived_action = true;
         } else if ($current_status == RecruitmentStageTypes::RECEIVED->value) {
             $review_action = true;
+        } else if ($current_status == RecruitmentStageTypes::SCREENING_REVIEW->value) {
+            $assign_review_action = true;
         } else if ($current_status == RecruitmentStageTypes::SHORTLISTING->value) {
             $accessment_testing_action = true;
             $interview_action          = true;
@@ -34,6 +37,7 @@ class RecruitmentHelper
         return [
             'markAsReceived_action'     => $markAsReceived_action,
             'review_action'             => $review_action,
+            'assign_review_action'      => $assign_review_action,
             'shortlist_action'          => $shortlist_action,
             'accessment_testing_action' => $accessment_testing_action,
             'interview_action'          => $interview_action,
