@@ -19,8 +19,8 @@ class JobApplicationReviewReviewerSideResource extends JsonResource
             'score'                => $this->score,
             'comment'              => $this->comment,
             'application'          => $this->application,
-            'resume'               => $this->resume,
-            'supportive_documents' => $this->supportiveDocuments,
+            'resume'               => $this->application->resume,
+            'supportive_documents' => $this->application->supportiveDocuments,
             'applicant'            => new ApplicantResource($this->application?->applicant),
         ];
     }
