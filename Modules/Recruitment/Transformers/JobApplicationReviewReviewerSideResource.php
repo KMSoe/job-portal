@@ -19,6 +19,7 @@ class JobApplicationReviewReviewerSideResource extends JsonResource
             'jobPosting'           => $this->application?->jobPosting,
             'score'                => $this->score,
             'comment'              => $this->comment,
+            'status'               => $this->status,
             'application'          => $this->application,
             'resume'               => $this->application->resume,
             'supportive_documents' => $this->application->supportiveDocuments,
