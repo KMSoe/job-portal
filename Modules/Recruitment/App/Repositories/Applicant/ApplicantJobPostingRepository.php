@@ -167,44 +167,25 @@ class ApplicantJobPostingRepository
 
     public function getApplications($applicant_id, $request)
     {
+        $keyword = $request->search ? $request->search : '';
         $perPage = $request->perPage ? $request->perPage : 20;
 
-        $data = JobPosting::with([
-            'company',
-            'department',
-            'designation',
-            'template',
-            'experienceLevel',
-            'jobFunction',
-            'minimumEducationLevel',
-            'salaryCurrency',
-            'skills',
-            'applications' => function ($query) use ($applicant_id) {
-                $query->where('applicant_id', $applicant_id);
-            },
-        ])
-            ->join('job_applications', 'job_applications.job_posting_id', '=', 'job_postings.id')
+        $data = JobApplication::with(['jobPosting.company'])
             ->where('job_applications.applicant_id', $applicant_id)
-            ->where(function ($query) use ($request) {
-                if ($request->status) {
+            ->where(function ($query) use ($request, $keyword) {
+                if($request->status != null) {
                     $query->where('job_applications.status', $request->status);
                 }
-            });
 
-        if ($request->sort != null && $request->sort != '') {
-            $sorts = explode(',', $request->input('sort', ''));
-
-            foreach ($sorts as $sortColumn) {
-                $sortDirection = Str::startsWith($sortColumn, '-') ? 'DESC' : 'ASC';
-                $sortColumn    = ltrim($sortColumn, '-');
-
-                $data->orderBy($sortColumn, $sortDirection);
-            }
-        } else {
-            $data->orderBy('job_applications.applied_at', 'DESC');
-        }
-
-        $data = $data->select('job_postings.*', 'job_applications.status AS application_status')->paginate($perPage);
+                if($keyword != '') {
+                    $query->whereHas('jobPosting', function ($query) use ($keyword) {
+                        $query->where('title', 'LIKE', '%' . $keyword . '%');
+                    });
+                }
+               
+            })
+            ->orderByDesc('job_applications.applied_at')
+            ->paginate($perPage);
 
         $items = $data->getCollection();
 
