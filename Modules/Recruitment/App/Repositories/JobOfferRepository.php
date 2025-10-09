@@ -1,7 +1,11 @@
 <?php
 namespace Modules\Recruitment\App\Repositories;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Modules\Organization\Entities\Employee;
+use Modules\Recruitment\Entities\JobOffer;
+use Modules\Recruitment\Entities\JobOfferAttachment;
 use Modules\Recruitment\Entities\OfferLetterTemplate;
 use Modules\Recruitment\Transformers\OfferLetterTemplateResource;
 
@@ -64,22 +68,42 @@ class JobOfferRepository
     public function store($data)
     {
         $data['created_by'] = auth()->id();
-        $offerLetterTemplate            = OfferLetterTemplate::create($data);
 
-        return $offerLetterTemplate;
-    }
+        $jobOfferData = array_diff_key($data, array_flip([
+            'attachments',
+            'inform_departments',
+            'cc_users',
+        ]));
 
-    public function update($offerLetterTemplate, $data)
-    {
-        $data['updated_by'] = auth()->id();
+        DB::beginTransaction();
+        $jobOffer = JobOffer::create($jobOfferData);
 
-        return $offerLetterTemplate->update($data);
-    }
+        if (! empty($data['attachments'])) {
+            JobOfferAttachment::whereIn('id', $data['attachments'])
+                ->update([
+                    'job_offer_id' => $jobOffer->id,
+                ]);
+        }
 
-    public function delete($id)
-    {
-        $offerLetterTemplate = OfferLetterTemplate::findOrFail($id);
-        $offerLetterTemplate->delete();
+        if (! empty($data['inform_departments'])) {
+            $departmentIds = array_map('intval', $data['inform_departments']);
+            $jobOffer->informedDepartments()->attach($departmentIds);
+        }
+
+        if (! empty($data['cc_users'])) {
+            $ccSyncData = [];
+            foreach ($data['cc_users'] as $cc) {
+                $ccSyncData[] = [
+                    'user_id'        => $cc,
+                    'designation_id' => Employee::where('user_id', $cc)->value('designation_id') ?? 0,
+                ];
+            }
+            $jobOffer->ccUsers()->attach($ccSyncData);
+        }
+
+        DB::commit();
+
+        return $jobOffer;
     }
 
 }

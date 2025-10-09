@@ -2,40 +2,30 @@
 
 namespace Modules\Recruitment\App\Services;
 
+use Modules\Recruitment\App\Repositories\JobOfferRepository;
 use Modules\Recruitment\App\Repositories\SkillRepository;
 
 class JobOfferService
 {
-    private SkillRepository $skillRepository;
+    private JobOfferRepository $jobOfferRepository;
 
-    public function __construct(SkillRepository $skillRepository)
+    public function __construct(JobOfferRepository $jobOfferRepository)
     {
-        $this->skillRepository = $skillRepository;
+        $this->jobOfferRepository = $jobOfferRepository;
     }
 
     public function findByParams($request)
     {
-        return $this->skillRepository->findByParams($request);
+        return $this->jobOfferRepository->findByParams($request);
     }
 
     public function findById($id)
     {
-        return $this->skillRepository->findById($id);
+        return $this->jobOfferRepository->findById($id);
     }
 
     public function store($data)
     {
-        return $this->skillRepository->store($data);
+        return $this->jobOfferRepository->store($data);
     }
-
-    public function update($id, $data)
-    {
-        return $this->skillRepository->update($id, $data);
-    }
-
-    public function delete($id)
-    {
-        return $this->skillRepository->delete($id);
-    }
-
 }

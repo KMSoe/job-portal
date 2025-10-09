@@ -13,6 +13,8 @@ use Modules\Recruitment\Http\Controllers\JobApplicationBoardController;
 use Modules\Recruitment\Http\Controllers\JobApplicationInterviewController;
 use Modules\Recruitment\Http\Controllers\JobApplicationReviewController;
 use Modules\Recruitment\Http\Controllers\JobApplicationTrackingController;
+use Modules\Recruitment\Http\Controllers\JobOfferAttachmentController;
+use Modules\Recruitment\Http\Controllers\JobOfferController;
 use Modules\Recruitment\Http\Controllers\JobPostingController;
 use Modules\Recruitment\Http\Controllers\JobPostingTemplateController;
 use Modules\Recruitment\Http\Controllers\OfferLetterTemplateController;
@@ -88,6 +90,9 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
 
     Route::resource('offer-letter-templates', OfferLetterTemplateController::class);
     Route::get('offer-letter-templates-page-data', [OfferLetterTemplateController::class, 'getPageData']);
+
+    Route::post('job-offer-attachments', [JobOfferAttachmentController::class, 'store']);
+    Route::post('job-applications/{job_application_id}/job-offers', [JobOfferController::class, 'store']);
 
     // Google OAuth
     Route::get('/auth/google', [GoogleOAuthController::class, 'redirect']);

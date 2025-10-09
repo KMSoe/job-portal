@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateJobOffersTable extends Migration
 {
@@ -22,16 +22,18 @@ class CreateJobOffersTable extends Migration
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('designation_id');
             $table->unsignedBigInteger('offer_letter_template_id');
-            $table->unsignedBigInteger('salary_currency_id');
-            $table->double('basic_salary');
-            $table->string('employment_type');
-            $table->boolean('approve_required');
-            $table->unsignedBigInteger('approver_id');
-            $table->string('approver_signature');
+            $table->unsignedBigInteger('salary_currency_id')->nullable();
+            $table->double('basic_salary')->nullable();
+            $table->string('employment_type')->nullable();
+            $table->boolean('approve_required')->default(true);
+            $table->unsignedBigInteger('approver_id')->nullable();
+            $table->unsignedBigInteger('approver_position_id')->nullable();
+            $table->string('approver_signature')->nullable();
             $table->date('offer_date');
-            $table->date('joined_date');
+            $table->date('joined_date')->nullable();
             $table->string('status');
-            $table->string('offer_letter_file');
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->default(0);
             $table->timestamps();
         });
     }
