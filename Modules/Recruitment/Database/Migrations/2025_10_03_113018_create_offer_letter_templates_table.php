@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->unsignedBigInteger('company_id');
             $table->boolean('is_salary_visible')->default(true);
-            $table->longText('content');
+            $table->json('template_data');
             $table->boolean('is_active')->default(true);
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->default(0);

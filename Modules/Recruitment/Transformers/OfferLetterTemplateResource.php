@@ -19,7 +19,7 @@ class OfferLetterTemplateResource extends JsonResource
             'description'       => $this->description,
             'company'           => $this->company,
             'is_salary_visible' => (bool) $this->is_salary_visible,
-            'content'           => $this->content,
+            'template_data'     => $this->template_data,
             'is_active'         => (bool) $this->is_active,
             'created_by'        => $this->createdBy,
             'created_at'        => $this->created_at,

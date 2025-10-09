@@ -39,12 +39,17 @@ class OfferLetterTemplateController extends Controller
             'data'    => [
                 'companies' => Company::all(),
                 'codes'     => [
+                    '{{offer_date}}',
+                    '{{ref}}',
                     '{{job_title}}',
                     '{{applicant_name}}',
                     '{{basic_salary}}',
                     '{{company_name}}',
                     '{{department}}',
                     '{{designation}}',
+                    '{{subject}}',
+                    '{{probationary_period}}',
+                    '{{extended_probationary_period}}',
                 ],
             ],
             'message' => 'success',

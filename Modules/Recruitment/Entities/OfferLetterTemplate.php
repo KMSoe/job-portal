@@ -23,7 +23,7 @@ class OfferLetterTemplate extends Model
         'description',
         'company_id',
         'is_salary_visible',
-        'content',
+        'template_data',
         'is_active',
         'created_by',
         'updated_by',
@@ -35,7 +35,8 @@ class OfferLetterTemplate extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'is_active' => 'boolean',
+        'is_active'     => 'boolean',
+        'template_data' => 'array',
     ];
 
     // --- Relationships ---
