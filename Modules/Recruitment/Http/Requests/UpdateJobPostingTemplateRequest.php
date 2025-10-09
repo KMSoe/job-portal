@@ -13,14 +13,12 @@ class UpdateJobPostingTemplateRequest extends FormRequest
      */
     public function rules()
     {
-        $templateId = $this->route('job_posting_template')->id ?? null;
-
         return [
             'name'                                                 => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('job_posting_templates', 'name')->ignore($templateId),
+                Rule::unique('job_posting_templates', 'name')->ignore($this->job_posting_template),
             ],
             'description'                                          => 'nullable|string',
             'company_id'                                           => 'nullable|exists:companies,id',
