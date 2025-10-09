@@ -35,9 +35,4 @@ Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::resource('designations', DesignationController::class);
     Route::get('designation-sample-download', [DesignationController::class, 'downloadSampleExcelFile']);
     Route::post('designation/import', [DesignationController::class, 'import'])->name('designation.import');
-
-    Route::get('countries', [WorldController::class, 'getAllCountries']);
-    Route::get('cities', [WorldController::class, 'getAllCities']);
-    Route::get('states', [WorldController::class, 'getAllStates']);
-    Route::get('currencies', [WorldController::class, 'getAllCurrencies']);
 });
