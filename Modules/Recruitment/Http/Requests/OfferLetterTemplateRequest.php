@@ -13,12 +13,12 @@ class OfferLetterTemplateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'                                                 => 'required|string|max:255|unique:job_posting_templates,name',
-            'description'                                          => 'nullable|string',
-            'company_id'                                           => 'nullable|exists:companies,id',
-            'is_active'                                            => 'sometimes|boolean',
-
-            
+            'name'              => 'required|string|max:255|unique:job_posting_templates,name',
+            'description'       => 'nullable|string',
+            'company_id'        => 'required|exists:companies,id',
+            'is_active'         => 'required|boolean',
+            'is_salary_visible' => 'required|boolean',
+            'content'           => 'required|string',
         ];
     }
 
