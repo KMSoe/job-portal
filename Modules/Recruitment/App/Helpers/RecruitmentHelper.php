@@ -16,6 +16,7 @@ class RecruitmentHelper
         $evaluation_action         = false;
         $reference_check_action    = false;
         $offer_action              = false;
+        $send_offer_action         = false;
         $onboard_check_action      = false;
 
         if ($current_status == RecruitmentStageTypes::SUBMITTED->value) {
@@ -24,7 +25,7 @@ class RecruitmentHelper
             $review_action = true;
         } else if ($current_status == RecruitmentStageTypes::SCREENING_REVIEW->value) {
             $assign_review_action = true;
-            $shortlist_action = true;
+            $shortlist_action     = true;
         } else if ($current_status == RecruitmentStageTypes::SHORTLISTING->value) {
             $accessment_testing_action = true;
             $interview_action          = true;
@@ -33,6 +34,8 @@ class RecruitmentHelper
         } else if ($current_status == RecruitmentStageTypes::EVALUATION_SELECTION->value) {
             $reference_check_action = true;
             $offer_action           = true;
+        } else if ($current_status == RecruitmentStageTypes::OFFER->value) {
+            $send_offer_action = true;
         }
 
         return [
@@ -45,6 +48,7 @@ class RecruitmentHelper
             'evaluation_action'         => $evaluation_action,
             'reference_check_action'    => $reference_check_action,
             'offer_action'              => $offer_action,
+            'send_offer_action'         => $send_offer_action,
             'onboard_check_action'      => $onboard_check_action,
         ];
     }
