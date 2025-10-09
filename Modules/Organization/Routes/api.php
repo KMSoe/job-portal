@@ -19,8 +19,8 @@ use Modules\Organization\Http\Controllers\Api\WorldController;
 */
 Route::prefix('/v1/hrm')->name('api.auth.')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
-    Route::post('password/forgot', [AuthController::class, 'forgotPassword']);
-    Route::post('password/reset', [AuthController::class, 'resetPassword']);
+    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
 });
 
 Route::middleware(['auth:api'])->prefix('/v1')->group(function () {

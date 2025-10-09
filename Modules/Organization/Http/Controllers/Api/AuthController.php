@@ -10,11 +10,13 @@ use App\Models\User;
 use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
 {
@@ -102,138 +104,47 @@ class AuthController extends Controller
 
     public function forgotPassword(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => ['required', 'email'],
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Validation Fail',
-                'errors'  => $validator->getMessageBag(),
-            ], 422);
-        }
-
-        $user = User::where('email', $request->get('email'))->first();
-
-        if (! $user) {
-            return response()->json([
-                'status'  => false,
-                'message' => "User doesn\'t exist.",
-            ], 404);
-        }
-
-        $token = Str::random(10);
-
         try {
-            DB::table('password_resets')->updateOrInsert(
-                [
-                    'email' => $user->email,
+            $request->validate([
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'exists:'.User::class.',email'],
+            ]);
 
-                ],
-                [
-                    'token'      => Hash::make($token),
-                    'created_at' => Carbon::now(),
-                ]
-            );
+            $user = User::where('email', $request->email)->first();
 
-            $mailData = [
-                "email" => $user->email,
-                "token" => $token,
-                "name"  => $user->name,
-            ];
+            $reset_link = URL('/api/v1/hrm/reset-password?id='.$user->id.'&hash='.sha1($user->email));
 
-            // Send Mail
-            Mail::to($user->email)->send(new ResetPasswordMail($mailData));
+            Mail::send('organization::emails.forgotpasswordmail', ['reset_link' => $reset_link , 'name' => $user->name], function($message) use($user) {
+                $message->to($user->email);
+                $message->subject('Password Reset Request');
+            });
 
-            return response()->json([
-                'status'  => true,
-                'message' => 'Password reset Email Sent successfully!',
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status'  => false,
-                'message' => "Something Went Wrong!",
-            ], 500);
+            return response()->json(['message' => 'Password reset link sent to your email.'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
-    public function checkResetPasswordToken(Request $request)
+    public function resetPassword(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => ['required', 'email'],
-            'token' => ['required', 'string'],
-        ]);
+        try {
+            $request->validate([
+                'id' => ['required', 'integer', 'exists:'.User::class.',id'],
+                'hash' => ['required', 'string'],
+                'password' => ['required', 'confirmed', Password::defaults()],
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Fail',
-                'errors'  => $validator->getMessageBag(),
-            ], 422);
-        }
+            $user = User::find($request->id);
 
-        $passwordReset = DB::table('password_resets')->where('email', $request->get('email'))
-            ->where('created_at', '>', Carbon::now()->subHours(1))
-            ->first();
-
-        if ($passwordReset) {
-            if (Hash::check($request->get('token'), $passwordReset->token)) {
-                return response()->json([
-                    'status'  => true,
-                    'message' => "Token Valid",
-                ], 200);
+            if (!hash_equals((string) $request->hash, sha1($user->email))) {
+                return response()->json(['message' => 'Invalid reset link.'], 403);
             }
-        } else {
-            return response()->json([
-                'status'  => false,
-                'message' => "Token Invalid",
-            ], 422);
+
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            return response()->json(['message' => 'Password reset successfully.'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
-    }
-
-    public function resetPassword(ResetPasswordRequest $request)
-    {
-        $request->validated();
-
-        $email = $request->get('email');
-        $token = $request->get('token');
-
-        $passwordReset = DB::table('password_resets')->where('email', $email)
-            ->where('created_at', '>', Carbon::now()->subHours(1))
-            ->first();
-
-        if (! $passwordReset) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'Token is Invalid or expired',
-            ], 422);
-        } else {
-            if (! Hash::check($token, $passwordReset->token)) {
-                return response()->json([
-                    'status'  => true,
-                    'message' => "Token is Invalid or expired",
-                ], 422);
-            }
-        }
-
-        $user = User::where('email', $passwordReset->email)->first();
-
-        if (! $user) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'User doesn\'t exists.',
-            ], 404);
-        }
-
-        $user->password          = Hash::make($request->get('password'));
-        $user->is_activated      = 1;
-        $user->email_verified_at = now();
-        $user->save();
-
-        return response()->json([
-            'status'  => true,
-            'message' => 'Password changed successfully. Login again!',
-        ], 200);
     }
 }
