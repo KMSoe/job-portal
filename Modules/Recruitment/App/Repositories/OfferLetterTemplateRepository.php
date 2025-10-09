@@ -2,7 +2,7 @@
 namespace Modules\Recruitment\App\Repositories;
 
 use Illuminate\Support\Str;
-use Modules\Recruitment\Entities\offerLetterTemplate;
+use Modules\Recruitment\Entities\OfferLetterTemplate;
 use Modules\Recruitment\Transformers\offerLetterTemplateResource;
 
 class OfferLetterTemplateRepository

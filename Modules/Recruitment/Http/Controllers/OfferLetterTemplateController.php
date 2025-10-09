@@ -6,7 +6,7 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Organization\Entities\Company;
 use Modules\Recruitment\App\Services\OfferLetterTemplateService;
-use Modules\Recruitment\Entities\offerLetterTemplate;
+use Modules\Recruitment\Entities\OfferLetterTemplate;
 use Modules\Recruitment\Http\Requests\OfferLetterTemplateRequest;
 use Modules\Recruitment\Transformers\offerLetterTemplateResource;
 
