@@ -13,15 +13,13 @@ class UpdateSkillRequest extends FormRequest
      */
     public function rules()
     {
-        $skillId = $this->route('skill')->id ?? null;
-
         return [
             'name'        => [
                 'required',
                 'string',
                 'max:255',
                 // Ignore the current skill ID when checking for uniqueness
-                Rule::unique('skills', 'name')->ignore($skillId),
+                Rule::unique('skills', 'name')->ignore($this->skill),
             ],
             'description' => 'nullable|string',
         ];

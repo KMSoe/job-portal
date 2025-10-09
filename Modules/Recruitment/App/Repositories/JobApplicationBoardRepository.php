@@ -124,7 +124,7 @@ class JobApplicationBoardRepository
 
     public function getApplicationDetail($job_application_id)
     {
-        $job_application = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
+        $job_application = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments', 'reviewers.reviewer'])
             ->findOrFail($job_application_id);
 
         return $job_application;

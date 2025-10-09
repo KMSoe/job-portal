@@ -33,5 +33,7 @@ class JobApplicationTrackingRepository
                 ]
             );
         }
+
+        JobApplicationReviewer::where('application_id', $job_application_id)->whereNotIn('reviewer_id', $reviewer_ids)->delete();
     }
 }

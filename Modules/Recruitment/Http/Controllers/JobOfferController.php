@@ -6,15 +6,16 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Recruitment\App\Services\JobApplicationReviewService;
 use Modules\Recruitment\App\Services\JobApplicationTrackingService;
+use Modules\Recruitment\App\Services\JobOfferService;
 use Modules\Recruitment\Entities\JobApplicationReviewer;
 use Modules\Recruitment\Http\Requests\StoreJobApplicationReviewRequest;
 use Modules\Recruitment\Transformers\JobApplicationReviewReviewerSideResource;
 
-class JobApplicationReviewController extends Controller
+class JobOfferController extends Controller
 {
     private $service;
 
-    public function __construct(JobApplicationReviewService $service)
+    public function __construct(JobOfferService $service)
     {
         $this->service = $service;
     }
