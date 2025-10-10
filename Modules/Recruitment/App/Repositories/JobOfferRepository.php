@@ -93,7 +93,7 @@ class JobOfferRepository
     public function store($data)
     {
         $data['created_by'] = auth()->id();
-        $data['status']     = JobOfferStatusTypes::DRAFT->value;
+        $data['status']     = $data['status'] ?? JobOfferStatusTypes::DRAFT->value;
 
         $jobOfferData = array_diff_key($data, array_flip([
             'attachments',
