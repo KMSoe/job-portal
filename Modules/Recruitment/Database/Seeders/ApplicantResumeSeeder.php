@@ -2,7 +2,7 @@
 namespace Modules\Recruitment\Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\File;
+use Illuminate\Http\File;
 use Modules\Recruitment\Entities\Applicant;
 use Modules\Recruitment\Entities\Resume;
 use Modules\Storage\App\Classes\LocalStorage;
@@ -18,7 +18,7 @@ class ApplicantResumeSeeder extends Seeder
     {
         $applicant = Applicant::first();
 
-        $localFilePath = public_path('samples_files/sample_resume.pdf');
+        $localFilePath = public_path('sample_files/sample_resume.pdf');
         $localFile     = new File($localFilePath);
 
         $fileName = $localFile->getFilename();
