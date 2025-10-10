@@ -13,6 +13,7 @@ class RecruitmentHelper
         $shortlist_action          = false;
         $accessment_testing_action = false;
         $interview_action          = false;
+        $create_interview_action   = false;
         $evaluation_action         = false;
         $reference_check_action    = false;
         $offer_action              = false;
@@ -30,7 +31,8 @@ class RecruitmentHelper
             $accessment_testing_action = true;
             $interview_action          = true;
         } else if ($current_status == RecruitmentStageTypes::INTERVIEW->value) {
-            $evaluation_action = true;
+            $create_interview_action = true;
+            $evaluation_action       = true;
         } else if ($current_status == RecruitmentStageTypes::EVALUATION_SELECTION->value) {
             $reference_check_action = true;
             $offer_action           = true;
@@ -45,6 +47,7 @@ class RecruitmentHelper
             'shortlist_action'          => $shortlist_action,
             'accessment_testing_action' => $accessment_testing_action,
             'interview_action'          => $interview_action,
+            'create_interview_action'   => $create_interview_action,
             'evaluation_action'         => $evaluation_action,
             'reference_check_action'    => $reference_check_action,
             'offer_action'              => $offer_action,
