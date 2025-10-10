@@ -56,7 +56,6 @@ class JobOfferController extends Controller
 
     public function send(Request $request, $job_offer_id)
     {
-
         $job_offer = $this->service->findById($job_offer_id);
 
         Mail::send('recruitment::emails.joboffermail', [
@@ -82,7 +81,7 @@ class JobOfferController extends Controller
         ], 200);
     }
 
-    public function markedAsOfferAccepted(Request $request, $job_offer_id)
+    public function markAsOfferAccepted(Request $request, $job_offer_id)
     {
         $job_offer = $this->service->findById($job_offer_id);
 
