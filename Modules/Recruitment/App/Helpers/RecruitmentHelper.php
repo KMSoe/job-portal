@@ -16,8 +16,8 @@ class RecruitmentHelper
         $create_interview_action   = false;
         $evaluation_action         = false;
         $reference_check_action    = false;
-        $offer_action              = false;
-        $send_offer_action         = false;
+        $update_to_offer_action    = false;
+        $create_offer_action       = false;
         $onboard_check_action      = false;
 
         if ($current_status == RecruitmentStageTypes::SUBMITTED->value) {
@@ -35,9 +35,11 @@ class RecruitmentHelper
             $evaluation_action       = true;
         } else if ($current_status == RecruitmentStageTypes::EVALUATION_SELECTION->value) {
             $reference_check_action = true;
-            $offer_action           = true;
+            $update_to_offer_action = true;
         } else if ($current_status == RecruitmentStageTypes::OFFER->value) {
-            $send_offer_action = true;
+            $create_offer_action = true;
+        } else if ($current_status == RecruitmentStageTypes::OFFER_ACCEPTED->value) {
+            $onboard_check_action = true;
         }
 
         return [
@@ -50,8 +52,8 @@ class RecruitmentHelper
             'create_interview_action'   => $create_interview_action,
             'evaluation_action'         => $evaluation_action,
             'reference_check_action'    => $reference_check_action,
-            'offer_action'              => $offer_action,
-            'send_offer_action'         => $send_offer_action,
+            'update_to_offer_action'    => $update_to_offer_action,
+            'create_offer_action'       => $create_offer_action,
             'onboard_check_action'      => $onboard_check_action,
         ];
     }

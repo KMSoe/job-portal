@@ -12,6 +12,7 @@ enum RecruitmentStageTypes: string {
     case REFERENCE_BACKGROUND_CHECKS = 'Reference and Background Checks';
     case OFFER                       = 'Offer';
     case OFFER_ACCEPTED              = 'Offer Accepted';
+    case OFFER_Declined              = 'Offer Declined';
     case ONBOARDING                  = 'Onboarding';
 
     public static function values(): array
