@@ -78,6 +78,6 @@ class JobApplication extends Model
 
     public function jobOffer()
     {
-        return $this->hasOne(JobOffer::class, 'job_aplication_id');
+        return $this->hasOne(JobOffer::class, 'job_application_id');
     }
 }
