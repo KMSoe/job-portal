@@ -4,6 +4,7 @@ namespace Modules\Recruitment\App\Repositories;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
+use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\JobOfferAttachment;
 use Modules\Recruitment\Transformers\JobOfferResource;
@@ -92,7 +93,7 @@ class JobOfferRepository
     public function store($data)
     {
         $data['created_by'] = auth()->id();
-        $data['status']     = 'draft';
+        $data['status']     = JobOfferStatusTypes::DRAFT->value;
 
         $jobOfferData = array_diff_key($data, array_flip([
             'attachments',

@@ -127,7 +127,7 @@ class JobApplicationBoardRepository
         $job_application = JobApplication::with([
             'applicant.skills', 'resume', 'supportiveDocuments', 'reviewers.reviewer',
             'interviews.interviewers',
-            'jobOffer:id,status',
+            'jobOffer.salaryCurrency',
         ])
             ->findOrFail($job_application_id);
 

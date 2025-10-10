@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
+use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\App\Services\JobOfferService;
 use Modules\Recruitment\Http\Requests\JobOfferFormRequest;
 use Modules\Recruitment\Transformers\JobOfferResource;
@@ -88,7 +89,7 @@ class JobOfferController extends Controller
         });
 
         $job_offer->update([
-            'status' => 'sent',
+            'status' => JobOfferStatusTypes::SENT->value,
         ]);
 
         return response()->json([
@@ -103,7 +104,7 @@ class JobOfferController extends Controller
         $job_offer = $this->service->findById($job_offer_id);
 
         $job_offer->update([
-            'status' => '',
+            'status' => JobOfferStatusTypes::OFFER_ACCEPTED->value,
         ]);
 
         return response()->json([
@@ -118,7 +119,7 @@ class JobOfferController extends Controller
         $job_offer = $this->service->findById($job_offer_id);
 
         $job_offer->update([
-            'status' => '',
+            'status' => JobOfferStatusTypes::OFFER_DECLINED->value,
         ]);
 
         return response()->json([
