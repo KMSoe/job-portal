@@ -47,6 +47,7 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
     Route::get('resumes', [ApplicantResumeController::class, 'index']);
     Route::post('resumes', [ApplicantResumeController::class, 'store']);
     Route::delete('resumes/{id}', [ApplicantResumeController::class, 'destroy']);
+    Route::patch('resumes/{id}/default', [ApplicantResumeController::class, 'setDefault']);
 
     Route::post('job-postings/{id}/apply', [ApplicantJobPostingController::class, 'apply']);
     Route::get('applications', [ApplicantJobPostingController::class, 'applications']);

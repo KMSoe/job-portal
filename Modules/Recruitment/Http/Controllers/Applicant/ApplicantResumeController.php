@@ -78,6 +78,27 @@ class ApplicantResumeController extends Controller
         ], 201);
     }
 
+    public function setDefault($id)
+    {
+        $applicant = auth()->guard('applicant')->user();
+
+        Resume::where('applicant_id', $applicant->id)->where('id', $id)->update([
+            'is_default' => true,
+        ]);
+
+        Resume::where('applicant_id', $applicant->id)->whereNot('id', $id)->update([
+            'is_default' => false,
+        ]);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+
+            ],
+            'message' => 'success!',
+        ], 201);
+    }
+
     public function destroy($id)
     {
         $applicant = auth()->guard('applicant')->user();
