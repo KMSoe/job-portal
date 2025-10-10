@@ -100,5 +100,5 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
 
     // Application Interview
     Route::resource('job-interviews', JobApplicationInterviewController::class);
-    Route::post('interview-feedback/{id}', [JobApplicationInterviewController::class, 'updateFeedback']);
+    Route::post('interview-feedback', [JobApplicationInterviewController::class, 'updateFeedback']);
 });

@@ -271,7 +271,15 @@ class JobApplicationInterviewService
     public function updateFeedback($data, $id)
     {
         try {
-            $interviewer = JobApplicationInterviewInterviewer::findOrFail($id);
+            $user = auth()->user();
+            $interviewer = JobApplicationInterviewInterviewer::where('interview_id', $data['interview_id'])
+                            ->where('user_id', $user->id)
+                            ->first();
+
+            if (!$interviewer) {
+                throw new Exception("Interviewer not found");
+            }
+
             $interviewer->update([
                 'score' => $data['score'] ?? $interviewer->score,
                 'feedback' => $data['feedback'] ?? $interviewer->feedback,

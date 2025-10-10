@@ -80,6 +80,7 @@ class JobApplicationInterviewController extends Controller
     public function updateFeedback(Request $request, $id)
     {
         $request->validate([
+            'interview_id' => 'required|exists:job_application_interviews,id',
             'score' => 'nullable|integer|min:1|max:10',
             'feedback' => 'nullable|string'
         ]);
