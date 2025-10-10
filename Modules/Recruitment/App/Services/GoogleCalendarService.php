@@ -157,6 +157,15 @@ class GoogleCalendarService
         return $this->client->createAuthUrl();
     }
 
+    public function getAuthUrlWithState(?string $state = null): string
+    {
+        if ($state) {
+            $this->client->setState($state);
+        }
+
+        return $this->client->createAuthUrl();
+    }
+
     public function authenticateWithCode($code)
     {
         $token = $this->client->fetchAccessTokenWithAuthCode($code);
