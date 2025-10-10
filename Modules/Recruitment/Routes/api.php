@@ -8,6 +8,7 @@ use Modules\Recruitment\Http\Controllers\Applicant\ApplicantSkillController;
 use Modules\Recruitment\Http\Controllers\Applicant\ApplicantWorkExperienceController;
 use Modules\Recruitment\Http\Controllers\Auth\AuthenticatedSessionController;
 use Modules\Recruitment\Http\Controllers\Auth\RegisteredUserController;
+use Modules\Recruitment\Http\Controllers\ChecklistTemplateController;
 use Modules\Recruitment\Http\Controllers\GoogleOAuthController;
 use Modules\Recruitment\Http\Controllers\JobApplicationBoardController;
 use Modules\Recruitment\Http\Controllers\JobApplicationInterviewController;
@@ -103,6 +104,11 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::post('job-offers/{id}/send', [JobOfferController::class, 'send']);
     Route::patch('job-offers/{id}/mark-as-offer-accepted', [JobOfferController::class, 'markAsOfferAccepted']);
     Route::patch('job-offers/{id}/mark-as-offer-declined', [JobOfferController::class, 'markedAsOfferDeclined']);
+
+    Route::resource('checklist-templates', ChecklistTemplateController::class);
+    Route::delete('checklist-template/bulk-delete', [ChecklistTemplateController::class, 'bulkDelete']);
+    Route::put('checklist-template-items/{id}/update', [ChecklistTemplateController::class, 'updateItem']);
+    Route::delete('checklist-template-items/{id}/delete', [ChecklistTemplateController::class, 'destroyItem']);
 
     // Google OAuth
     Route::get('/auth/google', [GoogleOAuthController::class, 'redirect']);
