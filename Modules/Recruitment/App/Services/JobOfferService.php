@@ -28,4 +28,14 @@ class JobOfferService
     {
         return $this->jobOfferRepository->store($data);
     }
+
+    public function update($id, $data)
+    {
+        return $this->jobOfferRepository->update($id, $data);
+    }
+
+    public function send($job_offer_id)
+    {
+        return $this->jobOfferRepository->send($job_offer_id);
+    }
 }

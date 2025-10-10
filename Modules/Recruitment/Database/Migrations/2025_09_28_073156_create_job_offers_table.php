@@ -21,7 +21,7 @@ class CreateJobOffersTable extends Migration
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('designation_id');
-            $table->unsignedBigInteger('offer_letter_template_id');
+            $table->unsignedBigInteger('offer_letter_template_id')->nullable();
             $table->unsignedBigInteger('salary_currency_id')->nullable();
             $table->double('basic_salary')->nullable();
             $table->string('employment_type')->nullable();
@@ -32,6 +32,9 @@ class CreateJobOffersTable extends Migration
             $table->date('offer_date');
             $table->date('joined_date')->nullable();
             $table->string('status');
+            $table->string('offer_letter_subject')->nullable();
+            $table->string('offer_letter_content')->nullable();
+            $table->string('offer_letter_file_path')->nullable();
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->default(0);
             $table->timestamps();

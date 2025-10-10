@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorldDataController;
 use Illuminate\Http\Request;
@@ -26,4 +27,8 @@ Route::prefix('v1/')->group(function () {
     Route::get('cities', [WorldDataController::class, 'getAllCities']);
     Route::get('states', [WorldDataController::class, 'getAllStates']);
     Route::get('currencies', [WorldDataController::class, 'getAllCurrencies']);
+});
+
+Route::middleware(['auth:api'])->prefix('v1/')->group(function () {
+    Route::post('files', [FileController::class, 'store']);
 });

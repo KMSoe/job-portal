@@ -54,6 +54,10 @@ class Applicant extends Authenticatable implements MustVerifyEmail
         'open_to_work'      => 'boolean', // Cast the boolean field
     ];
 
+    protected $appends = [
+        'photo_url'
+    ];
+
     public function getPhotoUrlAttribute(): ?string
     {
         if ($this->photo) {

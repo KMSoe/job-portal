@@ -3,6 +3,7 @@ namespace Modules\Recruitment\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Modules\Organization\App\Enums\EmploymentTypes;
 
 class JobOfferFormRequest extends FormRequest
 {
@@ -16,22 +17,21 @@ class JobOfferFormRequest extends FormRequest
         return [
             // Core Job Offer Details
             'company_id'               => 'required|exists:companies,id',
+            'department_id'            => 'required|exists:departments,id',
             'designation_id'           => 'required|exists:designations,id',
             'offer_letter_template_id' => 'required|exists:offer_letter_templates,id',
 
             // Salary and Employment
             'salary_currency_id'       => 'nullable|exists:currencies,id',
             'basic_salary'             => 'nullable|numeric|min:0',
-            'employment_type'          => 'nullable',
+            'employment_type'          => ['nullable', Rule::in(EmploymentTypes::values())],
 
             // Offer Status and Dates
             'offer_date'               => 'required|date',
             'joined_date'              => 'nullable|date|after_or_equal:offer_date',
-            'status'                   => ['required', Rule::in(['draft', 'pending_approval', 'offered'])], // Use defined status states
 
-                                                     // Approval Details
-            'approve_required'         => 'boolean', // Expects 0/1 or "true"/"false" from frontend
-            'approver_id'              => 'nullable|exists:users,id',
+            'approve_required'         => 'boolean',
+            'approver_id'              => 'nullable|required_if:approve_required,true|exists:users,id',
             'approver_signature'       => 'nullable|string',
 
             // Attachments (Handles file paths saved temporarily or from another step)
@@ -45,6 +45,10 @@ class JobOfferFormRequest extends FormRequest
             // CC Users (Pivot Data)
             'cc_users'                 => 'nullable|array',
             'cc_users.*'               => 'required|exists:users,id',
+
+            // CC Users (Pivot Data)
+            'bcc_users'                => 'nullable|array',
+            'bcc_users.*'              => 'required|exists:users,id',
         ];
     }
 
