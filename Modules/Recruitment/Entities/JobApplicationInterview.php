@@ -30,4 +30,13 @@ class JobApplicationInterview extends Model
     {
         return $this->hasMany(JobApplicationInterviewInterviewer::class, 'interview_id');
     }
+
+    public function getCanCommentAttribute()
+    {
+        $currentUser = auth()->user();
+
+        return $this->interviewers->contains(function ($interviewer) use ($currentUser) {
+            return $interviewer->user_id === $currentUser->id;
+        });
+    }
 }

@@ -24,6 +24,7 @@ class JobApplicationInterviewResource extends JsonResource
             'location' => $this->location,
             'status' => $this->status,
             'notes' => $this->notes,
+            'can_comment' => $this->can_comment ?? false,
             'interviewers' => $this->interviewers,
             'google_event_id' => $this->google_event_id,
             'google_meet_link' => $this->google_meet_link,
