@@ -63,6 +63,8 @@ Route::prefix('/v1')->group(function () {
     Route::get('job-postings', [ApplicantJobPostingController::class, 'index']);
     Route::get('job-postings/{id}', [ApplicantJobPostingController::class, 'show']);
     Route::get('career-page-data', [ApplicantJobPostingController::class, 'getCareerPageData']);
+
+    Route::get('/auth/google/callback', [GoogleOAuthController::class, 'callback']);
 });
 
 Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
@@ -96,7 +98,6 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
 
     // Google OAuth
     Route::get('/auth/google', [GoogleOAuthController::class, 'redirect']);
-    Route::get('/auth/google/callback', [GoogleOAuthController::class, 'callback']);
 
     // Application Interview
     Route::resource('job-interviews', JobApplicationInterviewController::class);
