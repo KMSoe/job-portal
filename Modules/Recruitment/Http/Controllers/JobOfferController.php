@@ -6,7 +6,9 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
+use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Services\JobOfferService;
+use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Http\Requests\JobOfferFormRequest;
 use Modules\Recruitment\Transformers\JobOfferResource;
 
@@ -107,6 +109,11 @@ class JobOfferController extends Controller
             'status' => JobOfferStatusTypes::OFFER_ACCEPTED->value,
         ]);
 
+        JobApplication::where('id', $job_offer->job_application_id)
+            ->update([
+                'status' => RecruitmentStageTypes::OFFER_ACCEPTED->value,
+            ]);
+
         return response()->json([
             'status'  => true,
             'data'    => [],
@@ -121,6 +128,11 @@ class JobOfferController extends Controller
         $job_offer->update([
             'status' => JobOfferStatusTypes::OFFER_DECLINED->value,
         ]);
+
+        JobApplication::where('id', $job_offer->job_application_id)
+            ->update([
+                'status' => RecruitmentStageTypes::OFFER_Declined->value,
+            ]);
 
         return response()->json([
             'status'  => true,
