@@ -22,6 +22,8 @@ class RecruitmentDatabaseSeeder extends Seeder
         $this->call(JobPostingTemplateSeeder::class);
         $this->call(JobPostingSeeder::class);
         $this->call(ApplicantSeeder::class);
+        $this->call(ApplicantSkillSeeder::class);
         $this->call(ApplicantExperienceSeeder::class);
+        $this->call(ApplicantResumeSeeder::class);
     }
 }

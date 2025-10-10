@@ -47,6 +47,7 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
     Route::get('resumes', [ApplicantResumeController::class, 'index']);
     Route::post('resumes', [ApplicantResumeController::class, 'store']);
     Route::delete('resumes/{id}', [ApplicantResumeController::class, 'destroy']);
+    Route::patch('resumes/{id}/default', [ApplicantResumeController::class, 'setDefault']);
 
     Route::post('job-postings/{id}/apply', [ApplicantJobPostingController::class, 'apply']);
     Route::get('applications', [ApplicantJobPostingController::class, 'applications']);
@@ -95,6 +96,13 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
 
     Route::post('job-offer-attachments', [JobOfferAttachmentController::class, 'store']);
     Route::post('job-applications/{job_application_id}/job-offers', [JobOfferController::class, 'store']);
+
+    Route::get('job-offers', [JobOfferController::class, 'index']);
+    Route::get('job-offers/{id}', [JobOfferController::class, 'show']);
+    Route::put('job-offers/{id}', [JobOfferController::class, 'update']);
+    Route::post('job-offers/{id}/send', [JobOfferController::class, 'send']);
+    Route::patch('job-offers/{id}/mark-as-offer-accepted', [JobOfferController::class, 'markAsOfferAccepted']);
+    Route::patch('job-offers/{id}/mark-as-offer-declined', [JobOfferController::class, 'markedAsOfferDeclined']);
 
     // Google OAuth
     Route::get('/auth/google', [GoogleOAuthController::class, 'redirect']);

@@ -5,7 +5,7 @@ use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 
 class RecruitmentHelper
 {
-    public static function getJobApplicationActions($current_status)
+    public static function getJobApplicationActions($job_application, $current_status)
     {
         $markAsReceived_action     = false;
         $review_action             = false;
@@ -13,10 +13,11 @@ class RecruitmentHelper
         $shortlist_action          = false;
         $accessment_testing_action = false;
         $interview_action          = false;
+        $create_interview_action   = false;
         $evaluation_action         = false;
         $reference_check_action    = false;
-        $offer_action              = false;
-        $send_offer_action         = false;
+        $update_to_offer_action    = false;
+        $create_offer_action       = false;
         $onboard_check_action      = false;
 
         if ($current_status == RecruitmentStageTypes::SUBMITTED->value) {
@@ -30,12 +31,15 @@ class RecruitmentHelper
             $accessment_testing_action = true;
             $interview_action          = true;
         } else if ($current_status == RecruitmentStageTypes::INTERVIEW->value) {
-            $evaluation_action = true;
+            $create_interview_action = true;
+            $evaluation_action       = true;
         } else if ($current_status == RecruitmentStageTypes::EVALUATION_SELECTION->value) {
             $reference_check_action = true;
-            $offer_action           = true;
-        } else if ($current_status == RecruitmentStageTypes::OFFER->value) {
-            $send_offer_action = true;
+            $update_to_offer_action = true;
+        } else if ($current_status == RecruitmentStageTypes::OFFER->value && $job_application->jobOffer == null) {
+            $create_offer_action = true;
+        } else if ($current_status == RecruitmentStageTypes::OFFER_ACCEPTED->value) {
+            $onboard_check_action = true;
         }
 
         return [
@@ -45,10 +49,11 @@ class RecruitmentHelper
             'shortlist_action'          => $shortlist_action,
             'accessment_testing_action' => $accessment_testing_action,
             'interview_action'          => $interview_action,
+            'create_interview_action'   => $create_interview_action,
             'evaluation_action'         => $evaluation_action,
             'reference_check_action'    => $reference_check_action,
-            'offer_action'              => $offer_action,
-            'send_offer_action'         => $send_offer_action,
+            'update_to_offer_action'    => $update_to_offer_action,
+            'create_offer_action'       => $create_offer_action,
             'onboard_check_action'      => $onboard_check_action,
         ];
     }

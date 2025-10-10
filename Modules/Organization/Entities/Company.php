@@ -47,7 +47,7 @@ class Company extends Model
         'founded_at' => 'date',
     ];
 
-     protected $appends = ['logo_url'];
+     protected $appends = ['logo_url', 'primary_phone', 'secondary_phone'];
 
     public function getLogoUrlAttribute()
     {
@@ -56,6 +56,16 @@ class Company extends Model
             return $storage->getUrl($this->logo);
         }
         return null;
+    }
+
+    public function getPrimaryPhoneAttribute()
+    {
+        return $this->phone_dial_code . $this->phone_no;
+    }
+
+    public function getSecondaryPhoneAttribute()
+    {
+        return $this->secondary_phone_dial_code . $this->secondary_phone_no;
     }
 
     public function getFoundedAtAttribute($value)

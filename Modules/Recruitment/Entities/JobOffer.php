@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Entities\Designation;
+use Modules\Storage\App\Classes\LocalStorage;
+use Nnjeim\World\Models\Currency;
 
 class JobOffer extends Model
 {
@@ -30,6 +32,11 @@ class JobOffer extends Model
         'offer_date',
         'joined_date',
         'status',
+        'offer_letter_subject',
+        'offer_letter_content',
+        'offer_letter_file_path',
+        'created_by',
+        'updated_by',
     ];
 
     protected $casts = [
@@ -38,6 +45,19 @@ class JobOffer extends Model
         'joined_date'      => 'date',
         'basic_salary'     => 'float',
     ];
+
+    protected $appends = [
+        'offer_letter_file_path_url',
+    ];
+
+    public function getOfferLetterFilePathUrlAttribute(): ?string
+    {
+        if ($this->offer_letter_file_path) {
+            $storage = new LocalStorage();
+            return $storage->getUrl($this->offer_letter_file_path);
+        }
+        return null;
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -57,7 +77,7 @@ class JobOffer extends Model
 
     public function candidate()
     {
-        return $this->belongsTo(Candidate::class, 'candicate_id');
+        return $this->belongsTo(Applicant::class, 'candicate_id');
     }
 
     public function company()
@@ -73,6 +93,11 @@ class JobOffer extends Model
     public function template()
     {
         return $this->belongsTo(OfferLetterTemplate::class, 'offer_letter_template_id');
+    }
+
+    public function salaryCurrency()
+    {
+        return $this->belongsTo(Currency::class, 'salary_currency_id');
     }
 
     public function approver()
@@ -116,6 +141,16 @@ class JobOffer extends Model
         return $this->belongsToMany(
             User::class,
             'job_offer_inform_cc_users',
+            'job_offer_id',
+            'user_id'
+        )->withPivot('designation_id');
+    }
+
+    public function bccUsers()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'job_offer_inform_bcc_users',
             'job_offer_id',
             'user_id'
         )->withPivot('designation_id');

@@ -2,7 +2,9 @@
 namespace Modules\Organization\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Http\File;
 use Modules\Organization\Entities\Company;
+use Modules\Storage\App\Classes\LocalStorage;
 
 class CompanySeeder extends Seeder
 {
@@ -14,17 +16,15 @@ class CompanySeeder extends Seeder
     public function run()
     {
 
-        // 1. Ensure the directory for the logos exists
-        // if (! \Illuminate\Support\Facades\Storage::disk('public')->exists('logos')) {
-        //     \Illuminate\Support\Facades\Storage::disk('public')->makeDirectory('logos');
-        // }
+        $localFilePath = public_path('sample_files/avator.png');
+        $localFile     = new File($localFilePath);
 
-        // 2. Create 10 companies using the factory
-        // Company::factory()->count(3)->create();
+        $storage  = new LocalStorage();
+        $filePath = $storage->store('company_logo', $localFile);
 
         Company::create(
             [
-                'logo'                      => '/images/default/company_logo.png',
+                'logo'                      => $filePath,
                 'name'                      => 'Example Corp',
                 'registration_name'         => 'Example Corp Solutions Inc.',
                 'registration_no'           => 'RNG-98765432',
