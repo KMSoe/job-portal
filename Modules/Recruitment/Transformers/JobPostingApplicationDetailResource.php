@@ -14,7 +14,7 @@ class JobPostingApplicationDetailResource extends JsonResource
      */
     public function toArray($request)
     {
-        $actions = RecruitmentHelper::getJobApplicationActions($this->status);
+        $actions = RecruitmentHelper::getJobApplicationActions($this, $this->status);
 
         return array_merge([
             'id'                  => $this->id,

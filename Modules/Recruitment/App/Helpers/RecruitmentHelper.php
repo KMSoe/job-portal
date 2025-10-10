@@ -5,7 +5,7 @@ use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 
 class RecruitmentHelper
 {
-    public static function getJobApplicationActions($current_status)
+    public static function getJobApplicationActions($job_application, $current_status)
     {
         $markAsReceived_action     = false;
         $review_action             = false;
@@ -36,7 +36,7 @@ class RecruitmentHelper
         } else if ($current_status == RecruitmentStageTypes::EVALUATION_SELECTION->value) {
             $reference_check_action = true;
             $update_to_offer_action = true;
-        } else if ($current_status == RecruitmentStageTypes::OFFER->value) {
+        } else if ($current_status == RecruitmentStageTypes::OFFER->value && $job_application->jobOffer == null) {
             $create_offer_action = true;
         } else if ($current_status == RecruitmentStageTypes::OFFER_ACCEPTED->value) {
             $onboard_check_action = true;
