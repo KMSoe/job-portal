@@ -70,4 +70,9 @@ class JobApplication extends Model
     {
         return $this->hasMany(JobApplicationReviewer::class, 'application_id')->where('status', 'done');
     }
+
+    public function interviewers()
+    {
+        return $this->hasMany(JobApplicationInterview::class, 'application_id');
+    }
 }

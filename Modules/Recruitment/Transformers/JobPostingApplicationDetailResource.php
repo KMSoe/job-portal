@@ -24,6 +24,7 @@ class JobPostingApplicationDetailResource extends JsonResource
             'resume'              => $this->resume,
             'supportiveDocuments' => $this->supportiveDocuments,
             'reviewers'           => $this->reviewers,
+            'interviews'           => $this->interviews,
             'applied_at'          => $this->applied_at,
             'application_status'  => $this->status,
         ], $actions);

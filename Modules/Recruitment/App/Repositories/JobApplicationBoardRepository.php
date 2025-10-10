@@ -94,11 +94,11 @@ class JobApplicationBoardRepository
         $data = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
             ->where('job_applications.job_posting_id', $job_posting_id)
             ->where(function ($query) use ($request, $keyword) {
-                if($request->status != null) {
+                if ($request->status != null) {
                     $query->where('job_applications.status', $request->status);
                 }
 
-                if($keyword != '') {
+                if ($keyword != '') {
                     $query->whereHas('applicant', function ($query) use ($keyword) {
                         $query->where('name', 'LIKE', '%' . $keyword . '%');
                     })
@@ -106,7 +106,7 @@ class JobApplicationBoardRepository
                             $query->where('name', 'LIKE', '%' . $keyword . '%');
                         });
                 }
-               
+
             })
             ->orderByDesc('job_applications.applied_at')
             ->paginate($perPage);
@@ -124,7 +124,10 @@ class JobApplicationBoardRepository
 
     public function getApplicationDetail($job_application_id)
     {
-        $job_application = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments', 'reviewers.reviewer'])
+        $job_application = JobApplication::with([
+            'applicant.skills', 'resume', 'supportiveDocuments', 'reviewers.reviewer',
+            'interviews.interviewers',
+        ])
             ->findOrFail($job_application_id);
 
         return $job_application;
