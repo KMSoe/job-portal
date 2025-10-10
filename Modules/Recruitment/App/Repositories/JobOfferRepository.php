@@ -16,16 +16,25 @@ class JobOfferRepository
         $perPage = $request->perPage ? $request->perPage : 20;
 
         $data = JobOffer::with([
+            // Core Belongs To Relationships
+            'jobPosting',
+            'application',
+            'candidate',
+            'company',
+            'designation',
+            'template',
+            'salaryCurrency',
+            'approver',
 
-        ])
-            ->where(function ($query) use ($keyword) {
-                if ($keyword != '') {
-                    $query->where(function ($q) use ($keyword) {
-                        $q->where('name', 'LIKE', "%$keyword%")
-                            ->orWhere('description', 'LIKE', "%$keyword%");
-                    });
-                }
-            });
+            // Has Many / Belongs To Many Relationships
+            'attachments',
+            'informedDepartments',
+            'ccUsers',
+            'bccUsers',
+
+            // Note: If 'ccUsers' and 'bccUsers' pivot data is needed,
+            // you can access it via $jobOffer->ccUsers[0]->pivot->designation_id
+        ]);
 
         if ($request->sort != null && $request->sort != '') {
             $sorts = explode(',', $request->input('sort', ''));

@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Mail;
 use Modules\Recruitment\App\Services\JobOfferService;
 use Modules\Recruitment\Http\Requests\JobOfferFormRequest;
+use Modules\Recruitment\Transformers\JobOfferResource;
 
 class JobOfferController extends Controller
 {
@@ -19,7 +20,15 @@ class JobOfferController extends Controller
 
     public function index(Request $request)
     {
+        $job_offers = $this->service->findByParams($request);
 
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'job_offers' => $job_offers,
+            ],
+            'message' => 'Success',
+        ], 200);
     }
 
     public function pageData()
@@ -29,7 +38,15 @@ class JobOfferController extends Controller
 
     public function show($id)
     {
+        $job_offer = $this->service->findById($id);
 
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'job_offer' => new JobOfferResource($job_offer),
+            ],
+            'message' => 'Success',
+        ], 200);
     }
 
     public function store(JobOfferFormRequest $request)
@@ -40,7 +57,7 @@ class JobOfferController extends Controller
             'status'  => true,
             'data'    => [],
             'message' => 'Success',
-        ], 200);
+        ], 201);
     }
 
     public function update(JobOfferFormRequest $request, $job_application_id, $id)
