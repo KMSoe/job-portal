@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'email'       => $this->email,
             'designation' => $this->employee?->designation ?? null,
             'photo_url'   => $this->photo_url,
+            'google_account_connected' => isset($this->google_refresh_token) && now()->lt($this->google_token_expires_at) ? true : false,
         ];
     }
 }
