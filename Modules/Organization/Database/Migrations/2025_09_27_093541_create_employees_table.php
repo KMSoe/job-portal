@@ -26,8 +26,6 @@ class CreateEmployeesTable extends Migration
             $table->unsignedBigInteger('company_id')->default(0);
             $table->unsignedBigInteger('department_id')->default(0);
             $table->unsignedBigInteger('designation_id')->default(0);
-            $table->date('offered_date')->nullable();
-            $table->date('joined_date')->nullable();
             $table->enum('employment_type', array_column(EmploymentTypes::cases(), 'value'))->default(EmploymentTypes::PERMANENT->value);
             $table->date('last_date')->nullable();
             $table->enum('gender', array_column(GenderTypes::cases(), 'value'))->default(GenderTypes::MALE->value);
