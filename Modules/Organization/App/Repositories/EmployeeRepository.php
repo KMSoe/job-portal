@@ -21,7 +21,8 @@ class EmployeeRepository
                     'department',
                     'designation',
                     'salaryCurrency',
-                    'onboardingChecklist',
+                    'onboardingChecklistTemplate',
+                    'onboardingChecklistItems',
                     'createdBy'
                 ])
                 ->where(function ($query) use ($request, $keyword) {
@@ -88,7 +89,8 @@ class EmployeeRepository
             'department',
             'designation',
             'salaryCurrency',
-            'onboardingChecklist',
+            'onboardingChecklistTemplate',
+            'onboardingChecklistItems',
             'createdBy'
         ])->findOrFail($id);
 
@@ -100,7 +102,7 @@ class EmployeeRepository
         $user = User::create([
             'name'          => $data['name'],
             'email'         => $data['email'],
-            'password'      => $data['password'],
+            'password'      => bcrypt($data['password']),
         ]);
 
         $data['user_id'] = $user->id;
@@ -110,6 +112,8 @@ class EmployeeRepository
         if (isset($data['onboarding_checklist_template_id']) && $data['onboarding_checklist_template_id'] != 0) {
             $this->createChecklistItems($data['onboarding_checklist_template_id'], $employee->id);
         }
+
+        $user->update(['employee_id' => $employee->id]);
 
         return $employee;
     }
@@ -134,6 +138,7 @@ class EmployeeRepository
     {
         $data['updated_by'] = auth()->id();
         $employee = Employee::findOrFail($id);
+
         if (isset($data['onboarding_checklist_template_id']) && $data['onboarding_checklist_template_id'] != 0 && $employee->onboarding_checklist_template_id !== $data['onboarding_checklist_template_id']) {
             OnboardingChecklistItem::where('employee_id', $employee->id)->delete();
             $this->createChecklistItems($data['onboarding_checklist_template_id'], $employee->id);
@@ -158,13 +163,16 @@ class EmployeeRepository
             }
         }
 
-        return $employee->update($data);
+        $employee->update($data);
+        
+        return $employee->fresh();
     }
 
     public function delete($id)
     {
         $employee = Employee::findOrFail($id);
         User::where('id', $employee->user_id)->delete();
+        $employee->onboardingChecklistItems()->delete();
         $employee->delete();
     }
 
@@ -172,8 +180,7 @@ class EmployeeRepository
     {
         $per_page = $data['per_page'] ?? 20;
 
-        $data = OnboardingChecklistItem::with(['checklistTemplateItem.employees:id,name'])
-                ->where('employee_id', $employeeId);
+        $data = OnboardingChecklistItem::where('employee_id', $employeeId);
 
         $data = $data->paginate($per_page);
 

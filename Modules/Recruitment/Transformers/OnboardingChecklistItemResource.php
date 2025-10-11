@@ -15,7 +15,7 @@ class OnboardingChecklistItemResource extends JsonResource
     {
         return [
             'id'                      => $this->id,
-            'employee'                => $this->employee,
+            'employee_id'                => $this->employee_id,
             'checklist_template_item' => $this->checklistTemplateItem ? new ChecklistTemplateItemResource($this->checklistTemplateItem) : null,
             'status'                  => $this->status ?? 'not_started',
         ];

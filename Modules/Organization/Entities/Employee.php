@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Crypt;
 use Modules\Organization\App\Enums\EmploymentTypes;
 use Modules\Recruitment\Entities\ChecklistTemplate;
 use Modules\Recruitment\Entities\OnboardingChecklistItem;
@@ -61,12 +62,12 @@ class Employee extends Model
 
     public function setBasicSalaryAttribute($value)
     {
-        $this->attributes['basic_salary'] = $value ? General::encryptData($value) : null;
+        $this->attributes['basic_salary'] = $value ? Crypt::encryptString($value) : null;
     }
 
     public function getBasicSalaryAttribute($value)
     {
-        return $value ? (float) General::decryptData($value) : null;
+        return $value ? (float) Crypt::decryptString($value) : null;
     }
 
     public function user()

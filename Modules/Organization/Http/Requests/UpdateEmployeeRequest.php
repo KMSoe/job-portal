@@ -21,7 +21,7 @@ class UpdateEmployeeRequest extends FormRequest
             'name'                              => 'nullable|string|max:255',
             'preferred_name'                    => 'nullable|string|max:255',
             'email'                             => ['nullable', 'email', Rule::unique('employees', 'email')->ignore($this->employee)->whereNull('deleted_at')],
-            'work_mail'                         => ['nullable', 'work_email', Rule::unique('employees', 'work_email')->ignore($this->employee)->whereNull('deleted_at')],
+            'work_mail'                         => ['nullable', 'email', Rule::unique('employees', 'work_mail')->ignore($this->employee)->whereNull('deleted_at')],
             'company_id'                        => 'nullable|exists:companies,id',
             'department_id'                     => 'nullable|exists:departments,id',
             'designation_id'                    => 'nullable|exists:designations,id',
