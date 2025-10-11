@@ -16,7 +16,7 @@ class JobOffer extends Model
 
     protected $fillable = [
         'job_posting_id',
-        'job_aplication_id', // Consider renaming to 'job_application_id'
+        'job_application_id', // Consider renaming to 'job_application_id'
         'candicate_id',      // Consider renaming to 'candidate_id'
         'company_id',
         'department_id',
@@ -72,7 +72,7 @@ class JobOffer extends Model
 
     public function application()
     {
-        return $this->belongsTo(JobApplication::class, 'job_aplication_id');
+        return $this->belongsTo(JobApplication::class, 'job_application_id');
     }
 
     public function candidate()

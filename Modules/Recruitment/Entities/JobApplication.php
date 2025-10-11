@@ -71,13 +71,13 @@ class JobApplication extends Model
         return $this->hasMany(JobApplicationReviewer::class, 'application_id')->where('status', 'done');
     }
 
-    public function interviewers()
+    public function interviews()
     {
         return $this->hasMany(JobApplicationInterview::class, 'application_id');
     }
 
     public function jobOffer()
     {
-        return $this->hasOne(JobOffer::class, 'job_aplication_id');
+        return $this->hasOne(JobOffer::class, 'job_application_id');
     }
 }

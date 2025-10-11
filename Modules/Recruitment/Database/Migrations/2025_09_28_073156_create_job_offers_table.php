@@ -16,7 +16,7 @@ class CreateJobOffersTable extends Migration
         Schema::create('job_offers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('job_posting_id');
-            $table->unsignedBigInteger('job_aplication_id');
+            $table->unsignedBigInteger('job_application_id');
             $table->unsignedBigInteger('candicate_id');
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('department_id');
