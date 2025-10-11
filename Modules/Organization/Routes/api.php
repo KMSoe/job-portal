@@ -39,4 +39,5 @@ Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::resource('employees', EmployeeController::class);
     Route::get('employees-form-data', [EmployeeController::class, 'formData'])->name('employees.form-data');
     Route::get('onboarding/{employee_id}/checklist-items', [EmployeeController::class, 'getChecklistItems']);
+    Route::post('onboarding/checklist-items/{item_id}', [EmployeeController::class, 'updateChecklistStatus']);
 });

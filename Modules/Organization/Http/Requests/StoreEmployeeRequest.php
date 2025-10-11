@@ -21,7 +21,7 @@ class StoreEmployeeRequest extends FormRequest
             'name'                              => 'required|string|max:255',
             'preferred_name'                    => 'required|string|max:255',
             'email'                             => ['required', 'email', Rule::unique('employees', 'email')->whereNull('deleted_at')],
-            'work_mail'                         => ['required', 'work_email', Rule::unique('employees', 'work_email')->whereNull('deleted_at')],
+            'work_mail'                         => ['required', 'email', Rule::unique('employees', 'work_mail')->whereNull('deleted_at')],
             'company_id'                        => 'required|exists:companies,id',
             'department_id'                     => 'required|exists:departments,id',
             'designation_id'                    => 'required|exists:designations,id',

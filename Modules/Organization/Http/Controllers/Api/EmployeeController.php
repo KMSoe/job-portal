@@ -45,7 +45,6 @@ class EmployeeController extends Controller
             'data'   => [
                 'departments'        => Department::select(['id', 'name'])->get(),
                 'designations'       => Designation::select(['id', 'name'])->get(),
-                'roles'              => Role::select(['id', 'name'])->get(),
                 'employment_types'   => EmploymentTypes::toArray(),
                 'gender'             => GenderTypes::toArray(),
                 'marital_statuses'   => MaritalStatuses::toArray(),
@@ -68,29 +67,39 @@ class EmployeeController extends Controller
 
     public function store(StoreEmployeeRequest $request)
     {
+        $validatedData = $request->validated();
 
-        $employee = $this->service->store($request->toArray());
-
-        return response()->json([
-            'status'  => true,
-            'data'    => [
-                'employee' => new EmployeeResource($employee),
-            ],
-            'message' => 'Successfully saved',
-        ], 201);
+        try {
+            $employee = $this->service->store($validatedData);
+            return response()->json([
+                'status'  => true,
+                'data'    => [
+                    'employee' => new EmployeeResource($employee),
+                ],
+                'message' => 'Successfully saved',
+            ], 201);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     public function update(UpdateEmployeeRequest $request, $id)
     {
-        $employee = $this->service->update($id, $request->toArray());
+        $validatedData = $request->validated();
 
-        return response()->json([
-            'status'  => true,
-            'data'    => [
-                'employee' => new EmployeeResource($employee),
-            ],
-            'message' => 'Successfully updated',
-        ], 200);
+        try {
+            $employee = $this->service->update($id, $validatedData);
+
+            return response()->json([
+                'status'  => true,
+                'data'    => [
+                    'employee' => new EmployeeResource($employee),
+                ],
+                'message' => 'Successfully updated',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     public function destroy($id)
