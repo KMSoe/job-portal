@@ -18,9 +18,33 @@ class UserSeeder extends Seeder
         $storage  = new LocalStorage();
         $filePath = $storage->store('user_profiles', $localFile);
 
+        // \App\Models\User::factory()->create([
+        //     'name'  => 'Test User',
+        //     'email' => 'test@example.com',
+        //     'photo' => $filePath,
+        // ]);
+
         \App\Models\User::factory()->create([
-            'name'  => 'Test User',
-            'email' => 'test@example.com',
+            'name'  => 'Alice',
+            'email' => 'alice@example.com',
+            'photo' => $filePath,
+        ]);
+
+        \App\Models\User::factory()->create([
+            'name'  => 'Bob',
+            'email' => 'bob@example.com',
+            'photo' => $filePath,
+        ]);
+
+        \App\Models\User::factory()->create([
+            'name'  => 'John',
+            'email' => 'john@example.com',
+            'photo' => $filePath,
+        ]);
+
+        \App\Models\User::factory()->create([
+            'name'  => 'Mary',
+            'email' => 'mary@example.com',
             'photo' => $filePath,
         ]);
     }
