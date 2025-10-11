@@ -19,6 +19,7 @@ class RecruitmentHelper
         $update_to_offer_action    = false;
         $create_offer_action       = false;
         $onboard_check_action      = false;
+        $create_employee           = false;
 
         if ($current_status == RecruitmentStageTypes::SUBMITTED->value) {
             $markAsReceived_action = true;
@@ -40,6 +41,8 @@ class RecruitmentHelper
             $create_offer_action = true;
         } else if ($current_status == RecruitmentStageTypes::OFFER_ACCEPTED->value) {
             $onboard_check_action = true;
+        } else if ($current_status == RecruitmentStageTypes::ONBOARDING->value) {
+            $create_employee = true;
         }
 
         return [
@@ -55,6 +58,7 @@ class RecruitmentHelper
             'update_to_offer_action'    => $update_to_offer_action,
             'create_offer_action'       => $create_offer_action,
             'onboard_check_action'      => $onboard_check_action,
+            'create_employee'           => $create_employee,
         ];
     }
 }
