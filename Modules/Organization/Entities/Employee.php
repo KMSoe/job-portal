@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Organization\App\Enums\EmploymentTypes;
+use Modules\Recruitment\Entities\ChecklistTemplate;
+use Modules\Recruitment\Entities\OnboardingChecklistItem;
 use Nnjeim\World\Models\Currency;
 
 class Employee extends Model
@@ -16,28 +19,47 @@ class Employee extends Model
 
     protected $fillable = [
         'user_id',
-        'company_id',
-        'employee_code',
         'name',
-        'phone_dial_code',
-        'phone_no',
+        'preferred_name',
+        'email',
+        'work_mail',
+        'company_id',
+        'department_id',
+        'designation_id',
+        'offered_date',
+        'joined_date',
+        'employment_type',
+        'last_date',
+        'gender',
+        'marital_status',
+        'nationality',
+        'race',
+        'religion',
+        'primary_phone_dial_code',
+        'primary_phone_no',
+        'secondary_phone_dial_code',
+        'secondary_phone_no',
+        'id_nrc',
+        'passport',
+        'address',
+        'bank_name',
+        'bank_account_no',
+        'salary_currency_id',
+        'basic_salary',
+        'employee_code',
         'offered_date',
         'joined_date',
         'last_date',
-        'department_id',
-        'designation_id',
-        'employment_type',
-        'salary_currency_id',
-        'basic_salary',
         'created_by',
         'updated_by',
+        'onboarding_checklist_template_id'
     ];
 
     protected $casts = [
         'offered_date'    => 'date',
         'joined_date'     => 'date',
         'last_date'       => 'date',
-        'employment_type' => EmploymentTypes::class, 
+        'employment_type' => EmploymentTypes::class,
     ];
 
     public function setBasicSalaryAttribute($value)
@@ -73,6 +95,16 @@ class Employee extends Model
     public function salaryCurrency()
     {
         return $this->belongsTo(Currency::class, 'salary_currency_id');
+    }
+
+    public function onboardingChecklistTemplate()
+    {
+        return $this->belongsTo(ChecklistTemplate::class, 'onboarding_checklist_template_id');
+    }
+
+    public function onboardingChecklistItems()
+    {
+        return $this->hasMany(OnboardingChecklistItem::class, 'employee_id');
     }
 
     public function createdBy()

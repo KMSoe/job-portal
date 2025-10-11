@@ -5,6 +5,7 @@ use Modules\Organization\Http\Controllers\Api\AuthController;
 use Modules\Organization\Http\Controllers\Api\CompanyController;
 use Modules\Organization\Http\Controllers\Api\DepartmentController;
 use Modules\Organization\Http\Controllers\Api\DesignationController;
+use Modules\Organization\Http\Controllers\Api\EmployeeController;
 use Modules\Organization\Http\Controllers\Api\WorldController;
 
 /*
@@ -35,4 +36,7 @@ Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
     Route::resource('designations', DesignationController::class);
     Route::get('designation-sample-download', [DesignationController::class, 'downloadSampleExcelFile']);
     Route::post('designation/import', [DesignationController::class, 'import'])->name('designation.import');
+    Route::resource('employees', EmployeeController::class);
+    Route::get('employees-form-data', [EmployeeController::class, 'formData'])->name('employees.form-data');
+    Route::get('onboarding/{employee_id}/checklist-items', [EmployeeController::class, 'getChecklistItems']);
 });
