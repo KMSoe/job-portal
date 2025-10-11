@@ -16,13 +16,6 @@ class ChecklistTemplateItemResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'employees'              => $this->employees->map(function ($employee) {
-                return [
-                    'id'   => $employee->id,
-                    'name' => $employee->name,
-                ];
-            }),
-            'can_status_update'=> $this->employees()->pluck('id')->contains(auth()->id()),
             'created_at'   => $this->created_at,
             'updated_at'   => $this->updated_at,
         ];
