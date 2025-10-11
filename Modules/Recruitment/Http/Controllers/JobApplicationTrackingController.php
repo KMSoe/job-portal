@@ -23,11 +23,11 @@ class JobApplicationTrackingController extends Controller
         $this->service->updateStatus($job_application, $request->status);
 
         return response()->json([
-            'status' => true,
-            'data' => [
+            'status'  => true,
+            'data'    => [
 
             ],
-            'message' => 'success'
+            'message' => 'success',
         ], 200);
     }
 
@@ -38,11 +38,11 @@ class JobApplicationTrackingController extends Controller
         $this->service->updateStatus($job_application, RecruitmentStageTypes::RECEIVED->value);
 
         return response()->json([
-            'status' => true,
-            'data' => [
+            'status'  => true,
+            'data'    => [
 
             ],
-            'message' => 'success'
+            'message' => 'success',
         ], 200);
     }
 
@@ -151,6 +151,21 @@ class JobApplicationTrackingController extends Controller
         $job_application = $this->service->findById($job_application_id);
 
         $this->service->updateStatus($job_application, RecruitmentStageTypes::OFFER->value);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
+    public function updateToOnboardingStage(Request $request, $job_posting_id, $job_application_id)
+    {
+        $job_application = $this->service->findById($job_application_id);
+
+        $this->service->updateStatus($job_application, RecruitmentStageTypes::ONBOARDING->value);
 
         return response()->json([
             'status'  => true,

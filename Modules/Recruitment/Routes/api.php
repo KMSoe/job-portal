@@ -88,7 +88,7 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-evaluation-selection', [JobApplicationTrackingController::class, 'updateToInterviewStage']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-reference-and-background-check-stage', [JobApplicationTrackingController::class, 'updateToReferneceAndBackgroundCheckStage']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-offer-stage', [JobApplicationTrackingController::class, 'updateToOfferStage']);
-    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-onboarding-stage', [JobApplicationTrackingController::class, 'updateToOfferStage']);
+    Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-onboarding-stage', [JobApplicationTrackingController::class, 'updateToOnboardingStage']);
 
     Route::get('job-application-reviews', [JobApplicationReviewController::class, 'index']);
     Route::get('job-application-reviews/{id}', [JobApplicationReviewController::class, 'show']);
