@@ -2,7 +2,6 @@
 namespace Modules\Recruitment\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Employee\App\Http\Resources\ChecklistTemplateItemResource; 
 
 class ChecklistTemplateResource extends JsonResource
 {

@@ -5,9 +5,9 @@ namespace Modules\Recruitment\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Modules\Employee\App\Http\Resources\ChecklistTemplateItemResource;
 use Modules\Recruitment\App\Repositories\ChecklistTemplateRepository;
 use Modules\Recruitment\Http\Requests\ChecklistTemplateRequest;
+use Modules\Recruitment\Transformers\ChecklistTemplateItemResource;
 use Modules\Recruitment\Transformers\ChecklistTemplateResource;
 
 class ChecklistTemplateController extends Controller
