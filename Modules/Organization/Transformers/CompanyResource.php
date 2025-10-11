@@ -25,15 +25,17 @@ class CompanyResource extends JsonResource
             'phone_dial_code'           => $this->phone_dial_code,
             'phone_no'                  => $this->phone_no,
             'phone_no_full'             => $this->phone_dial_code . $this->phone_no,
+            'primary_phone'             => $this->primary_phone,
             'secondary_phone_dial_code' => $this->secondary_phone_dial_code,
             'secondary_phone_no'        => $this->secondary_phone_no,
             'secondary_phone_no_full'   => $this->secondary_phone_dial_code . $this->secondary_phone_no,
+            'secondary_phone'           => $this->secondary_phone,
             'email'                     => $this->email,
             'secondary_email'           => $this->secondary_email,
 
             // Location
-            'country_id'                => $this->country_id,
-            'city_id'                   => $this->city_id,
+            'country'                   => $this->country,
+            'city'                      => $this->city,
             'address'                   => $this->address,
 
             // Audit Timestamps (Optional, but useful)
