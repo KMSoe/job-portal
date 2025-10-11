@@ -39,8 +39,7 @@ class JobApplicationInterviewRequest extends FormRequest
             'notes' => 'nullable|string',
             'timezone' => 'nullable|string',
             'interviewers' => 'required|array|min:1',
-            'interviewers.*.user_id' => 'required|exists:users,id',
-            'interviewers.*.status' => 'required|string|in:confirmed,declined,tentative'
+            'interviewers.*' => 'exists:users,id',
         ];
     }
 
