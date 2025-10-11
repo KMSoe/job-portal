@@ -77,7 +77,7 @@ class JobApplicationInterviewController extends Controller
         }
     }
 
-    public function updateFeedback(Request $request, $id)
+    public function updateFeedback(Request $request)
     {
         $request->validate([
             'interview_id' => 'required|exists:job_application_interviews,id',
@@ -86,7 +86,7 @@ class JobApplicationInterviewController extends Controller
         ]);
 
         try {
-            $interviewer = $this->service->updateFeedback($request->all(), $id);
+            $interviewer = $this->service->updateFeedback($request->all());
             return new JobApplicationInterviewResource($interviewer);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);

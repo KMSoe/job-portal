@@ -268,7 +268,7 @@ class JobApplicationInterviewService
         }
     }
 
-    public function updateFeedback($data, $id)
+    public function updateFeedback($data)
     {
         try {
             $user = auth()->user();
