@@ -56,14 +56,14 @@ class JobApplicationInterviewService
                 'interview_type' => $data['interview_type'],
                 'scheduled_at' => $data['scheduled_at'],
                 'duration_minutes' => $data['duration_minutes'] ?? 60,
-                'notes' => $data['notes'] ?? null,
+                'notes' => $data['notes'] ?? null,  
             ]);
 
             if(isset($data['interviewers']) && is_array($data['interviewers'])) {
-                foreach ($data['interviewers'] as $interviewerData) {
+                foreach ($data['interviewers'] as $user_id) {
                     $interview->interviewers()->create([
-                        'user_id' => $interviewerData['user_id'],
-                        'attendance_status' => $interviewerData['status'] ?? 'confirmed',
+                        'user_id' => $user_id,
+                        'attendance_status' => 'confirmed',
                     ]);
                 }
             }
@@ -192,10 +192,10 @@ class JobApplicationInterviewService
             if(isset($data['interviewers']) && is_array($data['interviewers'])) 
             {
                 $interview->interviewers()->delete();
-                foreach ($data['interviewers'] as $interviewerData) {
+                foreach ($data['interviewers'] as $user_id) {
                     $interview->interviewers()->create([
-                        'user_id' => $interviewerData['user_id'],
-                        'attendance_status' => $interviewerData['status'] ?? 'confirmed',
+                        'user_id' => $user_id,
+                        'attendance_status' => 'confirmed',
                     ]);
                 }
             }
@@ -268,7 +268,7 @@ class JobApplicationInterviewService
         }
     }
 
-    public function updateFeedback($data, $id)
+    public function updateFeedback($data)
     {
         try {
             $user = auth()->user();

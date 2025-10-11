@@ -1,11 +1,9 @@
 <?php
 namespace Modules\Organization\App\Services;
-
 use Modules\Organization\App\Repositories\EmployeeRepository;
 
 class EmployeeService
 {
-
     private EmployeeRepository $employeeRepository;
 
     public function __construct(EmployeeRepository $employeeRepository)
@@ -38,4 +36,13 @@ class EmployeeService
         return $this->employeeRepository->delete($id);
     }
 
+    public function getChecklistItems($employeeId, $data)
+    {
+        return $this->employeeRepository->getChecklistItems($employeeId, $data);
+    }
+
+    public function updateChecklistStatus($id, $data)
+    {
+        return $this->employeeRepository->updateChecklistStatus($id, $data);
+    }
 }

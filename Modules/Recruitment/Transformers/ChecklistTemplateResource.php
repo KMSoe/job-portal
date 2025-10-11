@@ -2,7 +2,6 @@
 namespace Modules\Recruitment\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use Modules\Employee\App\Http\Resources\ChecklistTemplateItemResource;
 
 class ChecklistTemplateResource extends JsonResource
 {
@@ -18,9 +17,7 @@ class ChecklistTemplateResource extends JsonResource
             'id'           => $this->id,
             'name'         => $this->name,
             'description'  => $this->description,
-            'items'        => ChecklistTemplateItemResource::collection(
-                $this->items->load('employees')->values()
-            ),
+            'items'        => $this->items,
             'created_by'   => $this->createdBy?->name,
             'updated_by'   => $this->updatedBy?->name,
             'created_at'   => $this->created_at,

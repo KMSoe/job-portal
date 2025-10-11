@@ -53,6 +53,6 @@ class ChecklistTemplateRequest extends FormRequest
             'success'   => false,
             'message'   => 'Validation errors',
             'errors'      => $validator->errors()
-        ], ErrorService::UNPROCESSABLE_CONTENT));
+        ], 422));
     }
 }

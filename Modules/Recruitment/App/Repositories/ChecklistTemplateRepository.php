@@ -112,9 +112,6 @@ class ChecklistTemplateRepository
     public function delete($id)
     {
         $checklist = ChecklistTemplate::findOrFail($id);
-        foreach ($checklist->items as $item) {
-            $item->employees()->detach();
-        }
         $checklist->items()->delete();
         $checklist->delete();
     }
@@ -125,9 +122,6 @@ class ChecklistTemplateRepository
     public function bulkDelete(array $ids) {
         $checklists = ChecklistTemplate::whereIn('id', $ids)->get();
         foreach ($checklists as $checklist) {
-            foreach ($checklist->items as $item) {
-                $item->employees()->detach();
-            }
             $checklist->items()->delete();
             $checklist->delete();
         }
@@ -141,22 +135,13 @@ class ChecklistTemplateRepository
                 $existingItem = $checklist->items()->find($item['id']);
                 if ($existingItem) {
                     if (!empty($item['is_delete']) && $item['is_delete'] == true) {
-                        $existingItem->employees()->detach();
                         $existingItem->delete();
                     } else {
                         $existingItem->update($item);
-                        if (!empty($item['employee_ids']) && $item['employee_ids'] !== []) {
-                            $existingItem->employees()->sync($item['employee_ids']);
-                        } else {
-                            $existingItem->employees()->detach();
-                        }
                     }
                 }
             } else {
                 $checklistTemplateItem = $checklist->items()->create($item);
-                if (!empty($item['employee_ids']) && $item['employee_ids'] !== []) {
-                    $checklistTemplateItem->employees()->sync($item['employee_ids']);
-                }
             }
         }
     }
@@ -170,12 +155,6 @@ class ChecklistTemplateRepository
         $data['checklist_template_id'] = $item->checklist_template_id;
         $item->update($data);
 
-        if (!empty($data['employee_ids']) && $data['employee_ids'] !== []) {
-            $item->employees()->sync($data['employee_ids']);
-        } else {
-            $item->employees()->detach();
-        }
-
         return $item;
     }
 
@@ -185,7 +164,6 @@ class ChecklistTemplateRepository
     public function deleteItem($id)
     {
         $item = ChecklistTemplateItem::findOrFail($id);
-        $item->employees()->detach();
         $item->delete();
     }
 }
