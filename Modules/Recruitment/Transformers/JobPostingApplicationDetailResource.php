@@ -18,6 +18,7 @@ class JobPostingApplicationDetailResource extends JsonResource
 
         return array_merge([
             'id'                  => $this->id,
+            'jobPosting'          => $this->jobPosting,
             'applicant'           => new ApplicantResource($this->applicant),
             'expected_salary'     => $this->expected_salary,
             'applicant_skills'    => $this->applicant?->skills,
@@ -26,6 +27,7 @@ class JobPostingApplicationDetailResource extends JsonResource
             'supportiveDocuments' => $this->supportiveDocuments,
             'reviewers'           => $this->reviewers,
             'interviews'          => $this->interviews,
+            'jobOffer'            => $this->jobOffer,
             'applied_at'          => $this->applied_at,
             'application_status'  => $this->status,
         ], $actions);

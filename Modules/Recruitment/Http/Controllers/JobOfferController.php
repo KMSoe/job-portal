@@ -1,19 +1,25 @@
 <?php
 namespace Modules\Recruitment\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Mail;
+use Modules\Organization\App\Enums\EmploymentTypes;
+use Modules\Organization\Entities\Company;
+use Modules\Organization\Entities\Department;
+use Modules\Organization\Entities\Designation;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Services\JobOfferService;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobOffer;
+use Modules\Recruitment\Entities\OfferLetterTemplate;
 use Modules\Recruitment\Http\Requests\JobOfferFormRequest;
 use Modules\Recruitment\Transformers\JobOfferResource;
 use Modules\Storage\App\Classes\LocalStorage;
 use Modules\Storage\App\Interfaces\StorageInterface;
+use Nnjeim\World\Models\Currency;
 
 class JobOfferController extends Controller
 {
@@ -39,9 +45,21 @@ class JobOfferController extends Controller
         ], 200);
     }
 
-    public function pageData()
+    public function getPageData()
     {
-
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'companies'              => Company::all(),
+                'departments'            => Department::all(),
+                'designations'           => Designation::all(),
+                'offer_letter_templates' => OfferLetterTemplate::all(),
+                'currencies'             => Currency::all(),
+                'employment_types'       => EmploymentTypes::values(),
+                'users'                  => User::all(),
+            ],
+            'message' => 'Success',
+        ], 200);
     }
 
     public function show($id)
