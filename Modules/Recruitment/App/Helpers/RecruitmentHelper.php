@@ -18,6 +18,7 @@ class RecruitmentHelper
         $reference_check_action    = false;
         $update_to_offer_action    = false;
         $create_offer_action       = false;
+        $view_offer_action         = false;
         $onboard_check_action      = false;
         $create_employee           = false;
 
@@ -39,6 +40,8 @@ class RecruitmentHelper
             $update_to_offer_action = true;
         } else if ($current_status == RecruitmentStageTypes::OFFER->value && $job_application->jobOffer == null) {
             $create_offer_action = true;
+        } else if ($current_status == RecruitmentStageTypes::OFFER->value && $job_application->jobOffer != null) {
+            $view_offer_action = true;
         } else if ($current_status == RecruitmentStageTypes::OFFER_ACCEPTED->value) {
             $onboard_check_action = true;
         } else if ($current_status == RecruitmentStageTypes::ONBOARDING->value) {
@@ -57,6 +60,7 @@ class RecruitmentHelper
             'reference_check_action'    => $reference_check_action,
             'update_to_offer_action'    => $update_to_offer_action,
             'create_offer_action'       => $create_offer_action,
+            'view_offer_action'         => $view_offer_action,
             'onboard_check_action'      => $onboard_check_action,
             'create_employee'           => $create_employee,
         ];
