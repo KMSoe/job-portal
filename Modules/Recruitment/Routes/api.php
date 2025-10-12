@@ -35,7 +35,8 @@ use Modules\Recruitment\Http\Controllers\SkillController;
 Route::prefix('/v1/applicant')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'store']);
     Route::post('/register', [RegisteredUserController::class, 'applicantRegister']);
-    Route::get('verify-email/{id}/{hash}', [RegisteredUserController::class, 'verifyEmail']);
+    Route::get('verify-email/{id}', [RegisteredUserController::class, 'verifyEmail']);
+    Route::get('resend-otp/{id}', [RegisteredUserController::class, 'resendOtp']);
     Route::post('forgot-password', [RegisteredUserController::class, 'forgotPassword']);
     Route::post('reset-password', [RegisteredUserController::class, 'resetPassword']);
 });

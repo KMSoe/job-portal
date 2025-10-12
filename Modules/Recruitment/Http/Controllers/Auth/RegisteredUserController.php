@@ -35,20 +35,26 @@ class RegisteredUserController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            $verification_link = URL('/api/v1/applicant/verify-email/'.$user->id.'/'.sha1($user->email));
+            $otp = rand(100000, 999999);
+            $otpExpires = now()->addMinutes(10);
 
-            Mail::send('recruitment::emails.verificationmail', ['verification_link' => $verification_link , 'name' => $user->name], function($message) use($user) {
+            $user->update([
+                'email_otp' => $otp,
+                'email_otp_expires_at' => $otpExpires,
+            ]);
+
+            Mail::send('recruitment::emails.verificationmail', ['otp' => $otp, 'name' => $user->name], function($message) use($user) {
                 $message->to($user->email);
-                $message->subject('Email Verification For New User');
+                $message->subject('Your verification code');
             });
 
-            return response()->json(['message'    => 'Registration successful. Please check your email for verification link.'], 201);
+            return response()->json(['message' => 'Registration successful. An OTP has been sent to your email for verification.'], 201);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
-    public function verifyEmail($id, $hash, Request $request)
+    public function resendOtp($id)
     {
         try {
             $user = Applicant::find($id);
@@ -57,22 +63,60 @@ class RegisteredUserController extends Controller
                 return response()->json(['message' => 'User not found.'], 404);
             }
 
-            if (!hash_equals((string) $request->hash, sha1($user->email))) {
-                return response()->json(['message' => 'Invalid verification link.'], 403);
-            }
-
             if ($user->hasVerifiedEmail()) {
-                return response()->json(['message' => 'Email already verified.'], 200);
+                return response()->json(['message' => 'Email is already verified.'], 400);
             }
 
-            $user->markEmailAsVerified();
+            $otp = rand(100000, 999999);
+            $otpExpires = now()->addMinutes(10);
 
-            Mail::send('recruitment::emails.welcomemail', ['name' => $user->name], function($message) use($user) {
+            $user->update([
+                'email_otp' => $otp,
+                'email_otp_expires_at' => $otpExpires,
+            ]);
+
+            Mail::send('recruitment::emails.verificationmail', ['otp' => $otp, 'name' => $user->name], function($message) use($user) {
                 $message->to($user->email);
-                $message->subject('Welcome to SHIFANOVA');
+                $message->subject('Your verification code');
             });
 
-            return response()->json(['message' => 'Email verified successfully.'], 200);
+            return response()->json(['message' => 'A new OTP has been sent to your email for verification.'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function verifyEmail($id, Request $request)
+    {
+        try {
+            $user = Applicant::find($id);
+
+            if (!$user) {
+                return response()->json(['message' => 'User not found.'], 404);
+            }
+            
+            $providedOtp = $request->input('otp');
+
+            if ($providedOtp) {
+                if ($user->email_otp && $user->email_otp_expires_at && now()->lessThanOrEqualTo($user->email_otp_expires_at) && (string) $user->email_otp === (string) $providedOtp) {
+                    if (! $user->hasVerifiedEmail()) {
+                        $user->markEmailAsVerified();
+                    }
+
+                    $user->update(['email_otp' => null, 'email_otp_expires_at' => null]);
+
+                    Mail::send('recruitment::emails.welcomemail', ['name' => $user->name], function($message) use($user) {
+                        $message->to($user->email);
+                        $message->subject('Welcome to SHIFANOVA');
+                    });
+
+                    return response()->json(['message' => 'Email verified successfully via OTP.'], 200);
+                }
+
+                return response()->json(['message' => 'Invalid or expired OTP.'], 403);
+            } else {
+                return response()->json(['message' => 'OTP is required for verification.'], 400);
+            }
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }

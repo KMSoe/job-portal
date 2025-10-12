@@ -31,6 +31,8 @@ class Applicant extends Authenticatable implements MustVerifyEmail
         'job_function_id',
         'salary_currency_id',
         'expected_salary',
+        'email_otp',
+        'email_otp_expires_at',
     ];
 
     /**
