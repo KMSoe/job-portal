@@ -1,22 +1,29 @@
 <?php
 namespace Modules\Recruitment\App\Repositories\Applicant;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
+use Modules\Recruitment\App\Services\PdfResumeParserService;
+use Modules\Recruitment\Entities\ApplicantResumeExtractData;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobPosting;
+use Modules\Recruitment\Entities\Resume;
 use Modules\Recruitment\Transformers\Applicant\JobApplicationResource;
 use Modules\Recruitment\Transformers\JobPostingResource;
 use Modules\Storage\App\Classes\LocalStorage;
 use Modules\Storage\App\Interfaces\StorageInterface;
+use Storage;
 
 class ApplicantJobPostingRepository
 {
     private StorageInterface $storage;
+    private PdfResumeParserService $pdfResumeParserService;
 
-    public function __construct(LocalStorage $storage)
+    public function __construct(LocalStorage $storage, PdfResumeParserService $pdfResumeParserService)
     {
-        $this->storage = $storage;
+        $this->storage                = $storage;
+        $this->pdfResumeParserService = $pdfResumeParserService;
     }
 
     public function findByParams($request)
@@ -35,7 +42,7 @@ class ApplicantJobPostingRepository
             'salaryCurrency',
             'skills',
         ])
-            // ->whereNotNull('published_at')
+        // ->whereNotNull('published_at')
             ->where(function ($query) use ($request, $keyword) {
                 if ($request->company_id) {
                     $query->where('company_id', $request->company_id);
@@ -141,6 +148,9 @@ class ApplicantJobPostingRepository
             throw new \Exception('You have already applied for this job.');
         }
 
+        $resume = Resume::findOrFail($request->resume_id);
+
+        DB::beginTransaction();
         $application = JobApplication::create([
             'job_posting_id'  => $job_posting_id,
             'applicant_id'    => $applicant_id,
@@ -162,6 +172,15 @@ class ApplicantJobPostingRepository
             }
         }
 
+        $extract_data = $this->pdfResumeParserService->parse(storage_path("app/" . $resume->file_path));
+
+        ApplicantResumeExtractData::create([
+            'job_application_id' => $application->id,
+            'extract_data'       => $extract_data,
+        ]);
+
+        DB::commit();
+
         return $application;
     }
 
@@ -173,16 +192,16 @@ class ApplicantJobPostingRepository
         $data = JobApplication::with(['jobPosting.company'])
             ->where('job_applications.applicant_id', $applicant_id)
             ->where(function ($query) use ($request, $keyword) {
-                if($request->status != null) {
+                if ($request->status != null) {
                     $query->where('job_applications.status', $request->status);
                 }
 
-                if($keyword != '') {
+                if ($keyword != '') {
                     $query->whereHas('jobPosting', function ($query) use ($keyword) {
                         $query->where('title', 'LIKE', '%' . $keyword . '%');
                     });
                 }
-               
+
             })
             ->orderByDesc('job_applications.applied_at')
             ->paginate($perPage);

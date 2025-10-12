@@ -18,10 +18,12 @@
         "nnjeim/world": "^1.1",
         "nwidart/laravel-modules": "5.*",
         "opcodesio/log-viewer": "^3.19",
+        "sohagsrz/resume-parser": "*",
         "spatie/laravel-activitylog": "^4.10",
         "spatie/laravel-google-calendar": "^3.8",
         "spatie/laravel-permission": "^6.21",
-        "spatie/laravel-sluggable": "^3.7"
+        "spatie/laravel-sluggable": "^3.7",
+        "spatie/pdf-to-text": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

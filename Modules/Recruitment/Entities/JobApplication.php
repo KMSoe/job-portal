@@ -4,7 +4,6 @@ namespace Modules\Recruitment\Entities;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Storage\App\Classes\LocalStorage;
 
 class JobApplication extends Model
 {
@@ -64,6 +63,11 @@ class JobApplication extends Model
     public function resume()
     {
         return $this->belongsTo(Resume::class, 'resume_id');
+    }
+
+    public function extractedData()
+    {
+        return $this->hasOne(ApplicantResumeExtractData::class, 'job_application_id');
     }
 
     public function reviewers()
