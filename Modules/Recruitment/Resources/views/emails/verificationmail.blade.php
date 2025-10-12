@@ -53,24 +53,22 @@
               </h1>
 
               <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
-                Hi {{$name}}, thanks for signing up — please confirm your email address to activate your account.
+                Hi {{$name}}, thanks for signing up — please confirm your email address with the OTP sent to your email to activate your account.
               </p>
 
               <table role="presentation" cellpadding="0" cellspacing="0" style="margin:18px 0;">
                 <tr>
-                  <td align="center">
-                    <a href="{{$verification_link}}" class="btn" style="background:#2563eb; color:#ffffff; padding:12px 22px; border-radius:10px; font-weight:600; display:inline-block; font-size:15px;">
-                      Verify Email
-                    </a>
+                  <td>
+                    Your OTP is: <h2>{{$otp}}</h2>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td style="padding-top:20px; font-size:13px; color:#8b97a6;">
+                    This OTP is valid for the next 10 minutes.
                   </td>
                 </tr>
               </table>
-
-              <p style="margin:18px 0 0 0; font-size:13px; line-height:20px; color:#6b7b87;">
-                If the button doesn't work, copy and paste the following link into your browser:
-                <br>
-                <a href="{{$verification_link}}" style="color:#1e64ff; word-break:break-all;">{{$verification_link}}</a>
-              </p>
             </td>
           </tr>
 
