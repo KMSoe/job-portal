@@ -10,10 +10,10 @@ class TestResumeController extends Controller
     public function index()
     {
         $parser = new PdfResumeParserService();
-        $parsed = $parser->parse(public_path('sample_files/kms.pdf'));
+        $parsed = $parser->parse(public_path('sample_files/resume.pdf'));
         return $parsed;
 
-        // $localFilePath = public_path('sample_files/kms.pdf');
+        // $localFilePath = public_path('sample_files/resume.pdf');
         // $response = \Geeky\CV\ParserFacade::parse($localFilePath);
         // return $response;
         // $result = ResumeParser::parse($localFilePath);
