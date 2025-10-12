@@ -103,7 +103,7 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::get('job-offers', [JobOfferController::class, 'index']);
     Route::get('job-offers/{id}', [JobOfferController::class, 'show']);
     Route::put('job-offers/{id}', [JobOfferController::class, 'update']);
-    Route::post('quotations/{id}/signature', [JobOfferController::class, 'uploadSignature']);
+    Route::post('job-offers/{id}/approver-signature', [JobOfferController::class, 'uploadSignature']);
     Route::post('job-offers/{id}/send', [JobOfferController::class, 'send']);
     Route::patch('job-offers/{id}/mark-as-offer-accepted', [JobOfferController::class, 'markAsOfferAccepted']);
     Route::patch('job-offers/{id}/mark-as-offer-declined', [JobOfferController::class, 'markedAsOfferDeclined']);
