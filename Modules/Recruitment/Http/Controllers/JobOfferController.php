@@ -113,17 +113,17 @@ class JobOfferController extends Controller
     {
         $job_offer = $this->service->findById($job_offer_id);
 
-        Mail::send('recruitment::emails.joboffermail', [
+        // Mail::send('recruitment::emails.joboffermail', [
 
-        ], function ($message) use ($job_offer) {
-            $message->to($job_offer->candidate->email);
-            $message->subject('Email Verification For New User');
+        // ], function ($message) use ($job_offer) {
+        //     $message->to($job_offer->candidate->email);
+        //     $message->subject('Email Verification For New User');
 
-            // $message->attach($attachmentPath, [
-            //     'as'   => $attachmentName, // Optional: The name the recipient will see
-            //     'mime' => $mimeType,       // Optional: Set the correct MIME type
-            // ]);
-        });
+        //     // $message->attach($attachmentPath, [
+        //     //     'as'   => $attachmentName, // Optional: The name the recipient will see
+        //     //     'mime' => $mimeType,       // Optional: Set the correct MIME type
+        //     // ]);
+        // });
 
         $job_offer->update([
             'status' => JobOfferStatusTypes::SENT->value,
