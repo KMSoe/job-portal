@@ -125,7 +125,11 @@ class JobApplicationBoardRepository
     public function getApplicationDetail($job_application_id)
     {
         $job_application = JobApplication::with([
-            'applicant.skills', 'resume', 'supportiveDocuments', 'reviewers.reviewer',
+            'applicant.skills',
+            'resume',
+            'supportiveDocuments',
+            'extractedData',
+            'reviewers.reviewer',
             'interviews.interviewers',
             'jobOffer.salaryCurrency',
         ])

@@ -18,7 +18,7 @@ class ApplicantResumeSeeder extends Seeder
     {
         $applicant = Applicant::first();
 
-        $localFilePath = public_path('sample_files/sample_resume.pdf');
+        $localFilePath = public_path('sample_files/kms.pdf');
         $localFile     = new File($localFilePath);
 
         $fileName = $localFile->getFilename();

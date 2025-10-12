@@ -1,11 +1,11 @@
 <?php
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\TestResumeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorldDataController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Sohagsrz\ResumeParser\ResumeParser;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,11 +29,7 @@ Route::prefix('v1/')->group(function () {
     Route::get('states', [WorldDataController::class, 'getAllStates']);
     Route::get('currencies', [WorldDataController::class, 'getAllCurrencies']);
 
-    Route::get('resume', function () {
-        $localFilePath = public_path('sample_files/resume.pdf');
-        $result        = ResumeParser::parse($localFilePath);
-        return $result;
-    });
+    Route::get('resume', [TestResumeController::class, 'index']);
 });
 
 Route::middleware(['auth:api'])->prefix('v1/')->group(function () {
