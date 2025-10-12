@@ -32,7 +32,6 @@ class JobOfferFormRequest extends FormRequest
 
             'approve_required'         => 'boolean',
             'approver_id'              => 'nullable|required_if:approve_required,true|exists:users,id',
-            'approver_signature'       => 'nullable|string',
 
             // Attachments (Handles file paths saved temporarily or from another step)
             'attachments'              => 'nullable|array',

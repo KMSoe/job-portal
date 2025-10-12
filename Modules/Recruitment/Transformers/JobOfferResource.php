@@ -15,20 +15,26 @@ class JobOfferResource extends JsonResource
     public function toArray($request)
     {
         return [
-            // Core Identifiers
             'id'                            => $this->id,
-            'status'                        => $this->status,
+            'jobPosting'                    => $this->jobPosting,
+            'application'                   => $this->application,
+            'candicate'                     => $this->candicate,
+            'company'                       => $this->company,
+            'department'                    => $this->department,
+            'designation'                   => $this->designation,
+            'candidate'                     => $this->candidate,
+            'template'                      => $this->template,
             'employment_type'               => $this->employment_type,
-
-            // Dates
-            'offer_date'                    => $this->offer_date,
-            'joined_date'                   => $this->joined_date,
 
             // Salary Details
             'salary_currency'               => $this->salaryCurrency,
             'basic_salary'                  => (float) $this->basic_salary,
 
+            'offer_date'                    => $this->offer_date,
+            'joined_date'                   => $this->joined_date,
+
             // Offer Letter Content
+            'offer_letter_ref'              => $this->offer_letter_ref,
             'offer_letter_subject'          => $this->offer_letter_subject,
             'offer_letter_content'          => $this->offer_letter_content,
             'content_file_path'             => $this->offer_letter_file_path,
@@ -36,31 +42,18 @@ class JobOfferResource extends JsonResource
 
             // Approval & Auditing
             'approve_required'              => (bool) $this->approve_required,
-            'approver_id'                   => $this->approver_id,
+            'approver'                      => $this->approver,
             'approver_signature'            => $this->approver_signature,
+            'approver_signature_url'        => $this->approver_signature_url,
             'created_by'                    => $this->createdBy,
             'updated_by'                    => $this->updatedBy,
-
-            // Timestamps
             'created_at'                    => $this->created_at,
             'updated_at'                    => $this->updated_at,
-
-            // --- Eager Loaded Relationships ---
-
-            // Show main relationships when loaded
-            'company'                       => $this->company,
-            'designation'                   => $this->designation,
-            'candidate'                     => $this->candidate,
-            'approver'                      => $this->approver,
-
-            // Attachments (HasMany)
             'attachments'                   => $this->attachments,
-
-            // Departments to Inform (BelongsToMany)
             'informed_departments'          => $this->informedDepartments,
-
-            // CC Users (BelongsToMany)
             'cc_users'                      => $this->ccUsers,
+            'bcc_users'                     => $this->bccUsers,
+            'status'                        => $this->status,
             'edit_action'                   => $this->status == JobOfferStatusTypes::DRAFT->value ? true : false,
             'send_action'                   => $this->status == JobOfferStatusTypes::DONE->value ? true : false,
             'mark_as_offer_accepted_action' => $this->status == JobOfferStatusTypes::SENT->value || $this->status == JobOfferStatusTypes::OFFER_DECLINED->value ? true : false,

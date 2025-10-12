@@ -32,6 +32,7 @@ class CreateJobOffersTable extends Migration
             $table->date('offer_date');
             $table->date('joined_date')->nullable();
             $table->string('status');
+            $table->string('offer_letter_ref')->nullable();
             $table->string('offer_letter_subject')->nullable();
             $table->string('offer_letter_content')->nullable();
             $table->string('offer_letter_file_path')->nullable();

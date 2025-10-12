@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
+use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\JobOfferAttachment;
 use Modules\Recruitment\Transformers\JobOfferResource;
@@ -22,6 +23,7 @@ class JobOfferRepository
             'application',
             'candidate',
             'company',
+            'department',
             'designation',
             'template',
             'salaryCurrency',
@@ -71,6 +73,7 @@ class JobOfferRepository
             'application',
             'candidate',
             'company',
+            'department',
             'designation',
             'template',
             'salaryCurrency',
@@ -100,6 +103,12 @@ class JobOfferRepository
             'inform_departments',
             'cc_users',
         ]));
+
+        $job_application = JobApplication::findOrFail($data['job_application_id']);
+
+        $jobOfferData['job_posting_id']     = $job_application->job_posting_id;
+        $jobOfferData['job_application_id'] = $job_application->id;
+        $jobOfferData['candicate_id']       = $job_application->applicant_id;
 
         DB::beginTransaction();
         $jobOffer = JobOffer::create($jobOfferData);
@@ -152,6 +161,12 @@ class JobOfferRepository
             'inform_departments',
             'cc_users',
         ]));
+
+        $job_application = JobApplication::findOrFail($data['job_application_id']);
+
+        $jobOfferData['job_posting_id']     = $job_application->job_posting_id;
+        $jobOfferData['job_application_id'] = $job_application->id;
+        $jobOfferData['candicate_id']       = $job_application->applicant_id;
 
         DB::beginTransaction();
         $jobOffer->update($jobOfferData);

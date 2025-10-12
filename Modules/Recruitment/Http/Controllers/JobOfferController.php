@@ -9,16 +9,21 @@ use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Services\JobOfferService;
 use Modules\Recruitment\Entities\JobApplication;
+use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Http\Requests\JobOfferFormRequest;
 use Modules\Recruitment\Transformers\JobOfferResource;
+use Modules\Storage\App\Classes\LocalStorage;
+use Modules\Storage\App\Interfaces\StorageInterface;
 
 class JobOfferController extends Controller
 {
     private $service;
+    private StorageInterface $storage;
 
-    public function __construct(JobOfferService $service)
+    public function __construct(JobOfferService $service, LocalStorage $storage)
     {
         $this->service = $service;
+        $this->storage = $storage;
     }
 
     public function index(Request $request)
@@ -52,8 +57,12 @@ class JobOfferController extends Controller
         ], 200);
     }
 
-    public function store(JobOfferFormRequest $request)
+    public function store(JobOfferFormRequest $request, $job_application_id)
     {
+        $request->merge(input: [
+            'job_application_id' => $job_application_id,
+        ]);
+
         $this->service->store($request->toArray());
 
         return response()->json([
@@ -65,11 +74,37 @@ class JobOfferController extends Controller
 
     public function update(JobOfferFormRequest $request, $job_application_id, $id)
     {
+        $request->merge(input: [
+            'job_application_id' => $job_application_id,
+        ]);
+
         $this->service->update($id, $request->toArray());
 
         return response()->json([
             'status'  => true,
             'data'    => [],
+            'message' => 'Success',
+        ], 200);
+    }
+
+    public function uploadSignature($id, Request $request)
+    {
+        $request->validate([
+            'approver_signature' => 'required|file',
+        ]);
+
+        $job_offer = JobOffer::findOrFail($id);
+        $url       = $this->storage->store($request->path ?? 'approver_signatures', $request->file('approver_signature'));
+
+        $job_offer->update([
+            'approver_signature' => $url,
+        ]);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+
+            ],
             'message' => 'Success',
         ], 200);
     }

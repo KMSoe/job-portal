@@ -16,8 +16,8 @@ class JobOffer extends Model
 
     protected $fillable = [
         'job_posting_id',
-        'job_application_id', // Consider renaming to 'job_application_id'
-        'candicate_id',      // Consider renaming to 'candidate_id'
+        'job_application_id',
+        'candicate_id',
         'company_id',
         'department_id',
         'designation_id',
@@ -32,6 +32,7 @@ class JobOffer extends Model
         'offer_date',
         'joined_date',
         'status',
+        'offer_letter_ref',
         'offer_letter_subject',
         'offer_letter_content',
         'offer_letter_file_path',
@@ -47,8 +48,18 @@ class JobOffer extends Model
     ];
 
     protected $appends = [
+        'approver_signature_url',
         'offer_letter_file_path_url',
     ];
+
+    public function getApproverSignatureUrlAttribute(): ?string
+    {
+        if ($this->approver_signature) {
+            $storage = new LocalStorage();
+            return $storage->getUrl($this->approver_signature);
+        }
+        return null;
+    }
 
     public function getOfferLetterFilePathUrlAttribute(): ?string
     {
@@ -83,6 +94,11 @@ class JobOffer extends Model
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
     public function designation()
