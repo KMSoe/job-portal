@@ -32,6 +32,8 @@ class RecruitmentHelper
         } else if ($current_status == RecruitmentStageTypes::SHORTLISTING->value) {
             $accessment_testing_action = true;
             $interview_action          = true;
+        } else if ($current_status == RecruitmentStageTypes::ASSESSMENT_TESTING->value) {
+            $interview_action = true;
         } else if ($current_status == RecruitmentStageTypes::INTERVIEW->value) {
             $create_interview_action = true;
             $evaluation_action       = true;

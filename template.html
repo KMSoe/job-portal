@@ -126,10 +126,10 @@
                 >
                   <tr>
                     <td width="50%">
-                      <p style="margin: 0"><strong> offer_date </strong></p>
+                      <p style="margin: 0"><strong>{{ offer_date }}</strong></p>
                     </td>
                     <td width="50%" align="right">
-                      <p style="margin: 0"><strong>Ref:</strong> ref</p>
+                      <p style="margin: 0"><strong>Ref:</strong> {{ref}}</p>
                     </td>
                   </tr>
                 </table>
@@ -138,20 +138,20 @@
                   <p style="margin: 4px 0">
                     <strong
                       >Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                      applicant_name</strong
+                      {{applicant_name}}</strong
                     >
                   </p>
                   <p style="margin: 4px 0">
                     <strong
                       >Position&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                      job_title</strong
+                      {{job_title}}</strong
                     >
                   </p>
                 </div>
 
                 <p style="margin: 4px 0 0 0; font-size: 13px">
                   <strong
-                    >SUBJECT&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;subject</strong
+                    >SUBJECT&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{subject}}</strong
                   >
                 </p>
 
@@ -159,9 +159,9 @@
                   style="margin: 16px 0 0 0; font-size: 13px; line-height: 1.6"
                 >
                   We are pleased to inform you that you are appointed as an
-                  <strong> job_title </strong> at
-                  <strong> department </strong> Department with effect from
-                  <strong> offer_date </strong>.
+                  <strong>{{ job_title }}</strong> at
+                  <strong>{{ department }}</strong> Department with effect from
+                  <strong>{{ offer_date }}</strong>.
                 </p>
               </td>
             </tr>
@@ -176,7 +176,7 @@
                   color: #374151;
                 "
               >
-                 content 
+                {{ content }}
               </td>
             </tr>
 
@@ -199,13 +199,13 @@
                     <td width="50%" valign="top">
                       <p style="margin: 0">
                         <strong>Approved by</strong><br />
-                        approver_name
+                        {{approver_name}}
                       </p>
                     </td>
                     <td width="50%" valign="top" align="right">
                       <p style="margin: 0">
                         <strong>Accepted By</strong><br />
-                        applicant_name
+                        {{applicant_name}}
                       </p>
                     </td>
                   </tr>
