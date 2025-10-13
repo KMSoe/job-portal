@@ -58,13 +58,13 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
     Route::resource('work-experiences', ApplicantWorkExperienceController::class);
 });
 
-Route::middleware(['auth:api'])->prefix('/v1')->group(function () {
+Route::middleware(['auth:api,applicant'])->prefix('/v1')->group(function () {
     Route::resource('skills', SkillController::class);
 });
 
-Route::middleware(['auth:applicant'])->prefix('/v1')->group(function () {
-    Route::resource('skills', SkillController::class);
-});
+// Route::middleware(['auth:applicant'])->prefix('/v1')->group(function () {
+//     Route::resource('skills', SkillController::class);
+// });
 
 Route::prefix('/v1')->group(function () {
     Route::get('job-postings', [ApplicantJobPostingController::class, 'index']);
