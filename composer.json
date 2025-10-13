@@ -23,7 +23,8 @@
         "spatie/laravel-google-calendar": "^3.8",
         "spatie/laravel-permission": "^6.21",
         "spatie/laravel-sluggable": "^3.7",
-        "spatie/pdf-to-text": "^1.54"
+        "spatie/pdf-to-text": "^1.54",
+        "tecnickcom/tcpdf": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

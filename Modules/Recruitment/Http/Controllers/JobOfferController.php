@@ -5,12 +5,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Mail;
 use Modules\Organization\App\Enums\EmploymentTypes;
 use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Entities\Designation;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
+use Modules\Recruitment\App\Mails\JobOfferMail;
 use Modules\Recruitment\App\Services\JobOfferService;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobOffer;
@@ -131,27 +133,35 @@ class JobOfferController extends Controller
     {
         $job_offer = $this->service->findById($job_offer_id);
 
-        // Mail::send('recruitment::emails.joboffermail', [
+        $mailData = [
+            'subject'     => $job_offer->offer_letter_subject,
+            'attachments' => $job_offer->attachments,
+        ];
 
-        // ], function ($message) use ($job_offer) {
-        //     $message->to($job_offer->candidate->email);
-        //     $message->subject('Email Verification For New User');
+        try {
+            Mail::to(["maythuaung415@gmail.com"])
+            // Mail::to([$job_offer->candidate?->email])
+                ->cc($job_offer->ccUsers->pluck('email')->toArray())
+                ->bcc($job_offer->bccUsers->pluck('email')->toArray())
+                ->send(new JobOfferMail($mailData));
 
-        //     // $message->attach($attachmentPath, [
-        //     //     'as'   => $attachmentName, // Optional: The name the recipient will see
-        //     //     'mime' => $mimeType,       // Optional: Set the correct MIME type
-        //     // ]);
-        // });
+            $job_offer->update([
+                'status' => JobOfferStatusTypes::SENT->value,
+            ]);
 
-        $job_offer->update([
-            'status' => JobOfferStatusTypes::SENT->value,
-        ]);
+            return response()->json([
+                'status'  => true,
+                'data'    => [],
+                'message' => 'Success',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status'  => false,
+                'data'    => [],
+                'message' => $th->getMessage(),
+            ], 500);
+        }
 
-        return response()->json([
-            'status'  => true,
-            'data'    => [],
-            'message' => 'Success',
-        ], 200);
     }
 
     public function markAsOfferAccepted(Request $request, $job_offer_id)

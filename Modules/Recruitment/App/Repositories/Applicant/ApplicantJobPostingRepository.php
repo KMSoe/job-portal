@@ -172,12 +172,12 @@ class ApplicantJobPostingRepository
             }
         }
 
-        $extract_data = $this->pdfResumeParserService->parse(storage_path("app/" . $resume->file_path));
+        // $extract_data = $this->pdfResumeParserService->parse(storage_path("app/" . $resume->file_path));
 
-        ApplicantResumeExtractData::create([
-            'job_application_id' => $application->id,
-            'extract_data'       => $extract_data,
-        ]);
+        // ApplicantResumeExtractData::create([
+        //     'job_application_id' => $application->id,
+        //     'extract_data'       => $extract_data,
+        // ]);
 
         DB::commit();
 

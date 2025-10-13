@@ -7,7 +7,7 @@
 </head>
 <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333333; margin: 0; padding: 0; background-color: #f4f4f4;">
 
-    <div style="max-width: 750px; margin: 20px auto; background: #ffffff; border-top: 10px solid black; border-bottom: 10px solid black; box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);">
+    <div style="max-width: 750px; margin: 20px auto; background: #ffffff;">
 
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
@@ -30,8 +30,8 @@
         
             <table style="width: 100%; margin-bottom: 20px; font-size: 14px;">
                 <tr>
-                    <td style="text-align: left; padding: 2px 0; width: 50%; font-weight: bold;">5th July, 2025</td>
-                    <td style="text-align: right; padding: 2px 0; width: 50%;">Ref: RM/Dept;/HR (Appt)/2025</td>
+                    <td style="text-align: left; padding: 2px 0; width: 50%; font-weight: bold;">{{ $job_offer->offer_date }}</td>
+                    <td style="text-align: right; padding: 2px 0; width: 50%;">Ref: {{ $job_offer->offer_letter_ref }}</td>
                 </tr>
             </table>
 
@@ -39,12 +39,12 @@
                 <tr>
                     <td style="width: 30%; padding: 2px 0;">Name</td>
                     <td style="width: 5%; padding: 2px 0;">:</td>
-                    <td style="width: 65%; padding: 2px 0; border-bottom: 1px dotted #ccc;">{{ $name }}</td>
+                    <td style="width: 65%; padding: 2px 0; border-bottom: 1px dotted #ccc;">{{  $candicate_name  }}</td>
                 </tr>
                 <tr>
                     <td style="padding: 2px 0;">Position</td>
                     <td style="padding: 2px 0;">:</td>
-                    <td style="padding: 2px 0; border-bottom: 1px dotted #ccc;">{{ $position }}</td>
+                    <td style="padding: 2px 0; border-bottom: 1px dotted #ccc;">{{  $candicate_position  }}</td>
                 </tr>
             </table>
             
@@ -53,22 +53,24 @@
                     <tr>
                         <td style="padding-right: 15px;">SUBJECT</td>
                         <td style="padding-right: 15px;">:</td>
-                        <td>APPOINTMENT LETTER</td>
+                        <td>{{ $job_offer->offer_letter_subject }}</td>
                     </tr>
                 </table>
             </div>
+
+             {!! $job_offer->offer_letter_content !!}
             
-            <p style="font-size: 14px; margin-bottom: 15px;">
+            {{-- <p style="font-size: 14px; margin-bottom: 15px;">
                 We are pleased to inform you that you are appointed as an 
-                <span style="font-weight: bold; border-bottom: 1px dotted #ccc;">{{ $position }}</span> 
+                <span style="font-weight: bold; border-bottom: 1px dotted #ccc;">Web Developer</span> 
                 at 
-                <span style="font-weight: bold; border-bottom: 1px dotted #ccc;">{{ $department }}</span> 
+                <span style="font-weight: bold; border-bottom: 1px dotted #ccc;">IT</span> 
                 Department with effect from 
-                <span style="font-weight: bold; border-bottom: 1px dotted #ccc;">{{ $joined_date }}</span>.
+                <span style="font-weight: bold; border-bottom: 1px dotted #ccc;">2025-11-02</span>.
             </p>
 
             <p style="font-size: 14px; margin-bottom: 15px;">
-                Your salary will be <span style="font-weight: bold; border-bottom: 1px dotted #ccc;">{{ $basic_salary }}</span> per month, your hours of work will be Monday to Saturday, 
+                Your salary will be <span style="font-weight: bold; border-bottom: 1px dotted #ccc;">3000</span> per month, your hours of work will be Monday to Saturday, 
                 <span style="font-weight: bold;">9:00 AM to 5:00 PM</span> and as a condition of employment, you will be required to serve a <span style="font-weight: bold;">3 months probationary period</span>. If further evaluation of performance is required, the probationary period will be extended from 3 to 6 months.
             </p>
 
@@ -80,7 +82,7 @@
                 Thank you for your prompt attention to this request. If you have any questions or concerns, please feel free to contact our office on <span style="font-weight: bold;">09-798236943</span>.
             </p>
 
-            <p style="font-size: 14px; margin-bottom: 50px;">Yours sincerely,</p>
+            <p style="font-size: 14px; margin-bottom: 50px;">Yours sincerely,</p> --}}
 
             <table style="width: 100%; border-collapse: collapse; margin-top: 50px;">
                 <tr style="vertical-align: top;">

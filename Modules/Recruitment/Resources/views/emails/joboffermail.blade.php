@@ -69,7 +69,7 @@
               <p style="margin:18px 0 0 0; font-size:13px; line-height:20px; color:#6b7b87;">
                 If the button doesn't work, copy and paste the following link into your browser:
                 <br>
-                <a href="{{}}" style="color:#1e64ff; word-break:break-all;">{{}}</a>
+                {{-- <a href="{{}}" style="color:#1e64ff; word-break:break-all;">{{}}</a> --}}
               </p>
             </td>
           </tr>

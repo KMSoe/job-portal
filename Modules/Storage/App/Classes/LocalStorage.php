@@ -1,14 +1,14 @@
 <?php
-
 namespace Modules\Storage\App\Classes;
 
-use Modules\Storage\App\Interfaces\StorageInterface;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Modules\Storage\App\Interfaces\StorageInterface;
 
 class LocalStorage implements StorageInterface
 {
-     public function getFilePathFromUrl($url)
+    public function getFilePathFromUrl($url)
     {
         $url  = parse_url($url);
         $path = $url['path'] ?? '';
@@ -53,17 +53,22 @@ class LocalStorage implements StorageInterface
 
     public function store($path, $file, $name = '')
     {
-        if (!$this->checkFileExists($path)) {
+        if (! $this->checkFileExists($path)) {
             Storage::makeDirectory($path, 0777, true, true);
         }
 
+        $url = null;
+
         if ($name) {
             $url = Storage::putFileAs($path ?? 'files', $file, $name);
-
-            return $url;
+        } else {
+            $url = Storage::put($path ?? 'files', $file);
         }
 
-        $url = Storage::put($path ?? 'files', $file);
+        if($url == null) {
+            throw new Exception("Cannot store the file", 500);
+            
+        }   
 
         return $url;
     }

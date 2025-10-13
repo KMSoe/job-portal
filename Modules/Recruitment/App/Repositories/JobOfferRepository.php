@@ -9,9 +9,20 @@ use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\JobOfferAttachment;
 use Modules\Recruitment\Transformers\JobOfferResource;
+use Modules\Storage\App\Classes\LocalStorage;
+use Modules\Storage\App\Interfaces\StorageInterface;
+use TCPDF;
+use TCPDF_FONTS;
 
 class JobOfferRepository
 {
+    private StorageInterface $storage;
+
+    public function __construct(LocalStorage $storage)
+    {
+        $this->storage = $storage;
+    }
+
     public function findByParams($request)
     {
         $keyword = $request->search ? $request->search : '';
@@ -104,14 +115,21 @@ class JobOfferRepository
             'cc_users',
         ]));
 
-        $job_application = JobApplication::findOrFail($data['job_application_id']);
+        $job_application = JobApplication::with(['applicant', 'jobPosting'])->findOrFail($data['job_application_id']);
 
         $jobOfferData['job_posting_id']     = $job_application->job_posting_id;
         $jobOfferData['job_application_id'] = $job_application->id;
         $jobOfferData['candicate_id']       = $job_application->applicant_id;
 
         DB::beginTransaction();
+
         $jobOffer = JobOffer::create($jobOfferData);
+
+        $offer_letter_file_path = $this->storeOfferLetter($jobOffer, $job_application, $job_application->applicant->name . "-" . time());
+
+        $jobOffer->update([
+            'offer_letter_file_path' => $offer_letter_file_path,
+        ]);
 
         if (! empty($data['attachments'])) {
             JobOfferAttachment::whereIn('id', $data['attachments'])
@@ -162,14 +180,27 @@ class JobOfferRepository
             'cc_users',
         ]));
 
-        $job_application = JobApplication::findOrFail($data['job_application_id']);
+        $job_application = JobApplication::with(['applicant', 'jobPosting'])->findOrFail($data['job_application_id']);
 
         $jobOfferData['job_posting_id']     = $job_application->job_posting_id;
         $jobOfferData['job_application_id'] = $job_application->id;
         $jobOfferData['candicate_id']       = $job_application->applicant_id;
 
         DB::beginTransaction();
+
         $jobOffer->update($jobOfferData);
+
+        $jobOffer = JobOffer::findOrFail($id);
+
+        if ($jobOffer->offer_letter_file_path) {
+            $this->storage->delete($jobOffer->offer_letter_file_path);
+        }
+
+        $offer_letter_file_path = $this->storeOfferLetter($jobOffer, $job_application, $job_application->applicant->name . "-" . time());
+
+        $jobOffer->update([
+            'offer_letter_file_path' => $offer_letter_file_path,
+        ]);
 
         if (! empty($data['attachments'])) {
             JobOfferAttachment::whereIn('id', $data['attachments'])
@@ -206,6 +237,42 @@ class JobOfferRepository
         }
 
         DB::commit();
+    }
+
+    public function storeOfferLetter($jobOffer, $job_application, $file_name)
+    {
+        $html = view('recruitment::offer_letter', [
+            'job_offer'          => $jobOffer,
+            'candicate_name'     => $job_application->applicant?->name,
+            'candicate_position' => $job_application->jobPosting?->title,
+        ])->render();
+
+        $fontFileBold = public_path('font/OpenSans-Bold.ttf');
+        $fontFile     = public_path('font/OpenSans-Regular.ttf');
+
+        $opensan_bold    = TCPDF_FONTS::addTTFfont($fontFileBold, 'TrueTypeUnicode', '', 12);
+        $opensan_regular = TCPDF_FONTS::addTTFfont($fontFile, 'TrueTypeUnicode', '', 12);
+
+        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle("Test");
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetFont($opensan_bold, '', 12);
+        $pdf->SetFont($opensan_regular, '', 12);
+        $pdf->AddPage();
+        $pdf->writeHTML($html, true, false, true, false, '');
+        // $pdf->SetY(-20);
+        // $pdf->SetLineStyle([
+        //     'width' => 0.5,
+        //     'dash'  => '3,2',           // 3mm dash, 2mm gap
+        //     'color' => [128, 128, 128], // Gray color
+        // ]);
+        // $pdf->Line(15, $pdf->GetY(), $pdf->getPageWidth() - 15, $pdf->GetY());
+        $filePath = storage_path('app/offer_letters/' . $file_name . ".pdf");
+        $pdf->Output($filePath, 'F');
+
+        return "offer_letters/$file_name.pdf";
     }
 
     public function send($job_offer_id)
