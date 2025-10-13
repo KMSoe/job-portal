@@ -20,7 +20,7 @@ class JobPostingApplicationDetailResource extends JsonResource
             'id'                  => $this->id,
             'jobPosting'          => $this->jobPosting,
             'applicant'           => new ApplicantResource($this->applicant),
-            'expected_salary'     => $this->expected_salary,
+            'expected_salary'     => $this->expected_salary ?? 0,
             'applicant_skills'    => $this->applicant?->skills,
             'resume'              => $this->resume,
             'extracted_data'      => $this->extractedData?->extract_data,

@@ -1,264 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Offer Letter</title>
-  </head>
-  <body
-    style="
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background-color: #f3f4f6;
-    "
-  >
-    <table
-      width="100%"
-      cellpadding="0"
-      cellspacing="0"
-      border="0"
-      style="background-color: #f3f4f6; padding: 32px 16px"
-    >
-      <tr>
-        <td align="center">
-          <table
-            width="100%"
-            cellpadding="0"
-            cellspacing="0"
-            border="0"
-            style="
-              max-width: 800px;
-              background-color: #ffffff;
-              padding: 48px;
-              box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            "
-          >
-            <!-- Header -->
-            <tr>
-              <td
-                style="padding-bottom: 24px; border-bottom: 2px solid #000000"
-              >
-                <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                  <tr>
-                    <td width="50%" valign="top">
-                      <!-- Logo -->
-                      <table cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                          <td
-                            style="
-                              background-color: #f97316;
-                              padding: 8px;
-                              width: 80px;
-                              height: 80px;
-                              text-align: center;
-                              vertical-align: middle;
-                            "
-                          >
-                            <div
-                              style="
-                                width: 32px;
-                                height: 32px;
-                                border-radius: 50%;
-                                border: 4px solid #ffffff;
-                                margin: 0 auto;
-                              "
-                            ></div>
-                            <div
-                              style="
-                                color: #ffffff;
-                                font-weight: bold;
-                                font-size: 10px;
-                                margin-top: 4px;
-                                line-height: 1.2;
-                              "
-                            >
-                              ROYAL MOTOR
-                            </div>
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                    <td width="50%" valign="top" align="right">
-                      <!-- Company Info -->
-                      <div
-                        style="
-                          font-size: 11px;
-                          color: #374151;
-                          text-align: right;
-                        "
-                      >
-                        <h1
-                          style="
-                            margin: 0 0 8px 0;
-                            font-weight: bold;
-                            font-size: 20px;
-                            color: #000000;
-                            text-transform: uppercase;
-                            letter-spacing: 0.05em;
-                          "
-                        >
-                          Royal Motor Company Limited
-                        </h1>
-                        <p style="margin: 4px 0">
-                          No.66/B, Ayarwon Road, 7 West Quarter, Thakata
-                          Township, Yangon, Myanmar.
-                        </p>
-                        <p style="margin: 4px 0">
-                          Tel: +95-9-952039966, +95-9-952049966
-                        </p>
-                      </div>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
 
-            <!-- Body Top Section -->
-            <tr>
-              <td style="padding-top: 32px">
-                <table
-                  width="100%"
-                  cellpadding="0"
-                  cellspacing="0"
-                  border="0"
-                  style="font-size: 13px"
-                >
-                  <tr>
-                    <td width="50%">
-                      <p style="margin: 0"><strong> offer_date </strong></p>
-                    </td>
-                    <td width="50%" align="right">
-                      <p style="margin: 0"><strong>Ref:</strong> ref</p>
-                    </td>
-                  </tr>
-                </table>
+<head>
+    <meta charset="UTF-8">
+    <title>Offer Letter - Royal Motor Company</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            margin: 50px;
+            font-size: 14px;
+            color: #000;
+        }
 
-                <div style="margin-top: 16px; font-size: 13px">
-                  <p style="margin: 4px 0">
-                    <strong
-                      >Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                      applicant_name</strong
-                    >
-                  </p>
-                  <p style="margin: 4px 0">
-                    <strong
-                      >Position&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                      job_title</strong
-                    >
-                  </p>
-                </div>
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
 
-                <p style="margin: 4px 0 0 0; font-size: 13px">
-                  <strong
-                    >SUBJECT&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;subject</strong
-                  >
-                </p>
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-                <p
-                  style="margin: 16px 0 0 0; font-size: 13px; line-height: 1.6"
-                >
-                  We are pleased to inform you that you are appointed as an
-                  <strong> job_title </strong> at
-                  <strong> department </strong> Department with effect from
-                  <strong> offer_date </strong>.
-                </p>
-              </td>
-            </tr>
+        .logo img {
+            width: 80px;
+            height: 80px;
+        }
 
-            <!-- Dynamic Content -->
-            <tr>
-              <td
-                style="
-                  padding: 16px 0;
-                  font-size: 13px;
-                  line-height: 1.6;
-                  color: #374151;
-                "
-              >
-                 content 
-              </td>
-            </tr>
+        .company-info {
+            text-align: right;
+        }
 
-            <!-- Footer -->
-            <tr>
-              <td>
-                <p style="margin: 16px 0 0 0; font-size: 13px">
-                  Yours sincerely,
-                </p>
+        .company-info h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
 
-                <!-- Signature Area -->
-                <table
-                  width="100%"
-                  cellpadding="0"
-                  cellspacing="0"
-                  border="0"
-                  style="margin-top: 32px; font-size: 13px"
-                >
-                  <tr>
-                    <td width="50%" valign="top">
-                      <p style="margin: 0">
-                        <strong>Approved by</strong><br />
-                        approver_name
-                      </p>
-                    </td>
-                    <td width="50%" valign="top" align="right">
-                      <p style="margin: 0">
-                        <strong>Accepted By</strong><br />
-                        applicant_name
-                      </p>
-                    </td>
-                  </tr>
-                </table>
+        .company-info p {
+            margin: 2px 0;
+            font-size: 12px;
+        }
 
-                <table
-                  width="100%"
-                  cellpadding="0"
-                  cellspacing="0"
-                  border="0"
-                  style="margin-top: 48px; font-size: 13px"
-                >
-                  <tr>
-                    <td width="50%">
-                      <p style="margin: 0">_________________________</p>
-                    </td>
-                    <td width="50%" align="right">
-                      <p style="margin: 0">_________________________</p>
-                    </td>
-                  </tr>
-                </table>
+        .content {
+            margin-top: 30px;
+            line-height: 1.6;
+        }
 
-                <div style="margin-top: 8px; font-size: 13px">
-                  <p style="margin: 4px 0; font-weight: 600">HR Manager</p>
-                  <p style="margin: 4px 0; font-weight: 600">
-                    Royal Motor Group of Companies
-                  </p>
-                </div>
+        .ref {
+            text-align: right;
+        }
 
-                <!-- Final Section -->
-                <div
-                  style="
-                    margin-top: 32px;
-                    padding-top: 16px;
-                    border-top: 1px solid #d1d5db;
-                    font-size: 13px;
-                  "
-                >
-                  <p style="margin: 4px 0">
-                    <strong
-                      >To:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(
-                      Department )</strong
-                    >
-                  </p>
-                  <p style="margin: 4px 0">
-                    <strong>Cc: MD, COO</strong>
-                  </p>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
+        .signature-section {
+            margin-top: 60px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .signature-block {
+            width: 45%;
+        }
+
+        .footer {
+            border-top: 1px solid #000;
+            margin-top: 40px;
+            padding-top: 10px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="logo">
+            <img src="logo.png" alt="Royal Motor Logo">
+            <strong>ROYAL MOTOR</strong>
+        </div>
+        <div class="company-info">
+            <h2>ROYAL MOTOR COMPANY LIMITED</h2>
+            <p>No.66/B, Ayarwon Road, 7 West Quarter, Thaketa Township, Yangon, Myanmar.</p>
+            <p>Tel: +95-9-952039966, +95-9-952049966</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <p class="ref">Ref:  ref </p>
+        <p> offer_date </p>
+
+        <p><strong>Name</strong> :  applicant_name </p>
+        <p><strong>Position</strong> :  job_title </p>
+        <p><strong>SUBJECT</strong> :  subject </p>
+
+        <p>We are pleased to inform you that you are appointed as an  job_title  at  department 
+            Department with effect from  offer_date .</p>
+
+        <p> content </p>
+
+        <p>Yours sincerely,</p>
+
+        <div class="signature-section">
+            <div class="signature-block">
+                <p><strong>Approved By</strong><br>
+                     approver_name <br>
+                    ___________________________<br>
+                    HR Manager<br>
+                    Royal Motor Group of Companies</p>
+            </div>
+            <div class="signature-block" style="text-align:right;">
+                <p><strong>Accepted By</strong><br>
+                     applicant_name <br>
+                    ___________________________</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>To:</strong> ( Department )<br>
+                <strong>Cc:</strong> MD, COO
+            </p>
+        </div>
+    </div>
+
+</body>
+
 </html>

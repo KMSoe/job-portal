@@ -261,7 +261,7 @@ class JobOfferRepository
         $pdf->SetFont($opensan_bold, '', 12);
         $pdf->SetFont($opensan_regular, '', 12);
         $pdf->AddPage();
-        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->writeHTML($html);
         // $pdf->SetY(-20);
         // $pdf->SetLineStyle([
         //     'width' => 0.5,
