@@ -21,7 +21,7 @@ class PdfResumeParserService
             'full_name'  => $this->extractName($lines),
             'email'      => $this->extractEmail($text),
             'phone'      => $this->extractPhone($text),
-            'skills'     => $this->extractSkills($text),
+            // 'skills'     => $this->extractSkills($text),
             'education'  => $this->extractEducation($lines),
             'experience' => $this->extractExperience($lines),
             // 'raw_text'   => $text,

@@ -134,8 +134,9 @@ class JobOfferController extends Controller
         $job_offer = $this->service->findById($job_offer_id);
 
         $mailData = [
-            'subject'     => $job_offer->offer_letter_subject,
-            'attachments' => $job_offer->attachments,
+            'subject'                => $job_offer->offer_letter_subject,
+            'offer_letter_file_path' => $job_offer->offer_letter_file_path,
+            'attachments'            => $job_offer->attachments,
         ];
 
         try {

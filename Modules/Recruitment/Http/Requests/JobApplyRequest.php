@@ -5,6 +5,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Validation\Rule;
+use Modules\Recruitment\Entities\Resume;
 
 class JobApplyRequest extends FormRequest
 {
@@ -25,11 +26,14 @@ class JobApplyRequest extends FormRequest
      */
     public function rules(): array
     {
+        $applicant            = auth()->guard('applicant')->user();
+        $applicant_resume_ids = Resume::where('applicant_id', $applicant->id)->pluck('id')->toArray();
+
         return [
-            'expected_salary'                 => 'nullable|numeric|min:0',
-            'resume_id'                       => 'nullable|exists:resumes,id',
-            'supportive_documents'            => 'nullable|array',
-            'supportive_documents.*' =>  [
+            'expected_salary'        => 'nullable|numeric|min:0',
+            'resume_id'              => ['required', Rule::in($applicant_resume_ids)],
+            'supportive_documents'   => 'nullable|array',
+            'supportive_documents.*' => [
                 'required',
                 'file',
             ],

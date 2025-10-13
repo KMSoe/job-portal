@@ -50,14 +50,18 @@ class JobOfferMail extends Mailable
      */
     public function attachments()
     {
-        // return array_map(function ($attachment) {
-        //     return Attachment::fromPath(storage_path($attachment->file_path));
-        // }, $this->mailData['attachments']);
+        $offer_attachments = $this->mailData['attachments'];
 
-        $attachments = $this->mailData['attachments'];
+        $attachments = [];
 
-        return collect($attachments)->map(function ($attachment) {
-            return Attachment::fromPath(storage_path('app/' . $attachment->file_path));
-        })->toArray();
+        if ($this->mailData['offer_letter_file_path']) {
+            $attachments[] = Attachment::fromPath(storage_path('app/' . $this->mailData['offer_letter_file_path']));
+        }
+
+        foreach ($offer_attachments as $key => $attachment) {
+            $attachments[] = Attachment::fromPath(storage_path('app/' . $attachment->file_path));
+        }
+
+        return $attachments;
     }
 }
