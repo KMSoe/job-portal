@@ -7,7 +7,7 @@ class RecruitmentHelper
 {
     public static function getJobApplicationActions($job_application, $current_status)
     {
-        $extact_data_action        = false;
+        $extract_data_action        = false;
         $markAsReceived_action     = false;
         $review_action             = false;
         $assign_review_action      = false;
@@ -24,7 +24,7 @@ class RecruitmentHelper
         $create_employee           = false;
 
         if ($job_application->extractedData == null) {
-            $extact_data_action = true;
+            $extract_data_action = true;
         }
 
         if ($current_status == RecruitmentStageTypes::SUBMITTED->value) {
@@ -56,7 +56,7 @@ class RecruitmentHelper
         }
 
         return [
-            'extact_data_action'        => $extact_data_action,
+            'extract_data_action'        => $extract_data_action,
             'markAsReceived_action'     => $markAsReceived_action,
             'review_action'             => $review_action,
             'assign_review_action'      => $assign_review_action,
