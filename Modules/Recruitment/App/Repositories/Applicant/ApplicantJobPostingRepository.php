@@ -82,7 +82,7 @@ class ApplicantJobPostingRepository
 
                     if (!empty($dates)) {
                         $minDate = collect($dates)->min();
-                        $query->where('published_at', '>=', $minDate);
+                        $query->where('created_at', '>=', $minDate);
                     }
                 }
 
