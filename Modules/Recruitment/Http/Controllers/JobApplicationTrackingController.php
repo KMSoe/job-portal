@@ -41,7 +41,9 @@ class JobApplicationTrackingController extends Controller
 
         $extract_data = $this->pdfResumeParserService->parse(storage_path("app/" . $job_application->resume->file_path), $job_application->jobPosting);
 
-        ApplicantResumeExtractData::create([
+        ApplicantResumeExtractData::updateOrCreate([
+            'job_application_id' => $job_application->id,
+        ], [
             'job_application_id' => $job_application->id,
             'extract_data'       => $extract_data,
         ]);
@@ -49,7 +51,7 @@ class JobApplicationTrackingController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'extract_data' => $extract_data
+                'extract_data' => $extract_data,
             ],
             'message' => 'success',
         ], 200);

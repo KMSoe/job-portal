@@ -85,7 +85,9 @@ class PdfResumeParserService
         $keywords = '/(education|certificate|certified|bachelor|master|mba|phd|doctoral|associate|degree|diploma|graduation|graduated|university|college|institute|academy|school|major|minor|alumni|course|gpa)/i';
         foreach ($lines as $line) {
             if (preg_match($keywords, $line)) {
-                $edu[] = $line;
+                if ($line !== 'education') {
+                    $edu[] = $line;
+                }
             }
         }
         return $edu;
@@ -100,7 +102,9 @@ class PdfResumeParserService
 
         foreach ($lines as $line) {
             if (preg_match($keywords, $line)) {
-                $exp[] = $line;
+                if ($line !== 'experience') {
+                    $exp[] = $line;
+                }
             }
         }
         return $exp;
