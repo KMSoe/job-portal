@@ -2,6 +2,7 @@
 namespace Modules\Recruitment\Transformers;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\App\Helpers\RecruitmentHelper;
 
 class JobPostingApplicationDetailResource extends JsonResource
@@ -28,6 +29,18 @@ class JobPostingApplicationDetailResource extends JsonResource
             'reviewers'           => $this->reviewers,
             'interviews'          => $this->interviews,
             'jobOffer'            => $this->jobOffer,
+            'job_offer_actions'   => $this->jobOffer ? [
+                'edit_action'                   => $this->jobOffer?->status == JobOfferStatusTypes::DRAFT->value ? true : false,
+                'send_action'                   => $this->jobOffer?->status == JobOfferStatusTypes::DONE->value ? true : false,
+                'mark_as_offer_accepted_action' => $this->jobOffer?->status == JobOfferStatusTypes::SENT->value || $this->jobOffer?->status == JobOfferStatusTypes::OFFER_DECLINED->value ? true : false,
+                'mark_as_offer_declined_action' => $this->jobOffer?->status == JobOfferStatusTypes::SENT->value || $this->jobOffer?->status == JobOfferStatusTypes::OFFER_ACCEPTED->value ? true : false,
+            ] :
+            [
+                'edit_action'                   => false,
+                'send_action'                   => false,
+                'mark_as_offer_accepted_action' => false,
+                'mark_as_offer_declined_action' => false,
+            ],
             'applied_at'          => $this->applied_at,
             'application_status'  => $this->status,
         ], $actions);
