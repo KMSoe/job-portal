@@ -127,6 +127,21 @@ class JobApplicationTrackingController extends Controller
         ], 200);
     }
 
+    public function updateToAssessmentTesting(Request $request, $job_posting_id, $job_application_id)
+    {
+        $job_application = $this->service->findById($job_application_id);
+
+        $this->service->updateStatus($job_application, RecruitmentStageTypes::ASSESSMENT_TESTING->value);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
     public function updateToInterviewStage(Request $request, $job_posting_id, $job_application_id)
     {
         $job_application = $this->service->findById($job_application_id);
