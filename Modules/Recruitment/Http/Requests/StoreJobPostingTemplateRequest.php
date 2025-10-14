@@ -25,13 +25,13 @@ class StoreJobPostingTemplateRequest extends FormRequest
             'template_data.summary'                                => 'nullable|string', // The "An Excellent Opportunity for..." text
 
             // Open To
-            'template_data.open_to'                                => 'nullable|in:Male,Female,Male/Female',
+            'template_data.open_to'                                => 'required|in:Male,Female,Male/Female',
 
             // Role and Responsibilities
-            'template_data.roles_and_responsibilities'             => 'nullable|string|max:1000',
+            'template_data.roles_and_responsibilities'             => 'nullable|string',
 
             // Job Requirements
-            'template_data.job_requirements'                       => 'required|string|max:1000',
+            'template_data.job_requirements'                       => 'required|string',
 
             // What We Can Offer
             'template_data.what_we_can_offer_include'              => 'required|boolean',

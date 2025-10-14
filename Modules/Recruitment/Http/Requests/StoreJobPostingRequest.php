@@ -22,7 +22,7 @@ class StoreJobPostingRequest extends FormRequest
             'company_id'                             => 'required|exists:companies,id',
             'department_id'                          => 'required|exists:departments,id',
             'designation_id'                         => 'required|exists:designations,id',
-            'template_id'                            => 'required|exists:job_posting_templates,id',
+            'template_id'                            => 'nullable|exists:job_posting_templates,id',
 
             // Job Details
             'title'                                  => 'required|string|max:255',
