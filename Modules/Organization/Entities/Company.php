@@ -47,7 +47,7 @@ class Company extends Model
         'founded_at' => 'date',
     ];
 
-     protected $appends = ['logo_url', 'primary_phone', 'secondary_phone'];
+    protected $appends = ['logo_url', 'primary_phone', 'secondary_phone'];
 
     public function getLogoUrlAttribute()
     {

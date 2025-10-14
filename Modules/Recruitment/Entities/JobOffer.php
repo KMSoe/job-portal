@@ -122,6 +122,12 @@ class JobOffer extends Model
         return $this->belongsTo(User::class, 'approver_id');
     }
 
+    public function approverPosition()
+    {
+        // Assuming the approver is a User
+        return $this->belongsTo(Designation::class, 'approver_position_id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Has Many / Belongs To Many Relationships
