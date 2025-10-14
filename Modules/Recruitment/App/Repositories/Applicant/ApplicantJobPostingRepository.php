@@ -29,7 +29,7 @@ class ApplicantJobPostingRepository
     public function findByParams($request)
     {
         $keyword = $request->search ? $request->search : '';
-        $perPage = $request->perPage ? $request->perPage : 20;
+        $perPage = $request->per_page ? $request->per_page : 20;
 
         $data = JobPosting::with([
             'company',
@@ -50,8 +50,7 @@ class ApplicantJobPostingRepository
 
                 if ($keyword != null && $keyword != '') {
                     $query->where(function ($q) use ($keyword) {
-                        $q->where('name', 'LIKE', "%$keyword%")
-                            ->orWhere('description', 'LIKE', "%$keyword%");
+                        $q->where('title', 'LIKE', "%$keyword%");
                     });
                 }
 
@@ -214,7 +213,7 @@ class ApplicantJobPostingRepository
     public function getApplications($applicant_id, $request)
     {
         $keyword = $request->search ? $request->search : '';
-        $perPage = $request->perPage ? $request->perPage : 20;
+        $perPage = $request->per_page ? $request->per_page : 20;
 
         $data = JobApplication::with(['jobPosting.company'])
             ->where('job_applications.applicant_id', $applicant_id)

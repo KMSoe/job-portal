@@ -13,7 +13,7 @@ class JobApplicationBoardRepository
     public function findByParams($request)
     {
         $keyword = $request->search ? $request->search : '';
-        $perPage = $request->perPage ? $request->perPage : 20;
+        $perPage = $request->per_page ? $request->per_page : 20;
 
         $data = JobPosting::with([
             'company',
@@ -89,7 +89,7 @@ class JobApplicationBoardRepository
     public function getApplicants($request, $job_posting_id)
     {
         $keyword = $request->search ? $request->search : '';
-        $perPage = $request->perPage ? $request->perPage : 20;
+        $perPage = $request->per_page ? $request->per_page : 20;
 
         $data = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
             ->where('job_applications.job_posting_id', $job_posting_id)

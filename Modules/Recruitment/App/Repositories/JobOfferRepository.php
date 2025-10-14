@@ -25,7 +25,7 @@ class JobOfferRepository
     public function findByParams($request)
     {
         $keyword = $request->search ? $request->search : '';
-        $perPage = $request->perPage ? $request->perPage : 20;
+        $perPage = $request->per_page ? $request->per_page : 20;
 
         $data = JobOffer::with([
             // Core Belongs To Relationships
