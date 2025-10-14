@@ -44,23 +44,51 @@ class ApplicantJobPostingRepository
         ])
         // ->whereNotNull('published_at')
             ->where(function ($query) use ($request, $keyword) {
-                if ($request->company_id) {
-                    $query->where('company_id', $request->company_id);
+                if (isset($request->job_function_id) && $request->job_function_id != null && $request->job_function_id != '') {
+                    $query->where('job_function_id', $request->job_function_id);
                 }
 
-                if ($request->department_id) {
-                    $query->where('department_id', $request->department_id);
-                }
-
-                if ($request->designation_id) {
-                    $query->where('designation_id', $request->designation_id);
-                }
-
-                if ($keyword != '') {
+                if ($keyword != null && $keyword != '') {
                     $query->where(function ($q) use ($keyword) {
                         $q->where('name', 'LIKE', "%$keyword%")
                             ->orWhere('description', 'LIKE', "%$keyword%");
                     });
+                }
+
+                if (isset($request->date_posted) && $request->date_posted != null && $request->date_posted != '') {
+                    $dateFilters = explode(',', $request->date_posted);
+                    $now = now();
+                    $dates = [];
+
+                    foreach ($dateFilters as $filter) {
+                        switch ($filter) {
+                            case 'today':
+                                $dates[] = $now->copy()->subDay();
+                                break;
+                            case 'last_3_days':
+                                $dates[] = $now->copy()->subDays(3);
+                                break;
+                            case 'last_7_days':
+                                $dates[] = $now->copy()->subDays(7);
+                                break;
+                            case 'last_14_days':
+                                $dates[] = $now->copy()->subDays(14);
+                                break;
+                            case 'last_30_days':
+                                $dates[] = $now->copy()->subDays(30);
+                                break;
+                        }
+                    }
+
+                    if (!empty($dates)) {
+                        $minDate = collect($dates)->min();
+                        $query->where('created_at', '>=', $minDate);
+                    }
+                }
+
+                if (isset($request->companies) && $request->companies != null && $request->companies != '') {
+                    $companies = explode(',', $request->companies);
+                    $query->whereIn('company_id', $companies);
                 }
             });
 
