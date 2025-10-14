@@ -42,7 +42,7 @@ class ApplicantJobPostingController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'num_of_job_postings' => JobPosting::where('status', JobPostingStatusTypes::PUBLISHED)->count(),
+                'num_of_job_postings' => JobPosting::where('status', JobPostingStatusTypes::PUBLISHED->value)->count(),
                 'num_of_companies'    => Company::count(),
                 'num_of_candicates'   => Applicant::count(),
                 'latest_job_postings' => JobPostingResource::collection($this->service->getLatestJobPosting(6)),

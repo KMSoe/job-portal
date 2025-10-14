@@ -3,6 +3,7 @@ namespace Modules\Recruitment\App\Repositories\Applicant;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Services\PdfResumeParserService;
 use Modules\Recruitment\Entities\ApplicantResumeExtractData;
@@ -130,6 +131,7 @@ class ApplicantJobPostingRepository
             'salaryCurrency',
             'skills',
         ])
+        ->where('status', JobPostingStatusTypes::PUBLISHED->value)
             ->take($count)->get();
         // ->whereNotNull('published_at')
 
