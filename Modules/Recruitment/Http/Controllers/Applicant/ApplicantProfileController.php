@@ -99,8 +99,8 @@ class ApplicantProfileController extends Controller
     {
         $applicant = auth()->guard('applicant')->user();
 
-        if ($applicant->photo) {
-            $this->storage->delete($applicant->logo);
+        if ($applicant->photo != null) {
+            $this->storage->delete($applicant->photo);
         }
 
         $applicant->photo = $this->storage->store('applicant_photos', $request->file('photo'));
