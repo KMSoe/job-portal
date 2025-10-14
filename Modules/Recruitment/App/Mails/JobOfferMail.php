@@ -13,6 +13,10 @@ class JobOfferMail extends Mailable
     use Queueable, SerializesModels;
 
     public $mailData;
+    public $logo;
+    public $job_offer;
+    public $candicate_name;
+    public $candicate_position;
 
     /**
      * Create a new message instance.
@@ -21,7 +25,11 @@ class JobOfferMail extends Mailable
      */
     public function __construct($mailData)
     {
-        $this->mailData = $mailData;
+        $this->mailData           = $mailData;
+        $this->job_offer          = $mailData['job_offer'];
+        $this->logo               = $mailData['logo'];
+        $this->candicate_name     = $mailData['candicate_name'];
+        $this->candicate_position = $mailData['candicate_position'];
     }
 
     /**
