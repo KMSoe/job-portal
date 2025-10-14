@@ -4,6 +4,7 @@ namespace Modules\Recruitment\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Modules\Organization\App\Enums\EmploymentTypes;
+use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 
 class JobOfferFormRequest extends FormRequest
 {
@@ -48,6 +49,7 @@ class JobOfferFormRequest extends FormRequest
             // CC Users (Pivot Data)
             'bcc_users'                => 'nullable|array',
             'bcc_users.*'              => 'required|exists:users,id',
+            'status'                   => ['required', Rule::in(JobOfferStatusTypes::values())],
         ];
     }
 
