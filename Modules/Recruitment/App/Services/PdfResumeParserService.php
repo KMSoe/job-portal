@@ -11,9 +11,9 @@ class PdfResumeParserService
 
         $jobPostingSkills = $jobPosting->skills->pluck('name')->toArray();
         return [
-            // 'full_name'  => $this->extractName($lines),
-            // 'email'      => $this->extractEmail($text),
-            // 'phone'      => $this->extractPhone($text),
+            'full_name'      => $this->extractName($lines),
+            'email'          => $this->extractEmail($text),
+            'phone'          => $this->extractPhone($text),
             'matched_skills' => $this->extractSkills($jobPostingSkills, $text),
             'education'      => $this->extractEducation($lines),
             'experience'     => $this->extractExperience($lines),

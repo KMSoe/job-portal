@@ -14,7 +14,7 @@ class JobApplicationReviewService
         $per_page = $request->input('per_page', 20);
         $keyword  = $request->search ?? '';
 
-        $query = JobApplicationReviewer::with(['application.applicant', 'application.jobPosting', 'application.resume', 'application.supportiveDocuments'])
+        $query = JobApplicationReviewer::with(['application.applicant', 'application.jobPosting', 'application.resume', 'application.supportiveDocuments', 'application.extractedData'])
             ->where('reviewer_id', $user->id);
 
         if ($keyword != '') {
@@ -43,7 +43,7 @@ class JobApplicationReviewService
     {
         $user = auth()->user();
 
-        return JobApplicationReviewer::with(['application.applicant', 'application.jobPosting', 'application.resume', 'application.supportiveDocuments'])
+        return JobApplicationReviewer::with(['application.applicant', 'application.jobPosting', 'application.resume', 'application.supportiveDocuments', 'application.extractedData'])
             ->where('reviewer_id', $user->id)
             ->findOrFail($id);
     }
