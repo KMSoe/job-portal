@@ -22,11 +22,39 @@ class ApplicantSeeder extends Seeder
         $storage  = new LocalStorage();
         $filePath = $storage->store('applicant_profiles', $localFile);
 
+        // Applicant::create([
+        //     'name'     => 'Test User',
+        //     'email'    => 'test@example.com',
+        //     'photo'    => $filePath,
+        //     'password' => Hash::make('password'),
+        // ]);
+
         Applicant::create([
-            'name'     => 'Test User',
-            'email'    => 'test@example.com',
-            'password' => Hash::make('password'),
+            'name'     => 'Alice',
+            'email'    => 'alice@example.com',
             'photo'    => $filePath,
+            'password' => Hash::make('password'),
+        ]);
+
+        Applicant::create([
+            'name'     => 'Bob',
+            'email'    => 'bob@example.com',
+            'photo'    => $filePath,
+            'password' => Hash::make('password'),
+        ]);
+
+        Applicant::create([
+            'name'     => 'John',
+            'email'    => 'john@example.com',
+            'photo'    => $filePath,
+            'password' => Hash::make('password'),
+        ]);
+
+        Applicant::create([
+            'name'     => 'Mary',
+            'email'    => 'mary@example.com',
+            'photo'    => $filePath,
+            'password' => Hash::make('password'),
         ]);
     }
 }
