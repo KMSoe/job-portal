@@ -20,7 +20,7 @@ class CreateJobPostingsTable extends Migration
             $table->unsignedBigInteger('department_id');
             $table->unsignedBigInteger('designation_id');
 
-            $table->unsignedBigInteger('template_id');
+            $table->unsignedBigInteger('template_id')->nullable();
 
             // --- Job Details ---
             $table->string('title');
