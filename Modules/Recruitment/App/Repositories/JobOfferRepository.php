@@ -1,6 +1,7 @@
 <?php
 namespace Modules\Recruitment\App\Repositories;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
@@ -11,8 +12,6 @@ use Modules\Recruitment\Entities\JobOfferAttachment;
 use Modules\Recruitment\Transformers\JobOfferResource;
 use Modules\Storage\App\Classes\LocalStorage;
 use Modules\Storage\App\Interfaces\StorageInterface;
-use TCPDF;
-use TCPDF_FONTS;
 
 class JobOfferRepository
 {
@@ -241,27 +240,27 @@ class JobOfferRepository
 
     public function storeOfferLetter($jobOffer, $job_application, $file_name)
     {
-        $html = view('recruitment::offer_letter', [
-            'job_offer'          => $jobOffer,
-            'candicate_name'     => $job_application->applicant?->name,
-            'candicate_position' => $job_application->jobPosting?->title,
-        ])->render();
+        // $html = view('recruitment::offer_letter', [
+        //     'job_offer'          => $jobOffer,
+        //     'candicate_name'     => $job_application->applicant?->name,
+        //     'candicate_position' => $job_application->jobPosting?->title,
+        // ])->render();
 
-        $fontFileBold = public_path('font/OpenSans-Bold.ttf');
-        $fontFile     = public_path('font/OpenSans-Regular.ttf');
+        // $fontFileBold = public_path('font/OpenSans-Bold.ttf');
+        // $fontFile     = public_path('font/OpenSans-Regular.ttf');
 
-        $opensan_bold    = TCPDF_FONTS::addTTFfont($fontFileBold, 'TrueTypeUnicode', '', 12);
-        $opensan_regular = TCPDF_FONTS::addTTFfont($fontFile, 'TrueTypeUnicode', '', 12);
+        // $opensan_bold    = TCPDF_FONTS::addTTFfont($fontFileBold, 'TrueTypeUnicode', '', 12);
+        // $opensan_regular = TCPDF_FONTS::addTTFfont($fontFile, 'TrueTypeUnicode', '', 12);
 
-        $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-        $pdf->SetCreator(PDF_CREATOR);
-        $pdf->SetTitle("Test");
-        $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(false);
-        $pdf->SetFont($opensan_bold, '', 12);
-        $pdf->SetFont($opensan_regular, '', 12);
-        $pdf->AddPage();
-        $pdf->writeHTML($html);
+        // $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        // $pdf->SetCreator(PDF_CREATOR);
+        // $pdf->SetTitle("Test");
+        // $pdf->setPrintHeader(false);
+        // $pdf->setPrintFooter(false);
+        // $pdf->SetFont($opensan_bold, '', 12);
+        // $pdf->SetFont($opensan_regular, '', 12);
+        // $pdf->AddPage();
+        // $pdf->writeHTML($html, true, false, true, false, '');
         // $pdf->SetY(-20);
         // $pdf->SetLineStyle([
         //     'width' => 0.5,
@@ -269,8 +268,16 @@ class JobOfferRepository
         //     'color' => [128, 128, 128], // Gray color
         // ]);
         // $pdf->Line(15, $pdf->GetY(), $pdf->getPageWidth() - 15, $pdf->GetY());
-        $filePath = storage_path('app/offer_letters/' . $file_name . ".pdf");
-        $pdf->Output($filePath, 'F');
+        // $filePath = storage_path('app/offer_letters/' . $file_name . ".pdf");
+        // $pdf->Output($filePath, 'F');
+
+        $pdf = Pdf::loadView("recruitment::offer_letter", [
+            'job_offer'          => $jobOffer,
+            'candicate_name'     => $job_application->applicant?->name,
+            'candicate_position' => $job_application->jobPosting?->title,
+        ]);
+
+        $pdf->save(storage_path('app/offer_letters/' . $file_name . ".pdf"));
 
         return "offer_letters/$file_name.pdf";
     }

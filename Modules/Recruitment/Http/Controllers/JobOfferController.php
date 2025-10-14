@@ -140,8 +140,8 @@ class JobOfferController extends Controller
         ];
 
         try {
-            // Mail::to(["maythuaung415@gmail.com"])
-            Mail::to([$job_offer->candidate?->email])
+            Mail::to(["maythuaung415@gmail.com"])
+            // Mail::to([$job_offer->candidate?->email])
                 ->cc($job_offer->ccUsers->pluck('email')->toArray())
                 ->bcc($job_offer->bccUsers->pluck('email')->toArray())
                 ->send(new JobOfferMail($mailData));
