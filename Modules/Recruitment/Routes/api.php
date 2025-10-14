@@ -70,6 +70,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('job-postings', [ApplicantJobPostingController::class, 'index']);
     Route::get('job-postings/{id}', [ApplicantJobPostingController::class, 'show']);
     Route::get('career-page-data', [ApplicantJobPostingController::class, 'getCareerPageData']);
+    Route::get('job-posting-filters', [ApplicantJobPostingController::class, 'getFilterData']);
 
     Route::get('/auth/google/callback', [GoogleOAuthController::class, 'callback']);
 });

@@ -57,25 +57,24 @@ class ApplicantJobPostingRepository
 
                 if (isset($request->date_posted) && $request->date_posted != null && $request->date_posted != '') {
                     $dateFilters = explode(',', $request->date_posted);
-                    $now = now();
                     $dates = [];
 
                     foreach ($dateFilters as $filter) {
                         switch ($filter) {
                             case 'today':
-                                $dates[] = $now->copy()->subDay();
+                                $dates[] = now()->subDay();
                                 break;
                             case 'last_3_days':
-                                $dates[] = $now->copy()->subDays(3);
+                                $dates[] = now()->subDays(3);
                                 break;
                             case 'last_7_days':
-                                $dates[] = $now->copy()->subDays(7);
+                                $dates[] = now()->subDays(7);
                                 break;
                             case 'last_14_days':
-                                $dates[] = $now->copy()->subDays(14);
+                                $dates[] = now()->subDays(14);
                                 break;
                             case 'last_30_days':
-                                $dates[] = $now->copy()->subDays(30);
+                                $dates[] = now()->subDays(30);
                                 break;
                         }
                     }
