@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Offer Letter</title>
+    <title>{{ $job_offer->offer_letter_subject }}</title>
   </head>
   <body
     style="
@@ -126,10 +126,10 @@
                 >
                   <tr>
                     <td width="50%">
-                      <p style="margin: 0"><strong> offer_date </strong></p>
+                      <p style="margin: 0"><strong> {{ $job_offer->offer_date }} </strong></p>
                     </td>
                     <td width="50%" align="right">
-                      <p style="margin: 0"><strong>Ref:</strong> ref</p>
+                      <p style="margin: 0"><strong>Ref:</strong> {{ $job_offer->offer_letter_ref }}</p>
                     </td>
                   </tr>
                 </table>
@@ -138,30 +138,31 @@
                   <p style="margin: 4px 0">
                     <strong
                       >Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                      applicant_name</strong
+                      {{ $candicate_name }}</strong
                     >
                   </p>
                   <p style="margin: 4px 0">
                     <strong
                       >Position&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                      job_title</strong
+                      {{ $candicate_position }}</strong
                     >
                   </p>
                 </div>
 
                 <p style="margin: 4px 0 0 0; font-size: 13px">
                   <strong
-                    >SUBJECT&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;subject</strong
+                    >SUBJECT&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{ $job_offer->offer_letter_subject }}</strong
                   >
                 </p>
 
                 <p
                   style="margin: 16px 0 0 0; font-size: 13px; line-height: 1.6"
                 >
-                  We are pleased to inform you that you are appointed as an
+                  {{-- We are pleased to inform you that you are appointed as an
                   <strong> job_title </strong> at
                   <strong> department </strong> Department with effect from
-                  <strong> offer_date </strong>.
+                  <strong> offer_date </strong>. --}}
+                  {{-- {{ $job_offer->offer_letter_content }} --}}
                 </p>
               </td>
             </tr>
@@ -176,7 +177,7 @@
                   color: #374151;
                 "
               >
-                 content 
+                 {{ $job_offer->offer_letter_content }} 
               </td>
             </tr>
 

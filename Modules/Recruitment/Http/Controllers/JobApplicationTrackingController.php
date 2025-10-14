@@ -6,14 +6,18 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Services\JobApplicationTrackingService;
+use Modules\Recruitment\App\Services\PdfResumeParserService;
+use Modules\Recruitment\Entities\ApplicantResumeExtractData;
 
 class JobApplicationTrackingController extends Controller
 {
     private $service;
+    private PdfResumeParserService $pdfResumeParserService;
 
-    public function __construct(JobApplicationTrackingService $service)
+    public function __construct(JobApplicationTrackingService $service, PdfResumeParserService $pdfResumeParserService)
     {
-        $this->service = $service;
+        $this->service                = $service;
+        $this->pdfResumeParserService = $pdfResumeParserService;
     }
 
     public function updateStatus(Request $request, $job_posting_id, $job_application_id)
@@ -26,6 +30,26 @@ class JobApplicationTrackingController extends Controller
             'status'  => true,
             'data'    => [
 
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
+    public function parseResume(Request $request, $job_posting_id, $job_application_id)
+    {
+        $job_application = $this->service->findById($job_application_id);
+
+        $extract_data = $this->pdfResumeParserService->parse(storage_path("app/" . $job_application->resume->file_path), $job_application->jobPosting);
+
+        ApplicantResumeExtractData::create([
+            'job_application_id' => $job_application->id,
+            'extract_data'       => $extract_data,
+        ]);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+                'extract_data' => $extract_data
             ],
             'message' => 'success',
         ], 200);

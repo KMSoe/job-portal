@@ -8,7 +8,7 @@ class JobApplicationTrackingRepository
 {
     public function findById($id)
     {
-        return JobApplication::findOrFail($id);
+        return JobApplication::with(['resume', 'jobPosting.skills'])->findOrFail($id);
     }
 
     public function updateStatus($job_application, $status)

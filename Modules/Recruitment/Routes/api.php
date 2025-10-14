@@ -85,6 +85,7 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::get('job-postings/{job_posting_id}/job-applications', [JobApplicationBoardController::class, 'getApplications']);
     Route::get('job-postings/{job_posting_id}/job-applications/{job_application_id}', [JobApplicationBoardController::class, 'getApplicationDetail']);
 
+    Route::post('job-postings/{job_posting_id}/job-applications/{job_application_id}/parse-resume', [JobApplicationTrackingController::class, 'parseResume']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/mark-as-received', [JobApplicationTrackingController::class, 'markAsReceived']);
     Route::patch('job-postings/{job_posting_id}/job-applications/{job_application_id}/update-to-review-state', [JobApplicationTrackingController::class, 'updateToReviewStage']);
     Route::post('job-postings/{job_posting_id}/job-applications/{job_application_id}/reviewers', [JobApplicationTrackingController::class, 'assignReviewers']);

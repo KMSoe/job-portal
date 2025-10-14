@@ -101,7 +101,7 @@ class JobPostingController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'job_posting' => new JobPostingResource($job_posting),
+                // 'job_posting' => new JobPostingResource($job_posting),
             ],
             'message' => 'Successfully updated',
         ], 200);

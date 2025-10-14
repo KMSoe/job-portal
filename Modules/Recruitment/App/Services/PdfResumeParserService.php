@@ -1,29 +1,22 @@
 <?php
 namespace Modules\Recruitment\App\Services;
 
-use Spatie\PdfToText\Pdf;
-
 class PdfResumeParserService
 {
-    protected array $skillsList = [
-        'php', 'laravel', 'javascript', 'react', 'node', 'vue', 'mysql', 'postgres', 'aws',
-        'docker', 'kubernetes', 'python', 'java', 'c#', 'git', 'html', 'css', 'redis', 'mongodb',
-        'rest', 'graphql', 'typescript', 'go',
-    ];
-
-    public function parse(string $pdfPath): array
+    public function parse(string $pdfPath, $jobPosting): array
     {
         $text  = $this->extractText($pdfPath);
         $text  = $this->normalize($text);
         $lines = array_filter(array_map('trim', explode("\n", $text)));
 
+        $jobPostingSkills = $jobPosting->skills->pluck('name')->toArray();
         return [
-            'full_name'  => $this->extractName($lines),
-            'email'      => $this->extractEmail($text),
-            'phone'      => $this->extractPhone($text),
-            // 'skills'     => $this->extractSkills($text),
-            'education'  => $this->extractEducation($lines),
-            'experience' => $this->extractExperience($lines),
+            // 'full_name'  => $this->extractName($lines),
+            // 'email'      => $this->extractEmail($text),
+            // 'phone'      => $this->extractPhone($text),
+            'matched_skills' => $this->extractSkills($jobPostingSkills, $text),
+            'education'      => $this->extractEducation($lines),
+            'experience'     => $this->extractExperience($lines),
             // 'raw_text'   => $text,
         ];
     }
@@ -73,12 +66,13 @@ class PdfResumeParserService
         return null;
     }
 
-    protected function extractSkills(string $text): array
+    protected function extractSkills($jobPostingSkills, string $text): array
     {
         $found = [];
         $lower = strtolower($text);
-        foreach ($this->skillsList as $skill) {
-            if (strpos($lower, $skill) !== false) {
+
+        foreach ($jobPostingSkills as $skill) {
+            if (stripos($lower, $skill) !== false) {
                 $found[] = ucfirst($skill);
             }
         }
@@ -87,9 +81,10 @@ class PdfResumeParserService
 
     protected function extractEducation(array $lines): array
     {
-        $edu = [];
+        $edu      = [];
+        $keywords = '/(education|certificate|certified|bachelor|master|mba|phd|doctoral|associate|degree|diploma|graduation|graduated|university|college|institute|academy|school|major|minor|alumni|course|gpa)/i';
         foreach ($lines as $line) {
-            if (preg_match('/(bachelor|master|mba|phd|university|college|institute)/i', $line)) {
+            if (preg_match($keywords, $line)) {
                 $edu[] = $line;
             }
         }
@@ -99,8 +94,12 @@ class PdfResumeParserService
     protected function extractExperience(array $lines): array
     {
         $exp = [];
+
+        // Expanded list of keywords for section headers, job roles, action verbs, and organizations
+        $keywords = '/(experience|employment|work history|professional|career|developer|engineer|manager|director|analyst|specialist|coordinator|lead|company|organization|firm|employer|worked|employed|job|title|project|accomplishment|responsibility|achieved|implemented|developed|contributed)/i';
+
         foreach ($lines as $line) {
-            if (preg_match('/(experience|developer|engineer|manager|company|worked|project)/i', $line)) {
+            if (preg_match($keywords, $line)) {
                 $exp[] = $line;
             }
         }
