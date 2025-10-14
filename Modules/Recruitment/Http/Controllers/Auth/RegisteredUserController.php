@@ -142,7 +142,11 @@ class RegisteredUserController extends Controller
                 $message->subject('Password Reset Request');
             });
 
-            return response()->json(['message' => 'Password reset link sent to your email.'], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Password reset link sent to your email.',
+                'user' => $user->only('id', 'name', 'email', 'created_at', 'updated_at')
+            ], 200);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
