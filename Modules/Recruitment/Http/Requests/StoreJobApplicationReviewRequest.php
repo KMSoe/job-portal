@@ -14,7 +14,7 @@ class StoreJobApplicationReviewRequest extends FormRequest
     {
         return [
             'score'   => 'required|integer|min:0|max:100',
-            'comment' => 'required|string|min:10|max:2000',
+            'comment' => 'required|string',
             'status'  => 'in:draft,done',
         ];
     }

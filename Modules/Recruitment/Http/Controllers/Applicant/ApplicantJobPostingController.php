@@ -30,7 +30,7 @@ class ApplicantJobPostingController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'total_job_postings' => JobPosting::where('status', JobPostingStatusTypes::PUBLISHED)->count(),
+                'total_job_postings' => JobPosting::where('status', JobPostingStatusTypes::PUBLISHED->value)->count(),
                 'job_postings'       => $job_postings,
             ],
             'message' => 'success',

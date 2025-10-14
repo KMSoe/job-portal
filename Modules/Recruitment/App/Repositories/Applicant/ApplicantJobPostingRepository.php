@@ -6,7 +6,6 @@ use Illuminate\Support\Str;
 use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Services\PdfResumeParserService;
-use Modules\Recruitment\Entities\ApplicantResumeExtractData;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Entities\Resume;
@@ -32,17 +31,19 @@ class ApplicantJobPostingRepository
         $keyword = $request->search ? $request->search : '';
         $perPage = $request->per_page ? $request->per_page : 20;
 
-        $data = JobPosting::with([
-            'company',
-            'department',
-            'designation',
-            'template',
-            'experienceLevel',
-            'jobFunction',
-            'minimumEducationLevel',
-            'salaryCurrency',
-            'skills',
-        ])
+        $data = JobPosting::publishedAndActive()
+            ->with([
+                'company',
+                'department',
+                'designation',
+                'template',
+                'experienceLevel',
+                'jobFunction',
+                'minimumEducationLevel',
+                'salaryCurrency',
+                'skills',
+            ])
+
         // ->whereNotNull('published_at')
             ->where(function ($query) use ($request, $keyword) {
                 if (isset($request->job_function_id) && $request->job_function_id != null && $request->job_function_id != '') {
@@ -57,7 +58,7 @@ class ApplicantJobPostingRepository
 
                 if (isset($request->date_posted) && $request->date_posted != null && $request->date_posted != '') {
                     $dateFilters = explode(',', $request->date_posted);
-                    $dates = [];
+                    $dates       = [];
 
                     foreach ($dateFilters as $filter) {
                         switch ($filter) {
@@ -79,7 +80,7 @@ class ApplicantJobPostingRepository
                         }
                     }
 
-                    if (!empty($dates)) {
+                    if (! empty($dates)) {
                         $minDate = collect($dates)->min();
                         $query->where('created_at', '>=', $minDate);
                     }
@@ -120,18 +121,19 @@ class ApplicantJobPostingRepository
     public function getLatestJobPosting($count)
     {
 
-        $data = JobPosting::with([
-            'company',
-            'department',
-            'designation',
-            'template',
-            'experienceLevel',
-            'jobFunction',
-            'minimumEducationLevel',
-            'salaryCurrency',
-            'skills',
-        ])
-        ->where('status', JobPostingStatusTypes::PUBLISHED->value)
+        $data = JobPosting::publishedAndActive()
+            ->with([
+                'company',
+                'department',
+                'designation',
+                'template',
+                'experienceLevel',
+                'jobFunction',
+                'minimumEducationLevel',
+                'salaryCurrency',
+                'skills',
+            ])
+            ->where('status', JobPostingStatusTypes::PUBLISHED->value)
             ->take($count)->get();
         // ->whereNotNull('published_at')
 
@@ -142,17 +144,18 @@ class ApplicantJobPostingRepository
     {
         $applicantId = auth()->guard('applicant')->id();
 
-        $jobPosting = JobPosting::with([
-            'company',
-            'department',
-            'designation',
-            'template',
-            'experienceLevel',
-            'jobFunction',
-            'minimumEducationLevel',
-            'salaryCurrency',
-            'skills',
-        ])
+        $jobPosting = JobPosting::publishedAndActive()
+            ->with([
+                'company',
+                'department',
+                'designation',
+                'template',
+                'experienceLevel',
+                'jobFunction',
+                'minimumEducationLevel',
+                'salaryCurrency',
+                'skills',
+            ])
             ->leftJoin('job_applications', function ($join) use ($applicantId) {
                 $join->on('job_applications.job_posting_id', '=', 'job_postings.id')
                     ->where('job_applications.applicant_id', '=', $applicantId);

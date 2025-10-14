@@ -1,12 +1,15 @@
 <?php
 namespace Modules\Recruitment\Entities;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Entities\Designation;
+use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Nnjeim\World\Models\Currency;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
@@ -90,6 +93,15 @@ class JobPosting extends Model
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
+    }
+
+    public function scopePublishedAndActive(Builder $query): void
+    {
+        $now = Carbon::now();
+
+        $query->where('status', JobPostingStatusTypes::PUBLISHED->value)
+            ->where('published_at', '<=', $now)
+            ->where('deadline_date', '>=', $now);
     }
 
     // --- Relationships ---
