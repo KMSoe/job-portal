@@ -28,7 +28,7 @@ class StoreJobPostingRequest extends FormRequest
             'title'                                  => 'required|string|max:255',
             'experience_level_id'                    => 'required|exists:experience_levels,id',
             'job_function_id'                        => 'required|exists:job_functions,id',
-            'min_education_level_id'                  => 'required|exists:education_levels,id',
+            'min_education_level_id'                 => 'required|exists:education_levels,id',
             'summary'                                => 'required|string|max:65535', // longText
             'open_to'                                => 'nullable|string|max:255',
             'roles_and_responsibilities'             => 'nullable|string|max:65535',
@@ -65,7 +65,7 @@ class StoreJobPostingRequest extends FormRequest
             // Status and Dates
             'vacancies'                              => 'required|integer|min:1',
             'status'                                 => ['required', Rule::in(JobPostingStatusTypes::values())],
-            'published_at'                           => 'nullable|date',
+            'published_at'                           => 'required|date',
             'deadline_date'                          => 'nullable|date|after_or_equal:published_at',
         ];
     }
