@@ -48,7 +48,11 @@ class RegisteredUserController extends Controller
                 $message->subject('Your verification code');
             });
 
-            return response()->json(['message' => 'Registration successful. An OTP has been sent to your email for verification.'], 201);
+            return response()->json([
+                'success' => true,
+                'message' => 'Registration successful. An OTP has been sent to your email for verification.',
+                'user' => $user->only('id', 'name', 'email', 'created_at', 'updated_at'),
+            ], 201);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
