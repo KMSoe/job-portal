@@ -99,7 +99,7 @@ class JobPosting extends Model
     {
         $now = Carbon::now();
 
-        $query->where('status', JobPostingStatusTypes::PUBLISHED->value)
+        $query->where('job_postings.status', JobPostingStatusTypes::PUBLISHED->value)
             ->where('published_at', '<=', $now)
             ->where('deadline_date', '>=', $now);
     }
