@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
             ], 401);
         }
 
-        if(!$applicant->is_email_verified) {
+        if($applicant->email_verified_at == null) {
             $otp = rand(100000, 999999);
             $otpExpires = now()->addMinutes(10);
 

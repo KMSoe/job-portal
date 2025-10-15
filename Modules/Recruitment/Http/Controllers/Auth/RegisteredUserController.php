@@ -114,12 +114,15 @@ class RegisteredUserController extends Controller
                         $message->subject('Welcome to SHIFANOVA');
                     });
 
-                    return response()->json(['message' => 'Email verified successfully via OTP.'], 200);
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Email verified successfully via OTP.'
+                    ], 200);
                 }
 
-                return response()->json(['message' => 'Invalid or expired OTP.'], 403);
+                return response()->json(['success' => false, 'message' => 'Invalid or expired OTP.'], 403);
             } else {
-                return response()->json(['message' => 'OTP is required for verification.'], 400);
+                return response()->json(['success' => false, 'message' => 'OTP is required for verification.'], 400);
             }
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);

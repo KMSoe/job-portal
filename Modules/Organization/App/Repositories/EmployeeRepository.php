@@ -2,10 +2,13 @@
 namespace Modules\Organization\App\Repositories;
 
 use App\Models\User;
+use Google\Service\Batch\Job;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
 use Modules\Organization\Transformers\EmployeeResource;
 use Modules\Recruitment\Entities\ChecklistTemplate;
+use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\OnboardingChecklistItem;
 use Modules\Recruitment\Transformers\OnboardingChecklistItemResource;
 
@@ -111,6 +114,27 @@ class EmployeeRepository
 
         if (isset($data['onboarding_checklist_template_id']) && $data['onboarding_checklist_template_id'] != 0) {
             $this->createChecklistItems($data['onboarding_checklist_template_id'], $employee->id);
+        }
+
+        if (isset($data['inform_to_departments'])) 
+        {
+            $department_ids = $data['inform_to_departments'];
+
+            $employee->informToDepartments()->sync($department_ids);
+
+            if (count($department_ids) > 0) {
+                Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee], function($message) use($department_ids) {
+                    $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
+                        $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
+                    })->get();
+
+                    foreach ($noti_employees as $user) {
+                        $message->to($user->email);
+                    }
+
+                    $message->subject('New Employee Onboarded');
+                });
+            }
         }
 
         $user->update(['employee_id' => $employee->id]);

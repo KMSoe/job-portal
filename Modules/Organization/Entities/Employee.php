@@ -114,4 +114,9 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function informToDepartments()
+    {
+        return $this->belongsToMany(Department::class, 'employee_inform_to_departments', 'employee_id', 'department_id');
+    }
 }
