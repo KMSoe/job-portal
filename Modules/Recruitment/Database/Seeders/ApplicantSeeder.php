@@ -23,10 +23,7 @@ class ApplicantSeeder extends Seeder
     {
         $localFilePath       = public_path('sample_files/avator.png');
         $localFile           = new File($localFilePath);
-        $resumeLocalFilePath = public_path('sample_files/kms.pdf');
-        $resumeLocalFile     = new File($resumeLocalFilePath);
-
-        $fileSize = $resumeLocalFile->getSize();
+        
 
         $storage = new LocalStorage();
 
@@ -42,7 +39,10 @@ class ApplicantSeeder extends Seeder
             'photo'    => $kmsFilePath,
             'password' => Hash::make('password'),
         ]);
-        $filePath = $storage->store('resumes', $resumeLocalFile);
+        $kmsRresumeLocalFilePath = public_path('sample_files/kms.pdf');
+        $kmsResumeLocalFile     = new File($kmsRresumeLocalFilePath);
+        $fileSize = $kmsResumeLocalFile->getSize();
+        $filePath = $storage->store('resumes', $kmsResumeLocalFile);
 
         $resume = Resume::create([
             'applicant_id' => $kms->id,
@@ -77,7 +77,10 @@ class ApplicantSeeder extends Seeder
             'photo'    => $yemyatFilePath,
             'password' => Hash::make('password'),
         ]);
-        $filePath = $storage->store('resumes', $resumeLocalFile);
+        $yemyatRresumeLocalFilePath = public_path('sample_files/yemyat.pdf');
+        $yemyatResumeLocalFile     = new File($yemyatRresumeLocalFilePath);
+        $fileSize = $yemyatResumeLocalFile->getSize();
+        $filePath = $storage->store('resumes', $yemyatResumeLocalFile);
 
         $resume = Resume::create([
             'applicant_id' => $yemyat->id,
@@ -112,7 +115,10 @@ class ApplicantSeeder extends Seeder
             'photo'    => $thuyainFilePath,
             'password' => Hash::make('password'),
         ]);
-        $filePath = $storage->store('resumes', $resumeLocalFile);
+        $thuyainRresumeLocalFilePath = public_path('sample_files/thuyain.pdf');
+        $thuyainResumeLocalFile     = new File($thuyainRresumeLocalFilePath);
+        $fileSize = $thuyainResumeLocalFile->getSize();
+        $filePath = $storage->store('resumes', $thuyainResumeLocalFile);
 
         $resume = Resume::create([
             'applicant_id' => $thuyain->id,
@@ -146,7 +152,10 @@ class ApplicantSeeder extends Seeder
             'photo'    => $naingaungFilePath,
             'password' => Hash::make('password'),
         ]);
-        $filePath = $storage->store('resumes', $resumeLocalFile);
+        $naingaungRresumeLocalFilePath = public_path('sample_files/naingaung.pdf');
+        $naingaungResumeLocalFile     = new File($naingaungRresumeLocalFilePath);
+        $fileSize = $naingaungResumeLocalFile->getSize();
+        $filePath = $storage->store('resumes', $naingaungResumeLocalFile);
 
         $resume = Resume::create([
             'applicant_id' => $naingaung->id,
