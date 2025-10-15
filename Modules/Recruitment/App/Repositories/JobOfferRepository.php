@@ -134,10 +134,23 @@ class JobOfferRepository
         ]);
 
         if (! empty($data['attachments'])) {
-            JobOfferAttachment::whereIn('id', $data['attachments'])
-                ->update([
+            // JobOfferAttachment::whereIn('id', $data['attachments'])
+            //     ->update([
+            //         'job_offer_id' => $jobOffer->id,
+            //     ]);
+
+            $attachments = $data['attachments'];
+
+            foreach ($attachments as $key => $attachment) {
+                $uploadedFile = $attachment;
+
+                $filePath = $this->storage->store('offer_attachments', $uploadedFile);
+
+                $attachment = JobOfferAttachment::create([
                     'job_offer_id' => $jobOffer->id,
+                    'file_path'    => $filePath,
                 ]);
+            }
         }
 
         if (! empty($data['inform_departments'])) {
@@ -205,11 +218,33 @@ class JobOfferRepository
             'offer_letter_file_path' => $offer_letter_file_path,
         ]);
 
+        if (isset($data['deleted_attachment_ids']) && is_array($data['deleted_attachment_ids']) && count($data['deleted_attachment_ids']) > 0) {
+            $deleted_job_offer_attachments = JobOfferAttachment::whereIn('id', $data['deleted_attachment_ids'])->get();
+
+            foreach ($deleted_job_offer_attachments as $key => $deleted_job_offer_attachment) {
+                $this->storage->delete($deleted_job_offer_attachment->file_path);
+            }
+
+            JobOfferAttachment::whereIn('id', $data['deleted_attachment_ids'])->delete();
+        }
+
         if (! empty($data['attachments'])) {
-            JobOfferAttachment::whereIn('id', $data['attachments'])
-                ->update([
+            // JobOfferAttachment::whereIn('id', $data['attachments'])
+            //     ->update([
+            //         'job_offer_id' => $jobOffer->id,
+            //     ]);
+            $attachments = $data['attachments'];
+
+            foreach ($attachments as $key => $attachment) {
+                $uploadedFile = $attachment;
+
+                $filePath = $this->storage->store('offer_attachments', $uploadedFile);
+
+                $attachment = JobOfferAttachment::create([
                     'job_offer_id' => $jobOffer->id,
+                    'file_path'    => $filePath,
                 ]);
+            }
         }
 
         if (! empty($data['inform_departments'])) {

@@ -36,7 +36,7 @@ class JobOfferFormRequest extends FormRequest
 
             // Attachments (Handles file paths saved temporarily or from another step)
             'attachments'              => 'nullable|array',
-            'attachments.*'            => 'required|exists:job_offer_attachments,id',
+            'attachments.*'            => ['file'],
 
             // Departments to Inform (Pivot Data)
             'inform_departments'       => 'nullable|array',
