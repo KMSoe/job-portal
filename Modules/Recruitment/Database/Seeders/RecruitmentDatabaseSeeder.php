@@ -23,5 +23,6 @@ class RecruitmentDatabaseSeeder extends Seeder
         $this->call(JobPostingSeeder::class);
         $this->call(ApplicantSeeder::class);
         $this->call(ApplicantSkillSeeder::class);
+        $this->call(OfferLetterTemplateSeeder::class);
     }
 }
