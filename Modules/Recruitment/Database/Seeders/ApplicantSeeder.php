@@ -21,9 +21,8 @@ class ApplicantSeeder extends Seeder
      */
     public function run()
     {
-        $localFilePath       = public_path('sample_files/avator.png');
-        $localFile           = new File($localFilePath);
-        
+        $localFilePath = public_path('sample_files/avator.png');
+        $localFile     = new File($localFilePath);
 
         $storage = new LocalStorage();
 
@@ -34,15 +33,23 @@ class ApplicantSeeder extends Seeder
         $storage     = new LocalStorage();
         $kmsFilePath = $storage->store('applicant_profiles', $localFile);
         $kms         = Applicant::create([
-            'name'     => 'Kaung Myat Soe',
-            'email'    => 'kaungmyatsoe.m192@gmail.com',
-            'photo'    => $kmsFilePath,
-            'password' => Hash::make('password'),
+            'name'                => 'Kaung Myat Soe',
+            'email'               => 'kaungmyatsoe.m192@gmail.com',
+            'photo'               => $kmsFilePath,
+            'password'            => Hash::make('password'),
+            'job_title'           => 'Web Developer',
+            'phone_dial_code'     => '+95',
+            'phone_no'            => '9986507933',
+            'open_to_work'        => true,
+            'experience_level_id' => 1,
+            'job_function_id'     => 1,
+            'salary_currency_id'  => 1,
+            'expected_salary'     => 200000,
         ]);
         $kmsRresumeLocalFilePath = public_path('sample_files/kms.pdf');
-        $kmsResumeLocalFile     = new File($kmsRresumeLocalFilePath);
-        $fileSize = $kmsResumeLocalFile->getSize();
-        $filePath = $storage->store('resumes', $kmsResumeLocalFile);
+        $kmsResumeLocalFile      = new File($kmsRresumeLocalFilePath);
+        $fileSize                = $kmsResumeLocalFile->getSize();
+        $filePath                = $storage->store('resumes', $kmsResumeLocalFile);
 
         $resume = Resume::create([
             'applicant_id' => $kms->id,
@@ -72,15 +79,23 @@ class ApplicantSeeder extends Seeder
 
         $yemyatFilePath = $storage->store('applicant_profiles', $localFile);
         $yemyat         = Applicant::create([
-            'name'     => 'Ye Myat Sandi Oo',
-            'email'    => 'yemyatsandi@gmail.com',
-            'photo'    => $yemyatFilePath,
-            'password' => Hash::make('password'),
+            'name'                => 'Ye Myat Sandi Oo',
+            'email'               => 'yemyatsandi@gmail.com',
+            'photo'               => $yemyatFilePath,
+            'password'            => Hash::make('password'),
+            'job_title'           => 'Web Developer',
+            'phone_dial_code'     => '+95',
+            'phone_no'            => '9986507934',
+            'open_to_work'        => true,
+            'experience_level_id' => 1,
+            'job_function_id'     => 1,
+            'salary_currency_id'  => 1,
+            'expected_salary'     => 200000,
         ]);
         $yemyatRresumeLocalFilePath = public_path('sample_files/yemyat.pdf');
-        $yemyatResumeLocalFile     = new File($yemyatRresumeLocalFilePath);
-        $fileSize = $yemyatResumeLocalFile->getSize();
-        $filePath = $storage->store('resumes', $yemyatResumeLocalFile);
+        $yemyatResumeLocalFile      = new File($yemyatRresumeLocalFilePath);
+        $fileSize                   = $yemyatResumeLocalFile->getSize();
+        $filePath                   = $storage->store('resumes', $yemyatResumeLocalFile);
 
         $resume = Resume::create([
             'applicant_id' => $yemyat->id,
@@ -110,15 +125,23 @@ class ApplicantSeeder extends Seeder
 
         $thuyainFilePath = $storage->store('applicant_profiles', $localFile);
         $thuyain         = Applicant::create([
-            'name'     => 'Thuyain Soe',
-            'email'    => 'thuyainsoe163361@gmail.com',
-            'photo'    => $thuyainFilePath,
-            'password' => Hash::make('password'),
+            'name'                => 'Thuyain Soe',
+            'email'               => 'thuyainsoe163361@gmail.com',
+            'photo'               => $thuyainFilePath,
+            'password'            => Hash::make('password'),
+            'job_title'           => 'Web Developer',
+            'phone_dial_code'     => '+95',
+            'phone_no'            => '9986507935',
+            'open_to_work'        => true,
+            'experience_level_id' => 1,
+            'job_function_id'     => 1,
+            'salary_currency_id'  => 1,
+            'expected_salary'     => 200000,
         ]);
         $thuyainRresumeLocalFilePath = public_path('sample_files/thuyain.pdf');
-        $thuyainResumeLocalFile     = new File($thuyainRresumeLocalFilePath);
-        $fileSize = $thuyainResumeLocalFile->getSize();
-        $filePath = $storage->store('resumes', $thuyainResumeLocalFile);
+        $thuyainResumeLocalFile      = new File($thuyainRresumeLocalFilePath);
+        $fileSize                    = $thuyainResumeLocalFile->getSize();
+        $filePath                    = $storage->store('resumes', $thuyainResumeLocalFile);
 
         $resume = Resume::create([
             'applicant_id' => $thuyain->id,
@@ -147,15 +170,23 @@ class ApplicantSeeder extends Seeder
 
         $naingaungFilePath = $storage->store('applicant_profiles', $localFile);
         $naingaung         = Applicant::create([
-            'name'     => 'Naing Aung Zaw',
-            'email'    => 'naingaung9863@gmail.com',
-            'photo'    => $naingaungFilePath,
-            'password' => Hash::make('password'),
+            'name'                => 'Naing Aung Zaw',
+            'email'               => 'naingaung9863@gmail.com',
+            'photo'               => $naingaungFilePath,
+            'password'            => Hash::make('password'),
+            'job_title'           => 'Web Developer',
+            'phone_dial_code'     => '+95',
+            'phone_no'            => '9986507936',
+            'open_to_work'        => true,
+            'experience_level_id' => 1,
+            'job_function_id'     => 1,
+            'salary_currency_id'  => 1,
+            'expected_salary'     => 200000,
         ]);
         $naingaungRresumeLocalFilePath = public_path('sample_files/naingaung.pdf');
-        $naingaungResumeLocalFile     = new File($naingaungRresumeLocalFilePath);
-        $fileSize = $naingaungResumeLocalFile->getSize();
-        $filePath = $storage->store('resumes', $naingaungResumeLocalFile);
+        $naingaungResumeLocalFile      = new File($naingaungRresumeLocalFilePath);
+        $fileSize                      = $naingaungResumeLocalFile->getSize();
+        $filePath                      = $storage->store('resumes', $naingaungResumeLocalFile);
 
         $resume = Resume::create([
             'applicant_id' => $naingaung->id,
