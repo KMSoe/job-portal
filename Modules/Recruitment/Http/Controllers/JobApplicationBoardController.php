@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Recruitment\App\Services\JobApplicationBoardService;
+use Modules\Recruitment\Entities\ExperienceLevel;
 use Modules\Recruitment\Entities\Skill;
 use Modules\Recruitment\Transformers\JobPostingApplicationDetailResource;
 
@@ -35,7 +36,8 @@ class JobApplicationBoardController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'skills' => Skill::all(),
+                'skills'            => Skill::all(),
+                'experience_levels' => ExperienceLevel::all(),
             ],
             'message' => 'success',
         ], 200);

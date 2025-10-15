@@ -95,9 +95,13 @@ class JobApplicationBoardRepository
             return $skill;
         })->values();
 
-        $data = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
+        $experience_level_ids = collect(explode(",", $request->experience_levels))->filter(function ($experience_level) {
+            return $experience_level;
+        })->values();
+
+        $data = JobApplication::with(['applicant.skills', 'applicant.experienceLevel', 'resume', 'supportiveDocuments'])
             ->where('job_applications.job_posting_id', $job_posting_id)
-            ->where(function ($query) use ($request, $skill_ids, $keyword) {
+            ->where(function ($query) use ($request, $skill_ids, $experience_level_ids, $keyword) {
                 if ($request->status != null) {
                     $query->where('job_applications.status', $request->status);
                 }
@@ -105,6 +109,12 @@ class JobApplicationBoardRepository
                 if (count($skill_ids) > 0 && strtolower($request->skills) != 'all') {
                     $query->whereHas('applicant.skills', function ($query) use ($skill_ids) {
                         $query->whereIn('id', $skill_ids);
+                    });
+                }
+
+                if (count($experience_level_ids) > 0 && strtolower($request->experience_levels) != 'all') {
+                    $query->whereHas('applicant.experienceLevel', function ($query) use ($experience_level_ids) {
+                        $query->whereIn('id', $experience_level_ids);
                     });
                 }
 
@@ -138,6 +148,7 @@ class JobApplicationBoardRepository
         $job_application = JobApplication::with([
             'jobPosting',
             'applicant.skills',
+            'applicant.salaryCurrency',
             'resume',
             'supportiveDocuments',
             'extractedData',
