@@ -3,6 +3,7 @@ namespace Modules\Recruitment\App\Repositories;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
@@ -156,6 +157,23 @@ class JobOfferRepository
         if (! empty($data['inform_departments'])) {
             $departmentIds = array_map('intval', $data['inform_departments']);
             $jobOffer->informedDepartments()->attach($departmentIds);
+
+            $department_ids = $data['inform_departments'];
+
+            // if (count($department_ids) > 0) {
+            //     Mail::send('recruitment::emails.jobofferinformmail', ['applicant' => $job_application->applicant, 'job_title' => $job_application->jobPosting->title], function ($message) use ($department_ids) {
+            //         $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
+            //             $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
+            //         })->get();
+
+            //         foreach ($noti_employees as $user) {
+            //             $message->to($user->email);
+            //         }
+
+            //         $message->subject('New Job Offer Made');
+            //     });
+
+            // }
         }
 
         if (! empty($data['cc_users'])) {
