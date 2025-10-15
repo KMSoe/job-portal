@@ -3,6 +3,7 @@ namespace Modules\Organization\App\Repositories;
 
 use App\Models\User;
 use Google\Service\Batch\Job;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
@@ -105,7 +106,7 @@ class EmployeeRepository
         $user = User::create([
             'name'          => $data['name'],
             'email'         => $data['email'],
-            'password'      => bcrypt($data['password']),
+            'password'      => Hash::make($data['password']),
         ]);
 
         $data['user_id'] = $user->id;
