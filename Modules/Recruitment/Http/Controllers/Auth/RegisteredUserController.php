@@ -135,7 +135,7 @@ class RegisteredUserController extends Controller
 
             $user = Applicant::where('email', $request->email)->first();
 
-            $reset_link = URL('/api/v1/applicant/reset-password?id='.$user->id.'&hash='.sha1($user->email));
+            $reset_link = config('app.frontend_url').'/reset-password?id='.$user->id.'&hash='.sha1($user->email);
 
             Mail::send('recruitment::emails.forgotpasswordmail', ['reset_link' => $reset_link , 'name' => $user->name], function($message) use($user) {
                 $message->to($user->email);
