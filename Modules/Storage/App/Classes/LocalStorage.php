@@ -51,6 +51,13 @@ class LocalStorage implements StorageInterface
         return null;
     }
 
+    public function createDirectory($name)
+    {
+        if (! $this->checkFileExists($name)) {
+            Storage::makeDirectory($name, 0777, true, true);
+        }
+    }
+
     public function store($path, $file, $name = '')
     {
         if (! $this->checkFileExists($path)) {
@@ -65,10 +72,10 @@ class LocalStorage implements StorageInterface
             $url = Storage::put($path ?? 'files', $file);
         }
 
-        if($url == null) {
+        if ($url == null) {
             throw new Exception("Cannot store the file", 500);
-            
-        }   
+
+        }
 
         return $url;
     }

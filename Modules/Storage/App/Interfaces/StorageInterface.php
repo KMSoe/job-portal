@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Storage\App\Interfaces;
 
 interface StorageInterface
@@ -11,6 +10,7 @@ interface StorageInterface
     public function getFileSize($path);
     public function getFileAsResponse($path);
     public static function getUrl($file_path);
+    public function createDirectory($name);
     public function store($path, $file, $name = '');
     public function getUniqueIfHasSameFileName($basename, $same_name_counts);
     public function delete($path);

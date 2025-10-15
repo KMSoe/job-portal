@@ -339,6 +339,8 @@ class JobOfferRepository
             'candicate_position' => $job_application->jobPosting?->title,
         ]);
 
+        $this->storage->createDirectory('offer_letters');
+
         $pdf->save(storage_path('app/offer_letters/' . $file_name . ".pdf"));
 
         return "offer_letters/$file_name.pdf";
