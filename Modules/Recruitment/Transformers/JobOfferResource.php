@@ -16,9 +16,9 @@ class JobOfferResource extends JsonResource
     {
         return [
             'id'                            => $this->id,
-            'jobPosting'                    => $this->jobPosting,
-            'application'                   => $this->application,
-            'candicate'                     => $this->candicate,
+            // 'jobPosting'                    => $this->jobPosting,
+            // 'application'                   => $this->application,
+            // 'candicate'                     => $this->candicate,
             'company'                       => $this->company,
             'department'                    => $this->department,
             'designation'                   => $this->designation,
@@ -54,10 +54,10 @@ class JobOfferResource extends JsonResource
             'cc_users'                      => $this->ccUsers,
             'bcc_users'                     => $this->bccUsers,
             'status'                        => $this->status,
-            'edit_action'                   => $this->status == JobOfferStatusTypes::DRAFT->value ? true : false,
-            'send_action'                   => $this->status == JobOfferStatusTypes::DONE->value ? true : false,
-            'mark_as_offer_accepted_action' => $this->status == JobOfferStatusTypes::SENT->value || $this->status == JobOfferStatusTypes::OFFER_DECLINED->value ? true : false,
-            'mark_as_offer_declined_action' => $this->status == JobOfferStatusTypes::SENT->value || $this->status == JobOfferStatusTypes::OFFER_ACCEPTED->value ? true : false,
+            // 'edit_action'                   => $this->status == JobOfferStatusTypes::DRAFT->value ? true : false,
+            // 'send_action'                   => $this->status == JobOfferStatusTypes::DONE->value ? true : false,
+            // 'mark_as_offer_accepted_action' => $this->status == JobOfferStatusTypes::SENT->value || $this->status == JobOfferStatusTypes::OFFER_DECLINED->value ? true : false,
+            // 'mark_as_offer_declined_action' => $this->status == JobOfferStatusTypes::SENT->value || $this->status == JobOfferStatusTypes::OFFER_ACCEPTED->value ? true : false,
         ];
     }
 }

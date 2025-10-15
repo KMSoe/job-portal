@@ -132,7 +132,23 @@ class JobApplicationBoardRepository
             'extractedData',
             'reviewers.reviewer',
             'interviews.interviewers',
-            'jobOffer.salaryCurrency',
+            'jobOffer' => function ($query) {
+                $query->with([
+                    'company',
+                    'department',
+                    'designation',
+                    'template',
+                    'salaryCurrency',
+                    'approver',
+                    'approverPosition',
+
+                    // Has Many / Belongs To Many Relationships
+                    'attachments',
+                    'informedDepartments',
+                    'ccUsers',
+                    'bccUsers',
+                ]);
+            },
         ])
             ->findOrFail($job_application_id);
 

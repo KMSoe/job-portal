@@ -28,7 +28,7 @@ class JobPostingApplicationDetailResource extends JsonResource
             'supportiveDocuments' => $this->supportiveDocuments,
             'reviewers'           => $this->reviewers,
             'interviews'          => $this->interviews,
-            'jobOffer'            => $this->jobOffer,
+            'jobOffer'            => new JobOfferResource($this->jobOffer),
             'job_offer_actions'   => $this->jobOffer ? [
                 'edit_action'                   => $this->jobOffer?->status == JobOfferStatusTypes::DRAFT->value ? true : false,
                 'send_action'                   => $this->jobOffer?->status == JobOfferStatusTypes::DONE->value ? true : false,
