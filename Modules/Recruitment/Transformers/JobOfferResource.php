@@ -23,6 +23,7 @@ class JobOfferResource extends JsonResource
             'designation_id'           => $this->designation_id,
             'offer_letter_template_id' => $this->offer_letter_template_id,
             'salary_currency_id'       => $this->salary_currency_id,
+            'approver_id'              => $this->approver_id,
             'company'                  => $this->company,
             'department'               => $this->department,
             'designation'              => $this->designation,
