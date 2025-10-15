@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Recruitment\App\Services\JobApplicationBoardService;
+use Modules\Recruitment\Entities\Skill;
 use Modules\Recruitment\Transformers\JobPostingApplicationDetailResource;
 
 class JobApplicationBoardController extends Controller
@@ -29,12 +30,12 @@ class JobApplicationBoardController extends Controller
         ], 200);
     }
 
-    public function pageData()
+    public function getPageData()
     {
         return response()->json([
             'status'  => true,
             'data'    => [
-
+                'skills' => Skill::all(),
             ],
             'message' => 'success',
         ], 200);

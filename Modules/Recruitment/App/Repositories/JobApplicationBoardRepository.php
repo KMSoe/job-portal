@@ -91,11 +91,21 @@ class JobApplicationBoardRepository
         $keyword = $request->search ? $request->search : '';
         $perPage = $request->per_page ? $request->per_page : 20;
 
+        $skill_ids = collect(explode(",", $request->skills))->filter(function ($skill) {
+            return $skill;
+        })->values();
+
         $data = JobApplication::with(['applicant.skills', 'resume', 'supportiveDocuments'])
             ->where('job_applications.job_posting_id', $job_posting_id)
-            ->where(function ($query) use ($request, $keyword) {
+            ->where(function ($query) use ($request, $skill_ids, $keyword) {
                 if ($request->status != null) {
                     $query->where('job_applications.status', $request->status);
+                }
+
+                if (count($skill_ids) > 0 && strtolower($request->skills) != 'all') {
+                    $query->whereHas('applicant.skills', function ($query) use ($skill_ids) {
+                        $query->whereIn('id', $skill_ids);
+                    });
                 }
 
                 if ($keyword != '') {
