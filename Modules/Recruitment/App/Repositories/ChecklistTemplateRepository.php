@@ -1,6 +1,7 @@
 <?php
 namespace Modules\Recruitment\App\Repositories;
 
+use Google\Service\BinaryAuthorization\Check;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Modules\Recruitment\Entities\ChecklistTemplate;
@@ -131,31 +132,11 @@ class ChecklistTemplateRepository
     {
         foreach ($data['items'] as $item) 
         {
-            if (isset($item['id'])) {
-                $existingItem = $checklist->items()->find($item['id']);
-                if ($existingItem) {
-                    if (!empty($item['is_delete']) && $item['is_delete'] == true) {
-                        $existingItem->delete();
-                    } else {
-                        $existingItem->update($item);
-                    }
-                }
-            } else {
-                $checklistTemplateItem = $checklist->items()->create($item);
-            }
+            ChecklistTemplateItem::firstOrCreate([
+                'checklist_template_id' => $checklist->id,
+                'name' => $item['name'],
+            ]);
         }
-    }
-
-    /**
-     * Update Checklist Template
-     */
-    public function updateItem($id, array $data)
-    {
-        $item = ChecklistTemplateItem::findOrFail($id);
-        $data['checklist_template_id'] = $item->checklist_template_id;
-        $item->update($data);
-
-        return $item;
     }
 
     /**
