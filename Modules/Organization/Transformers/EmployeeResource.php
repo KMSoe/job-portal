@@ -47,8 +47,14 @@ class EmployeeResource extends JsonResource
             'last_date'                     => $this->last_date,
             'onboarding_checklist_template' => $this->onboardingChecklistTemplate,
             'onboarding_checklist_items'    => $this->onboardingChecklistItems ? OnboardingChecklistItemResource::collection($this->onboardingChecklistItems) : null,
-            'created_by'                    => $this->createdBy,
-            'updated_by'                    => $this->updatedBy,
+            'created_by'                    => $this->createdBy ? $this->createdBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
+            'updated_by'                    => $this->updatedBy ? $this->updatedBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
             'created_at'                    => $this->created_at,
             'updated_at'                    => $this->updated_at,
         ];

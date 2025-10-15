@@ -108,7 +108,7 @@ class JobApplicationBoardRepository
 
                 if (count($skill_ids) > 0 && strtolower($request->skills) != 'all') {
                     $query->whereHas('applicant.skills', function ($query) use ($skill_ids) {
-                        $query->whereIn('id', $skill_ids);
+                        $query->whereIn('skills.id', $skill_ids);
                     });
                 }
 

@@ -21,7 +21,10 @@ class OfferLetterTemplateResource extends JsonResource
             'is_salary_visible' => (bool) $this->is_salary_visible,
             'template_data'     => $this->template_data,
             'is_active'         => (bool) $this->is_active,
-            'created_by'        => $this->createdBy,
+            'created_by'        => $this->createdBy ? $this->createdBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
             'created_at'        => $this->created_at,
             'updated_at'        => $this->updated_at,
         ];

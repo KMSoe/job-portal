@@ -50,8 +50,14 @@ class JobOfferResource extends JsonResource
             'approver'                 => $this->approver,
             'approver_signature'       => $this->approver_signature,
             'approver_signature_url'   => $this->approver_signature_url,
-            'created_by'               => $this->createdBy,
-            'updated_by'               => $this->updatedBy,
+            'created_by'               => $this->createdBy ? $this->createdBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
+            'updated_by'               => $this->updatedBy ? $this->updatedBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
             'created_at'               => $this->created_at,
             'updated_at'               => $this->updated_at,
             'attachments'              => $this->attachments,

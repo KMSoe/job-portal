@@ -57,8 +57,14 @@ class JobPostingResource extends JsonResource
             'deadline_date'                          => $this->deadline_date ? $this->deadline_date->toDateTimeString() : null,
 
             // Auditing
-            'created_by'                             => $this->createdBy,
-            'updated_by'                             => $this->updatedBy,
+            'created_by'                             => $this->createdBy ? $this->createdBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
+            'updated_by'                             => $this->updatedBy ? $this->updatedBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
 
             // Relationships (Eager Loaded)
 

@@ -20,8 +20,14 @@ class DepartmentResource extends JsonResource
             'is_active'   => (bool) $this->is_active,
             'company_id'  => $this->company_id,
             'company'     => $this->company,
-            'created_by'  => $this->createdBy,
-            'updated_by'  => $this->updatedBy,
+            'created_by'  => $this->createdBy ? $this->createdBy : [
+                "id"   => 0,
+                "name" => '',
+            ], ,
+            'updated_by'  => $this->updatedBy ? $this->updatedBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
             'created_at'  => $this->created_at,
             'updated_at'  => $this->updated_at,
         ];

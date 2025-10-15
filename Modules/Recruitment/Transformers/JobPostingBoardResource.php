@@ -27,7 +27,7 @@ class JobPostingBoardResource extends JsonResource
             'slug'                                   => $this->slug,
             'experience_level_id'                    => $this->experience_level_id,
             'job_function_id'                        => $this->job_function_id,
-            'min_education_level_id'                  => $this->min_education_level_id,
+            'min_education_level_id'                 => $this->min_education_level_id,
             'summary'                                => $this->summary,
             'open_to'                                => $this->open_to,
             'roles_and_responsibilities'             => $this->roles_and_responsibilities,
@@ -57,8 +57,14 @@ class JobPostingBoardResource extends JsonResource
             'deadline_date'                          => $this->deadline_date ? $this->deadline_date->toDateTimeString() : null,
 
             // Auditing
-            'created_by'                             => $this->createdBy,
-            'updated_by'                             => $this->updatedBy,
+            'created_by'                             => $this->createdBy ? $this->createdBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
+            'updated_by'                             => $this->updatedBy ? $this->updatedBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
 
             // Relationships (Eager Loaded)
 
