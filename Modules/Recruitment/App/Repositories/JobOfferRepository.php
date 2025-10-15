@@ -2,8 +2,8 @@
 namespace Modules\Recruitment\App\Repositories;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
@@ -332,11 +332,34 @@ class JobOfferRepository
         $mimeType   = $this->storage->getMimeType($jobOffer->company?->logo);
         $logoBase64 = 'data:' . $mimeType . ';base64,' . base64_encode($logoFile);
 
+        $replacements = [
+            '{{offer_date}}'            => Carbon::parse($jobOffer->offer_date)->format('d-m-Y'),
+            '{{ref}}'                   => $jobOffer->offer_letter_ref,
+            '{{job_title}}'             => $jobOffer->jobPosting->title,
+            '{{applicant_name}}'        => $jobOffer->candicate?->name,
+            '{{basic_salary}}'          => $jobOffer->template?->is_salary_visible == true ? $jobOffer->basic_salary : '***',
+            '{{company_name}}'          => $jobOffer->company->name,
+            '{{department}}'            => $jobOffer->department->name,
+            '{{designation}}'           => $jobOffer->designation->name,
+            '{{subject}}'               => $jobOffer->offer_letter_subject,
+            '{{approver_name}}'         => $jobOffer->approver?->name,
+            '{{approver_position}}'     => $jobOffer->approverPosition?->name,
+            '{{inform_to_departments}}' => implode(', ', $jobOffer->informedDepartments->pluck('name')->toArray()),
+            '{{cc}}'                    => implode(', ', $jobOffer->ccUsers->pluck('name')->toArray()),
+        ];
+
+        $offer_letter_content = str_replace(
+            array_keys($replacements),     // The search array (the keys: {{...}})
+            array_values($replacements),   // The replace array (the values: 'Data')
+            $jobOffer->offer_letter_content// The subject string
+        );
+
         $pdf = Pdf::loadView("recruitment::offer_letter", [
-            'logo'               => $logoBase64,
-            'job_offer'          => $jobOffer,
-            'candicate_name'     => $job_application->applicant?->name,
-            'candicate_position' => $job_application->jobPosting?->title,
+            'logo'                 => $logoBase64,
+            'job_offer'            => $jobOffer,
+            'offer_letter_content' => $offer_letter_content,
+            'candicate_name'       => $job_application->applicant?->name,
+            'candicate_position'   => $job_application->jobPosting?->title,
         ]);
 
         $this->storage->createDirectory('offer_letters');

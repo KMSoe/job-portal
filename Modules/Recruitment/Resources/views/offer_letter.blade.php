@@ -91,15 +91,20 @@
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
                                 style="font-size: 13px">
                                 <tr>
-                                    <td width="50%">
-                                        <p style="margin: 0"><strong>
-                                                {{ Carbon\Carbon::parse($job_offer->offer_date)->format('d-m-Y') }}
-                                            </strong></p>
-                                    </td>
-                                    <td width="50%" align="right">
-                                        <p style="margin: 0"><strong>Ref:</strong> {{ $job_offer->offer_letter_ref }}
-                                        </p>
-                                    </td>
+                                    @if (($job_offer->template?->template_data['is_showed_offer_date'] ?? false) == true)
+                                        <td width="50%">
+                                            <p style="margin: 0"><strong>
+                                                    {{ Carbon\Carbon::parse($job_offer->offer_date)->format('d-m-Y') }}
+                                                </strong></p>
+                                        </td>
+                                    @endif
+                                    @if (($job_offer->template?->template_data['is_showed_ref'] ?? false) == true)
+                                        <td width="50%" align="right">
+                                            <p style="margin: 0"><strong>Ref:</strong>
+                                                {{ $job_offer->offer_letter_ref }}
+                                            </p>
+                                        </td>
+                                    @endif
                                 </tr>
                             </table>
 
@@ -114,9 +119,11 @@
                                 </p>
                             </div>
 
-                            <p style="margin: 4px 0 0 0; font-size: 13px">
-                                <strong>SUBJECT&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{ $job_offer->offer_letter_subject }}</strong>
-                            </p>
+                            @if (($job_offer->template?->template_data['is_showed_subject'] ?? false) == true)
+                                <p style="margin: 4px 0 0 0; font-size: 13px">
+                                    <strong>SUBJECT&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;{{ $job_offer->offer_letter_subject }}</strong>
+                                </p>
+                            @endif
 
                             <p style="margin: 16px 0 0 0; font-size: 13px; line-height: 1.6">
                                 {{-- We are pleased to inform you that you are appointed as an
@@ -137,7 +144,7 @@
                   line-height: 1.6;
                   color: #374151;
                 ">
-                            {{ $job_offer->offer_letter_content }}
+                            {{ $offer_letter_content }}
                         </td>
                     </tr>
 
@@ -180,7 +187,8 @@
                             </table>
 
                             <div style="margin-top: 8px; font-size: 13px">
-                                <p style="margin: 4px 0; font-weight: 600">{{ $job_offer->approverPosition?->name }}</p>
+                                <p style="margin: 4px 0; font-weight: 600">{{ $job_offer->approverPosition?->name }}
+                                </p>
                                 <p style="margin: 4px 0; font-weight: 600">
                                     {{ $job_offer->company->name }}
                                 </p>
