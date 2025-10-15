@@ -15,7 +15,6 @@ class JobFunctionSeeder extends Seeder
     public function run()
     {
         $user   = User::first();
-        $userId = $user->id ?? 0;
 
         $functions = [
             'Administrative',
@@ -39,8 +38,8 @@ class JobFunctionSeeder extends Seeder
                 [
                     'description' => 'General category for ' . strtolower($functionName) . ' jobs.',
                     'is_active'   => true,
-                    'created_by'  => $userId,
-                    'updated_by'  => $userId,
+                    'created_by'  => $user->id ?? 0,
+                    'updated_by'  => $user->id ?? 0,
                 ]
             );
         }

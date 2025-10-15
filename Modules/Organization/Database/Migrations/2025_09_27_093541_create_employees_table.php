@@ -37,7 +37,7 @@ class CreateEmployeesTable extends Migration
             $table->string('secondary_phone_dial_code')->nullable();
             $table->string('secondary_phone_no')->nullable();
             $table->string('id_nrc')->nullable();
-            $table->string('passport')->nullable();
+            $table->string('passport_number')->nullable();
             $table->text('address')->nullable();
             $table->string('bank_name')->nullable();
             $table->string('bank_account_no')->nullable();

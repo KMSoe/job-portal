@@ -23,15 +23,15 @@ class JobPostingSeeder extends Seeder
     public function run()
     {
         // Ensure all required foreign key data exists
-        $company     = Company::inRandomOrder()->firstOrFail();
-        $department  = Department::inRandomOrder()->firstOrFail();
-        $designation = Designation::inRandomOrder()->firstOrFail();
-        $template    = JobPostingTemplate::inRandomOrder()->firstOrFail();
-        $expLevel    = ExperienceLevel::orderBy('order')->firstOrFail(); // Mid-level
-        $jobFunction = JobFunction::inRandomOrder()->firstOrFail();
-        $eduLevel    = EducationLevel::orderBy('order')->firstOrFail(); // Bachelor's
+        $company     = Company::first();
+        $department  = Department::first();
+        $designation = Designation::first();
+        $template    = JobPostingTemplate::first();
+        $expLevel    = ExperienceLevel::orderBy('order')->firstOrFail(); 
+        $jobFunction = JobFunction::first();
+        $eduLevel    = EducationLevel::orderBy('order')->firstOrFail(); 
         $currency    = Currency::first();
-        $user        = User::firstOrFail();
+        $user        = User::first();
 
         $title = 'Senior Backend Engineer - Laravel';
 
@@ -76,8 +76,8 @@ class JobPostingSeeder extends Seeder
                 'deadline_date'                          => now()->addDays(30),
 
                 // Auditing
-                'created_by'                             => $user->id,
-                'updated_by'                             => $user->id,
+                'created_by'                             => $user->id ?? 0,
+                'updated_by'                             => $user->id ?? 0,
             ]
         );
     }

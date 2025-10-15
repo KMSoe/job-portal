@@ -16,7 +16,6 @@ class ExperienceLevelSeeder extends Seeder
     {
         // Get an existing user ID for audit columns
         $user   = User::first();
-        $userId = $user->id;
 
         $levels = [
             // Ordered by experience (0 being the least experienced)
@@ -37,8 +36,8 @@ class ExperienceLevelSeeder extends Seeder
                     'description' => $level['name'] . ' experience level.',
                     'order'       => $level['order'],
                     'is_active'   => true,
-                    'created_by'  => $userId,
-                    'updated_by'  => $userId,
+                    'created_by'  => $user->id ?? 0,
+                    'updated_by'  => $user->id ?? 0,
                 ]
             );
         }

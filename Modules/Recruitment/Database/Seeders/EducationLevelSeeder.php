@@ -14,8 +14,7 @@ class EducationLevelSeeder extends Seeder
      */
     public function run()
     {
-        $user   = User::first();
-        $userId = $user->id;
+        $user = User::first();
 
         $levels = [
             // Ordered by precedence (1 being the lowest required level)
@@ -34,8 +33,8 @@ class EducationLevelSeeder extends Seeder
                     'description' => 'Minimum education requirement: ' . $level['name'],
                     'order'       => $level['order'],
                     'is_active'   => true,
-                    'created_by'  => $userId,
-                    'updated_by'  => $userId,
+                    'created_by'  => $user->id ?? 0,
+                    'updated_by'  => $user->id ?? 0,
                 ]
             );
         }

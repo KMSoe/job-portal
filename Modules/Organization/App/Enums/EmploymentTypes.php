@@ -12,11 +12,11 @@ enum EmploymentTypes: string {
     public function label(): string
     {
         return match ($this) {
-            self::PERMANENT => 'Permanent',
-            self::CONTRACT => 'Contract',
+            self::PERMANENT  => 'Permanent',
+            self::CONTRACT   => 'Contract',
             self::INTERNSHIP => 'Internship',
-            self::PROBATION => 'Probation',
-            self::RESIGNED => 'Resigned',
+            self::PROBATION  => 'Probation',
+            self::RESIGNED   => 'Resigned',
             self::TERMINATED => 'Terminated',
         };
     }

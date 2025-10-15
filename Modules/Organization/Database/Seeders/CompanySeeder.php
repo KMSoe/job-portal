@@ -47,8 +47,8 @@ class CompanySeeder extends Seeder
                 'address'                   => '123 Main St, Anytown',
 
                                                   // Audit columns
-                'created_by'                => 1, // Example ID for a User
-                'updated_by'                => 1, // Example ID for a User
+                'created_by'                => 0, // Example ID for a User
+                'updated_by'                => 0, // Example ID for a User
             ]
         );
     }

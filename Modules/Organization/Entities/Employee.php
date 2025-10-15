@@ -38,7 +38,7 @@ class Employee extends Model
         'secondary_phone_dial_code',
         'secondary_phone_no',
         'id_nrc',
-        'passport',
+        'passport_number',
         'address',
         'bank_name',
         'bank_account_no',

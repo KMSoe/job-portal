@@ -18,11 +18,6 @@ class DepartmentSeeder extends Seeder
         $companies = Company::all();
         $user      = User::first();
 
-        if ($companies->isEmpty() || ! $user) {
-            echo "Skipping DepartmentSeeder: Ensure User and Company Seeders run first.\n";
-            return;
-        }
-
         $commonDepartments = [
             'Human Resources',
             'Finance',
@@ -34,9 +29,6 @@ class DepartmentSeeder extends Seeder
 
         foreach ($companies as $company) {
             foreach ($commonDepartments as $deptName) {
-                // Ensure unique name per company
-                $name = $deptName . ' - ' . $company->name;
-
                 Department::firstOrCreate(
                     [
                         'company_id' => $company->id,
@@ -45,8 +37,8 @@ class DepartmentSeeder extends Seeder
                     [
                         'description' => 'Handles all ' . strtolower($deptName) . ' functions for ' . $company->name,
                         'is_active'   => true,
-                        'created_by'  => $user->id,
-                        'updated_by'  => $user->id,
+                        'created_by'  => $user->id ?? 0,
+                        'updated_by'  => $user->id ?? 0,
                     ]
                 );
             }

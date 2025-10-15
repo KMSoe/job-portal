@@ -16,11 +16,6 @@ class DesignationSeeder extends Seeder
     {
         $user = User::first();
 
-        if (! $user) {
-            echo "Skipping DesignationSeeder: Ensure User Seeder runs first.\n";
-            return;
-        }
-
         $commonDesignations = [
             'CEO'               => 'Chief Executive Officer',
             'Manager'           => 'Responsible for a team or department.',
@@ -36,8 +31,8 @@ class DesignationSeeder extends Seeder
                 ['name' => $name],
                 [
                     'description' => $description,
-                    'created_by'  => $user->id,
-                    'updated_by'  => $user->id,
+                    'created_by'  => $user->id ?? 0,
+                    'updated_by'  => $user->id ?? 0,
                 ]
             );
         }

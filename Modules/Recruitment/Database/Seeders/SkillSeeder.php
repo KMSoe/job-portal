@@ -15,7 +15,6 @@ class SkillSeeder extends Seeder
     public function run()
     {
         $user   = User::first();
-        $userId = $user->id;
 
         $sampleSkills = [
             // Hard Skills
@@ -43,8 +42,8 @@ class SkillSeeder extends Seeder
                 [
                     'description' => 'A fundamental skill in ' . strtolower($skillName) . '.',
                     'is_active'   => true,
-                    'created_by'  => $userId,
-                    'updated_by'  => $userId,
+                    'created_by'  => $user->id ?? 0,
+                    'updated_by'  => $user->id ?? 0,
                 ]
             );
         }
