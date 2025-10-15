@@ -111,7 +111,7 @@ class AuthController extends Controller
 
             $user = User::where('email', $request->email)->first();
 
-            $reset_link = URL('/api/v1/hrm/reset-password?id='.$user->id.'&hash='.sha1($user->email));
+            $reset_link = config('app.frontend_url').'/admin/reset-password?id='.$user->id.'&hash='.sha1($user->email);
 
             Mail::send('organization::emails.forgotpasswordmail', ['reset_link' => $reset_link , 'name' => $user->name], function($message) use($user) {
                 $message->to($user->email);
