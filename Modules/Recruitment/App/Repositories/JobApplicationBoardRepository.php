@@ -110,7 +110,8 @@ class JobApplicationBoardRepository
 
                 if ($keyword != '') {
                     $query->whereHas('applicant', function ($query) use ($keyword) {
-                        $query->where('name', 'LIKE', '%' . $keyword . '%');
+                        $query->where('name', 'LIKE', '%' . $keyword . '%')
+                            ->orWhere('email', 'LIKE', '%' . $keyword . '%');
                     })
                         ->orWhereHas('applicant.skills', function ($query) use ($keyword) {
                             $query->where('name', 'LIKE', '%' . $keyword . '%');
