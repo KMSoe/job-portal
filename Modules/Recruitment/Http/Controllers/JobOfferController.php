@@ -162,21 +162,22 @@ class JobOfferController extends Controller
 
             $department_ids = JobOfferInformToDepartment::where('job_offer_id', $job_offer->id)->pluck('departments')->toArray();
 
-            Mail::send('recruitment::emails.jobofferinformmail', [
-                'mailData'       => $mailData,
-                'candidate_name' => $job_offer->candidate->name,
-                'job_title'      => $job_offer->application->jobPosting->title,
-            ], function ($message) use ($department_ids) {
-                $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
-                    $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
-                })->get();
+            if (count($department_ids) > 0) {
+                $noti_employees = Employee::whereIn('department_id', $department_ids)
+                    ->whereNotNull('email')
+                    ->where('email', '!=', '')
+                    ->pluck('email')
+                    ->toArray();
 
-                foreach ($noti_employees as $user) {
-                    $message->to($user->email);
-                }
-
-                $message->subject('New Job Offer Made');
-            });
+                Mail::send('recruitment::emails.jobofferinformmail', [
+                    'mailData'       => $mailData,
+                    'candidate_name' => $job_offer->candidate->name,
+                    'job_title'      => $job_offer->application->jobPosting->title,
+                ], function ($message) use ($noti_employees) {
+                    $message->to($noti_employees);
+                    $message->subject('New Job Offer Made');
+                });
+            }
 
             return response()->json([
                 'status'  => true,
