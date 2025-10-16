@@ -23,7 +23,7 @@ class DepartmentResource extends JsonResource
             'created_by'  => $this->createdBy ? $this->createdBy : [
                 "id"   => 0,
                 "name" => '',
-            ], ,
+            ],
             'updated_by'  => $this->updatedBy ? $this->updatedBy : [
                 "id"   => 0,
                 "name" => '',

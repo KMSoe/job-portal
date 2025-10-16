@@ -49,7 +49,7 @@ class OfferLetterTemplateController extends Controller
                     '{{designation}}',
                     '{{subject}}',
                     '{{approver_name}}',
-                    '{{approver_position}}',,
+                    '{{approver_position}}',
                     '{{inform_to_departments}}',
                     '{{cc}}',
                 ],
