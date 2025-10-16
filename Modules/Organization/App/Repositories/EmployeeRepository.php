@@ -12,9 +12,18 @@ use Modules\Recruitment\Entities\ChecklistTemplate;
 use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\OnboardingChecklistItem;
 use Modules\Recruitment\Transformers\OnboardingChecklistItemResource;
+use Modules\Storage\App\Classes\LocalStorage;
+use Modules\Storage\App\Interfaces\StorageInterface;
 
 class EmployeeRepository
 {
+    private StorageInterface $storage;
+
+    public function __construct(LocalStorage $storage)
+    {
+        $this->storage = $storage;
+    }
+
     public function findByParams($request)
     {
         $keyword = $request->search ? $request->search : '';
@@ -123,8 +132,10 @@ class EmployeeRepository
 
             $employee->informToDepartments()->sync($department_ids);
 
+            $logoFile   = $this->storage->getFile($employee->company?->logo);
+
             if (count($department_ids) > 0) {
-                Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee], function($message) use($department_ids) {
+                Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee, 'logoFile' => $logoFile], function($message) use($department_ids) {
                     $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
                         $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
                     })->get();
