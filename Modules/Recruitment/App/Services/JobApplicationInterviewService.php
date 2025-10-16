@@ -49,6 +49,14 @@ class JobApplicationInterviewService
     public function createInterview($data)
     {
         try {
+            $existingInterview = JobApplicationInterview::where('application_id', $data['application_id'])
+                ->where('scheduled_at', $data['scheduled_at'])
+                ->first();  
+
+            if ($existingInterview) {
+                throw new Exception("An interview is already scheduled for this application at the specified time.");
+            }   
+
             $interview = JobApplicationInterview::create([
                 'title'            => $data['title'],
                 'description'      => $data['description'] ?? null,
