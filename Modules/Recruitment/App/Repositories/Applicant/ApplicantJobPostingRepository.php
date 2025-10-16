@@ -66,7 +66,7 @@ class ApplicantJobPostingRepository
                     foreach ($dateFilters as $filter) {
                         switch ($filter) {
                             case 'today':
-                                $dates[] = now()->subDay();
+                                $dates[] = now()->startOfDay();
                                 break;
                             case 'last_3_days':
                                 $dates[] = now()->subDays(3);
