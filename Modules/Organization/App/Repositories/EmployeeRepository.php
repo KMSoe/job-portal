@@ -112,6 +112,7 @@ class EmployeeRepository
 
     public function store($data)
     {
+        dd($data);
         $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
@@ -126,8 +127,6 @@ class EmployeeRepository
         if (isset($data['onboarding_checklist_template_id']) && $data['onboarding_checklist_template_id'] != 0) {
             $this->createChecklistItems($data['onboarding_checklist_template_id'], $employee->id);
         }
-
-        dd($data['inform_to_departments']);
 
         if (isset($data['inform_to_departments'])) 
         {
