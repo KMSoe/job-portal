@@ -83,12 +83,15 @@ class JobApplicationInterviewService
 
                 $interviewers = $interview->interviewers;
                 if ($interviewers) {
-                    $interviewer_mails = $interview->interviewers->pluck('user.email')->unique()->toArray();
-
-                    Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user], function($message) use ($interview, $interviewer_mails) {
-                        $message->to($interviewer_mails);
-                        $message->subject('Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position');
-                    });
+                    foreach ($interviewers as $interviewer) {
+                        $interviewer = $interviewer->user;
+                        if ($interviewer) {
+                            Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user, 'interviewer_name' => $interviewer->name], function($message) use ($interview, $interviewer) {
+                                $message->to($interviewer->email);
+                                $message->subject('Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position');
+                            });
+                        }
+                    }
                 }
             }
 

@@ -53,7 +53,7 @@
               </h1>
 
               <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
-                Hi Interviewer,</br>
+                Hi {{$interviewer_name}},</br>
                 I hope this email finds you well. We were impressed by the candidate's background and would like to invite them to interview for the {{$interview->application->jobPosting->title}} role at {{$interview->application->jobPosting->company->name}}. We believe their skills and experiences align well with the responsibilities of the position.
                 </br></br>
                 Interview Details:</br></br>
