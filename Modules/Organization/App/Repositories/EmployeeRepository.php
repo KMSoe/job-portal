@@ -133,20 +133,24 @@ class EmployeeRepository
 
             $employee->informToDepartments()->sync($department_ids);
 
-            $logoFile   = $this->storage->getFile($employee->company?->logo);
+            $logoFile = $this->storage->getFile($employee->company?->logo);
+            
+            if ($department_ids && count($department_ids) > 0) {
+                $noti_employees = Employee::whereIn('department_id', $department_ids)
+                    ->whereNotNull('email')
+                    ->where('email', '!=', '')
+                    ->pluck('email')
+                    ->toArray();
 
-            if ($department_ids) {
-                Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee, 'logoFile' => $logoFile], function($message) use($department_ids) {
-                    $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
-                        $query->select('id')->from('employees')->whereIn('department_id', $department_ids);
-                    })->get();
-
-                    foreach ($noti_employees as $user) {
-                        $message->to($user->email);
-                    }
-
-                    $message->subject('New Employee Onboarded');
-                });
+                if (!empty($noti_employees)) {
+                    Mail::send('recruitment::emails.newemployeeonboarded', [
+                        'employee' => $employee, 
+                        'logoFile' => $logoFile
+                    ], function($message) use($noti_employees) {
+                        $message->to($noti_employees);
+                        $message->subject('New Employee Onboarded');
+                    });
+                }
             }
         }
 
