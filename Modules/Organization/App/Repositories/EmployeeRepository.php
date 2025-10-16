@@ -120,31 +120,37 @@ class EmployeeRepository
 
         $data['user_id']    = $user->id;
         $data['created_by'] = auth()->id();
-        $employee           = Employee::create($data);
+        $data['user_id'] = $user->id;
+        $employee = Employee::create($data);
 
         if (isset($data['onboarding_checklist_template_id']) && $data['onboarding_checklist_template_id'] != 0) {
             $this->createChecklistItems($data['onboarding_checklist_template_id'], $employee->id);
         }
 
-        if (isset($data['inform_to_departments'])) {
-            $department_ids = $data['inform_to_departments'];
+        if (isset($data['inform_to_departments'])) 
+        {
+            $department_ids = is_array($data['inform_to_departments']) ? $data['inform_to_departments'] : explode(',', $data['inform_to_departments']);
 
             $employee->informToDepartments()->sync($department_ids);
 
             $logoFile = $this->storage->getFile($employee->company?->logo);
+            
+            if ($department_ids && count($department_ids) > 0) {
+                $noti_employees = Employee::whereIn('department_id', $department_ids)
+                    ->whereNotNull('email')
+                    ->where('email', '!=', '')
+                    ->pluck('email')
+                    ->toArray();
 
-            if (count($department_ids) > 0) {
-                Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee, 'logoFile' => $logoFile], function ($message) use ($department_ids) {
-                    $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
-                        $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
-                    })->get();
-
-                    foreach ($noti_employees as $user) {
-                        $message->to($user->email);
-                    }
-
-                    $message->subject('New Employee Onboarded');
-                });
+                if (!empty($noti_employees)) {
+                    Mail::send('recruitment::emails.newemployeeonboarded', [
+                        'employee' => $employee, 
+                        'logoFile' => $logoFile
+                    ], function($message) use($noti_employees) {
+                        $message->to($noti_employees);
+                        $message->subject('New Employee Onboarded');
+                    });
+                }
             }
         }
 
@@ -206,7 +212,8 @@ class EmployeeRepository
     public function delete($id)
     {
         $employee = Employee::findOrFail($id);
-        User::where('id', $employee->user_id)->delete();
+        $employee->informToDepartments()->detach();
+        $employee->user()->delete();
         $employee->onboardingChecklistItems()->delete();
         $employee->delete();
     }
