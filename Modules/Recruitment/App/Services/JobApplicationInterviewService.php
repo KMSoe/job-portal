@@ -9,14 +9,17 @@ use Illuminate\Support\Facades\Mail;
 use Modules\Recruitment\App\Services\GoogleCalendarService;
 use Modules\Recruitment\Entities\JobApplicationInterview;
 use Modules\Recruitment\Entities\JobApplicationInterviewInterviewer;
+use Modules\Storage\App\Classes\LocalStorage;
 
 class JobApplicationInterviewService
 {
     protected $googleCalendarService;
+    protected $storage;
 
-    public function __construct(GoogleCalendarService $googleCalendarService)
+    public function __construct(GoogleCalendarService $googleCalendarService, LocalStorage $storage)
     {
         $this->googleCalendarService = $googleCalendarService;
+        $this->storage = $storage;
     }
 
     public function findByParams($request)
@@ -46,6 +49,14 @@ class JobApplicationInterviewService
     public function createInterview($data)
     {
         try {
+            $existingInterview = JobApplicationInterview::where('application_id', $data['application_id'])
+                ->where('scheduled_at', $data['scheduled_at'])
+                ->first();  
+
+            if ($existingInterview) {
+                throw new Exception("An interview is already scheduled for this application at the specified time.");
+            }   
+
             $interview = JobApplicationInterview::create([
                 'title'            => $data['title'],
                 'description'      => $data['description'] ?? null,
@@ -73,22 +84,23 @@ class JobApplicationInterviewService
 
             if ($data['interview_type'] === 'online') {
                 $this->createGoogleMeetEvent($interview, $data);
-            } else {
-                Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user], function ($message) use ($interview) {
-                    $message->to($interview->application->applicant->email);
-                    $message->subject('Invitation to Interview with ' . $interview->application?->jobPosting?->company?->name . ' for the ' . $interview->application?->jobPosting?->title . ' position');
-                });
+            }
+            
+            $logoFile   = $this->storage->getFile($interview->application->jobPosting->company?->logo);
+            Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user, 'logoFile' => $logoFile], function ($message) use ($interview) {
+                $message->to($interview->application->applicant->email);
+                $message->subject('Invitation to Interview with ' . $interview->application?->jobPosting?->company?->name . ' for the ' . $interview->application?->jobPosting?->title . ' position');
+            });
 
-                $interviewers = $interview->interviewers;
-                if ($interviewers) {
-                    foreach ($interviewers as $interviewer) {
-                        $interviewer = $interviewer->user;
-                        if ($interviewer) {
-                            Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user, 'interviewer_name' => $interviewer->name], function ($message) use ($interview, $interviewer) {
-                                $message->to($interviewer->email);
-                                $message->subject('Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position');
-                            });
-                        }
+            $interviewers = $interview->interviewers;
+            if ($interviewers) {
+                foreach ($interviewers as $interviewer) {
+                    $interviewer = $interviewer->user;
+                    if ($interviewer) {
+                        Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user, 'interviewer_name' => $interviewer->name, 'logoFile' => $logoFile], function ($message) use ($interview, $interviewer) {
+                            $message->to($interviewer->email);
+                            $message->subject('Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position');
+                        });
                     }
                 }
             }

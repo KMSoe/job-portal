@@ -7,11 +7,18 @@ use Illuminate\Support\Facades\Mail;
 use Modules\Calendar\App\Models\ExternalCalendar;
 use Modules\Calendar\App\Services\IcsImportService;
 use Modules\Recruitment\Entities\JobApplicationInterview;
+use Modules\Storage\App\Classes\LocalStorage;
 
 class InterviewRemainder extends Command
 {
     protected $signature = 'interview:remainder';
     protected $description = 'Send reminders for upcoming interviews';
+
+    public function __construct(LocalStorage $storage)
+    {
+        parent::__construct();
+        $this->storage = $storage;
+    }
 
     public function handle()
     {
@@ -24,13 +31,14 @@ class InterviewRemainder extends Command
 
         foreach ($interviews as $interview) {
             $interviewer_mails = $interview->interviewers->pluck('user.email')->unique()->toArray();
+            $logoFile   = $this->storage->getFile($interview->application->jobPosting->company?->logo);
 
-            Mail::send('recruitment::emails.interview_reminder', ['interview' => $interview], function($message) use ($interview, $interviewer_mails) {
+            Mail::send('recruitment::emails.interview_reminder', ['interview' => $interview, 'logoFile' => $logoFile], function($message) use ($interview, $interviewer_mails) {
                 $message->to($interviewer_mails);
                 $message->subject('Interview Reminder For ' . $interview->title);
             });
 
-            Mail::send('recruitment::emails.interview_reminder', ['interview' => $interview], function($message) use ($interview) {
+            Mail::send('recruitment::emails.interview_reminder', ['interview' => $interview, 'logoFile' => $logoFile], function($message) use ($interview) {
                 $message->to($interview->application->applicant->email);
                 $message->subject('Interview Reminder For ' . $interview->title);
             });
