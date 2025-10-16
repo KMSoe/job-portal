@@ -84,9 +84,12 @@ class RegisteredUserController extends Controller
                 $message->subject('Your verification code');
             });
 
-            return response()->json(['message' => 'A new OTP has been sent to your email for verification.'], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'A new OTP has been sent to your email for verification.'
+            ], 200);
         } catch (\Throwable $th) {
-            return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
+            return response()->json(['status' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     }
 
