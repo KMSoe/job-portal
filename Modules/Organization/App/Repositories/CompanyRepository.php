@@ -19,10 +19,8 @@ class CompanyRepository
         ])
             ->where(function ($query) use ($keyword) {
                 if ($keyword != '') {
-                    $query->where(function ($q) use ($keyword) {
-                        $q->where('name', 'LIKE', "%$keyword%")
-                            ->orWhere('registration_name', 'LIKE', "%$keyword%");
-                    });
+                    $query->where('name', 'LIKE', "%$keyword%")
+                        ->orWhere('registration_name', 'LIKE', "%$keyword%");
                 }
             });
 
@@ -74,7 +72,7 @@ class CompanyRepository
     public function store($data)
     {
         $data['created_by'] = auth()->id();
-        $company = Company::create($data);
+        $company            = Company::create($data);
 
         return $company;
     }
