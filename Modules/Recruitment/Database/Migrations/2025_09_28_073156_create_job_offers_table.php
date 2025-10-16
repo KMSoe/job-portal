@@ -34,7 +34,7 @@ class CreateJobOffersTable extends Migration
             $table->string('status');
             $table->string('offer_letter_ref')->nullable();
             $table->string('offer_letter_subject')->nullable();
-            $table->string('offer_letter_content')->nullable();
+            $table->longText('offer_letter_content')->nullable();
             $table->string('offer_letter_file_path')->nullable();
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->default(0);
