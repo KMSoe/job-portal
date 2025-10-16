@@ -22,6 +22,11 @@ class JobApplicationTrackingService
         return $this->jobApplicationTrackingRepository->updateStatus($job_application, $status);
     }
 
+    public function updateComment($job_application, $recruiter_comment)
+    {
+        return $this->jobApplicationTrackingRepository->updateComment($job_application, $recruiter_comment);
+    }
+
     public function assignReviewers($job_application_id, $reviewer_ids)
     {
         return $this->jobApplicationTrackingRepository->assignReviewers($job_application_id, $reviewer_ids);

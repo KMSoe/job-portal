@@ -27,6 +27,11 @@ class JobPostingApplicationDetailResource extends JsonResource
             'resume'                   => $this->resume,
             'extracted_data'           => $this->extractedData?->extract_data,
             'supportiveDocuments'      => $this->supportiveDocuments,
+            'recruiter_comment'        => $this->recruiter_comment,
+            'last_updated_by'          => $this->lastUpdatedBy ? $this->lastUpdatedBy : [
+                'id'   => 0,
+                'name' => '',
+            ],
             'reviewers'                => $this->reviewers,
             'interviews'               => $this->interviews,
             'jobOffer'                 => new JobOfferResource($this->jobOffer),

@@ -1,6 +1,7 @@
 <?php
 namespace Modules\Recruitment\Entities;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,6 +29,8 @@ class JobApplication extends Model
         'applied_at',
         'expected_salary',
         'resume_id',
+        'recruiter_comment',
+        'last_updated_by',
     ];
 
     /**
@@ -45,6 +48,11 @@ class JobApplication extends Model
     public function applicant()
     {
         return $this->belongsTo(Applicant::class, 'applicant_id');
+    }
+
+    public function lastUpdatedBy()
+    {
+        return $this->belongsTo(User::class, 'last_updated_by');
     }
 
     /**

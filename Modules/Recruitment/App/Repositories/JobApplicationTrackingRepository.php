@@ -13,10 +13,17 @@ class JobApplicationTrackingRepository
 
     public function updateStatus($job_application, $status)
     {
-        $data['updated_by'] = auth()->id();
-
         return $job_application->update([
-            'status' => $status,
+            'status'     => $status,
+            'updated_by' => auth()->id(),
+        ]);
+    }
+
+    public function updateComment($job_application, $recruiter_comment)
+    {
+        return $job_application->update([
+            'recruiter_comment' => $recruiter_comment,
+            'updated_by'        => auth()->id(),
         ]);
     }
 

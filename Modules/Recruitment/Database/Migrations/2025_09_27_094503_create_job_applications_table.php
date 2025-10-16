@@ -19,15 +19,14 @@ class CreateJobApplicationsTable extends Migration
             $table->unsignedBigInteger('job_posting_id');
             $table->unique(['applicant_id', 'job_posting_id']);
 
-            // --- Application Details ---
             $table->string('status');
 
             $table->timestamp('applied_at')->useCurrent();
             $table->decimal('expected_salary', 10, 2)->nullable();
 
-            // --- Attachments (Store JSON array of file paths) ---
-            $table->unsignedBigInteger('resume_id')->nullable();
-
+            $table->unsignedBigInteger('resume_id');
+            $table->longText('recruiter_comment')->nullable();
+            $table->unsignedBigInteger('last_updated_by')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

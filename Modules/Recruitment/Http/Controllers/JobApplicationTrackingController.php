@@ -35,6 +35,25 @@ class JobApplicationTrackingController extends Controller
         ], 200);
     }
 
+    public function updateComment(Request $request, $job_posting_id, $job_application_id)
+    {
+        $request->validate([
+            "recruiter_comment" => "required|string",
+        ]);
+
+        $job_application = $this->service->findById($job_application_id);
+
+        $this->service->updateComment($job_application, $request->recruiter_comment);
+
+        return response()->json([
+            'status'  => true,
+            'data'    => [
+
+            ],
+            'message' => 'success',
+        ], 200);
+    }
+
     public function parseResume(Request $request, $job_posting_id, $job_application_id)
     {
         $job_application = $this->service->findById($job_application_id);

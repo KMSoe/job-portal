@@ -146,6 +146,7 @@ class JobApplicationBoardRepository
     public function getApplicationDetail($job_application_id)
     {
         $job_application = JobApplication::with([
+            'lastUpdatedBy:id,name',
             'jobPosting',
             'applicant.skills',
             'applicant.salaryCurrency',
