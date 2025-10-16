@@ -12,17 +12,19 @@
       margin: 0;
       padding: 0;
       font-family: Arial, Helvetica, sans-serif;
-      background-color: #f3f4f6;
+      /* background-color: #f3f4f6; */
     ">
     <table width="100%" cellpadding="0" cellspacing="0" border="0"
-        style="background-color: #f3f4f6; padding: 32px 16px">
+        style="
+        /* background-color: #f3f4f6;  */
+        padding: 16px 16px">
         <tr>
             <td align="center">
                 <table width="100%" cellpadding="0" cellspacing="0" border="0"
                     style="
               max-width: 800px;
               background-color: #ffffff;
-              padding: 48px;
+              padding: 16;
               box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             ">
                     <!-- Header -->
@@ -160,16 +162,20 @@
                                 Yours sincerely,
                             </p>
 
+
                             <!-- Signature Area -->
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
-                                style="margin-top: 32px; font-size: 13px">
+                                style="margin-top: 16px; font-size: 13px">
                                 <tr>
-                                    <td width="50%" valign="top">
-                                        <p style="margin: 0">
-                                            <strong>Approved by</strong><br />
-                                            {{ $job_offer->approver?->name }}
-                                        </p>
-                                    </td>
+                                    @if ($job_offer->approve_required)
+                                        <td width="50%" valign="top">
+                                            <p style="margin-top: 0">
+                                                <strong>Approved by</strong><br />
+                                                {{ $job_offer->approver?->name }}
+                                            </p>
+                                        </td>
+                                    @endif
+
                                     <td width="50%" valign="top" align="right">
                                         <p style="margin: 0">
                                             <strong>Accepted By</strong><br />
@@ -180,7 +186,7 @@
                             </table>
 
                             <table width="100%" cellpadding="0" cellspacing="0" border="0"
-                                style="margin-top: 48px; font-size: 13px">
+                                style="margin-top: 8px; font-size: 13px">
                                 <tr>
                                     <td width="50%">
                                         <p style="margin: 0">_________________________</p>
@@ -190,11 +196,11 @@
                                     </td>
                                 </tr>
                             </table>
-
-                            <div style="margin-top: 8px; font-size: 13px">
-                                <p style="margin: 4px 0; font-weight: 600">{{ $job_offer->approverPosition?->name }}
+                            
+                            <div style="margin-top: 4px; font-size: 13px">
+                                <p style="margin: 0; font-weight: 600">{{ $job_offer->approverPosition?->name }}
                                 </p>
-                                <p style="margin: 4px 0; font-weight: 600">
+                                <p style="margin: 0; font-weight: 600">
                                     {{ $job_offer->company->name }}
                                 </p>
                             </div>
