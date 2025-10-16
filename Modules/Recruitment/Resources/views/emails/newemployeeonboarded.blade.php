@@ -129,19 +129,6 @@
                         </td>
                     </tr>
 
-                    @if(isset($onboarding_tasks) && count($onboarding_tasks) > 0)
-                    <tr>
-                        <td>
-                            <p style="margin: 16px 0 0 0; font-size: 13px">
-                                <strong>Pending Onboarding Tasks:</strong><br>
-                                @foreach($onboarding_tasks as $task)
-                                    • {{ $task }}<br>
-                                @endforeach
-                            </p>
-                        </td>
-                    </tr>
-                    @endif
-
                     <!-- Footer -->
                     <tr>
                         <td>
