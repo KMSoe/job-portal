@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\TestEmailController;
 use App\Http\Controllers\TestResumeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WorldDataController;
@@ -30,7 +31,10 @@ Route::prefix('v1/')->group(function () {
     Route::get('currencies', [WorldDataController::class, 'getAllCurrencies']);
     Route::get('timezones', [WorldDataController::class, 'getAllTimezones']);
 
+    // Testing
     Route::get('resume', [TestResumeController::class, 'index']);
+    Route::get('email', [TestEmailController::class, 'index']);
+
 });
 
 Route::middleware(['auth:api'])->prefix('v1/')->group(function () {

@@ -1,106 +1,151 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Reset Your Password | SHIFANOVA</title>
-  <style>
-    @media only screen and (max-width: 600px) {
-      .container { width: 100% !important; padding: 20px !important; }
-      .hero { padding: 30px 18px !important; }
-      .btn { display:block !important; width:100% !important; box-sizing:border-box; }
-    }
-    body { margin:0; padding:0; background:#f4f6f8; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:#172033; }
-    a { color: inherit; text-decoration: none; }
-    .brand {
-        font-family: 'Poppins', Arial, sans-serif;
-        font-size: 28px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        text-decoration: none;
-    }
-
-    .gradient-text {
-        background: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(199 89% 48%) 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reset Your Password | {{ env('APP_NAME') }}</title>
 </head>
-<body style="margin:0; padding:0; background:#f4f6f8; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:#172033;">
 
-  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f4f6f8; width:100%; min-width:100%;">
-    <tr>
-      <td align="center" style="padding:28px 16px;">
-        <!-- Main Card -->
-        <table role="presentation" cellpadding="0" cellspacing="0" width="600" class="container" style="width:600px; max-width:100%; background:#ffffff; border-radius:12px; box-shadow:0 6px 20px rgba(23,32,51,0.08); overflow:hidden;">
-          
-          <!-- Header -->
-          <tr>
-            <td style="padding:20px 24px; text-align:left; background:linear-gradient(90deg,#fbfbff,#ffffff);">
-              <a href="/" class="brand gradient-text">SHIFANOVA</a>
+<body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f3f4f6;
+    ">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0"
+        style="background-color: #f3f4f6; padding: 32px 16px">
+        <tr>
+            <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="
+              max-width: 800px;
+              background-color: #ffffff;
+              padding: 48px;
+              box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            ">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding-bottom: 24px; border-bottom: 2px solid #000000">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td width="50%" valign="top">
+                                        <!-- Logo -->
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="
+                              padding: 8px;
+                              width: 80px;
+                              height: 80px;
+                              text-align: center;
+                              vertical-align: middle;
+                            ">
+                                                    <h1
+                                                        style="
+                            margin: 0 0 8px 0;
+                            font-weight: bold;
+                            font-size: 20px;
+                            color: #000000;
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                          ">
+                                                        {{ env('APP_NAME') }}
+                                                    </h1>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                Hi {{ $name }},
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                We received a request to reset your password. Click the button below to reset the
+                                password.
+                            </p>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td style="padding:0;">
+                            <div class="me-email-browse-product">
+                                <a href="{{ $reset_link }}"
+                                    style="
+       font-size: 16px;
+       font-weight: bold;
+       color: #ffffff; /* White text for contrast */
+       background-color: #007bff; /* A standard, professional blue */
+       border: 1px solid #007bff; /* Blue border to match background */
+       border-radius: 5px; /* Added border radius for rounded corners */
+       padding: 10px 20px; /* Added vertical and horizontal padding */
+       display: inline-block; /* Essential for padding/sizing */
+       text-decoration: none; /* Remove underline */
+       margin-top: 16px;
+   ">
+                                    Reset Password
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td style="padding-top: 30px;">
+                            <table class="no-padding-table" bgColor="white" align="left" valign="middle"
+                                border="0" style="width: 100%;">
+                                <tr>
+                                    <td style="padding:0;">
+                                        <p
+                                            style="margin-top: 0px; font-size: 1rem;line-height: normal;
+                                    font-weight: normal;
+                                    color: #1B3757;">
+                                            <span style="display:block;margin-bottom: 2px;">Regards,</span><b>
+                                                {{ Config::get('app.name') }}</b>
+                                        </p>
+                                        <hr style="margin: 32px 0;background-color: #DADBE4;width: 100%;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table class="no-padding-table" bgColor="white" align="left" valign="middle"
+                                border="0" style="width: 100%;border-radius: 12px;">
+                                <tr>
+                                    <td style="padding-left:36px;padding-right: 36px;padding-bottom: 36px;">
+                                        <p
+                                            style="margin-top: 0px; font-size: 12px;line-height: normal;font-style: italic;
+                                    font-weight: normal;
+                                    color: #363848;">
+                                            If you're having trouble clicking the button, copy and paste the URL below
+                                            into your web browser:<a href="{{ $reset_link }}"
+                                                style="white-space: normal;word-break: break-all;text-decoration: underline;color: #363848;">{{ $reset_link }}</a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                </table>
             </td>
-          </tr>
-
-          <!-- Hero -->
-          <tr>
-            <td class="hero" style="padding:40px 44px; text-align:left;">
-              <h1 style="margin:0 0 12px 0; font-size:22px; color:#0f1724; font-weight:600;">
-                Reset your password
-              </h1>
-
-              <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
-                Hi {{$name}},<br>
-                We received a request to reset your password. Click the button below to set a new one.
-              </p>
-
-              <!-- CTA Button -->
-              <table role="presentation" cellpadding="0" cellspacing="0" style="margin:20px 0;">
-                <tr>
-                  <td align="center">
-                    <a href="{{$reset_link}}" class="btn" style="background:#2563eb; color:#ffffff; padding:12px 22px; border-radius:10px; font-weight:600; display:inline-block; font-size:15px;">
-                      Reset Password
-                    </a>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- Fallback link -->
-              <p style="margin:18px 0 0 0; font-size:13px; line-height:20px; color:#6b7b87;">
-                If the button doesn't work, copy and paste this link into your browser:
-                <br>
-                <a href="{{$reset_link}}" style="color:#1e64ff; word-break:break-all;">{{$reset_link}}</a>
-              </p>
-
-              <!-- Note -->
-              <p style="margin:24px 0 0 0; font-size:13px; line-height:20px; color:#6b7b87;">
-                If you didn’t request a password reset, please ignore this message or contact our support team.
-              </p>
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="padding:18px 24px; background:#fbfbff; text-align:left; font-size:13px; color:#8b97a6;">
-              <div style="margin-bottom:6px;">Stay secure,</div>
-              <div style="color:#a0adbb;">© <span id="year">2025</span> SHIFANOVA. All rights reserved.</div>
-            </td>
-          </tr>
-        </table>
-
-        <!-- Bottom note -->
-        <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="max-width:100%; margin-top:12px;">
-          <tr>
-            <td style="text-align:center; font-size:12px; color:#aab6c3;">
-              You’re receiving this email because a password reset was requested for your SHIFANOVA account.
-            </td>
-          </tr>
-        </table>
-
-      </td>
-    </tr>
-  </table>
+        </tr>
+    </table>
 </body>
+
 </html>
