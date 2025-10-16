@@ -48,6 +48,7 @@ class StoreEmployeeRequest extends FormRequest
             'last_date'                         => 'nullable|date|after_or_equal:joined_date',
             'password'                          => 'required',
             'onboarding_checklist_template_id'  => 'nullable|exists:checklist_templates,id',
+            'inform_to_departments'             => 'nullable|array',
         ];
     }
 
