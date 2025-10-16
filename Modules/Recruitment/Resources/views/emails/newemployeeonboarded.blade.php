@@ -107,7 +107,7 @@
                             <p style="margin: 16px 0 0 0; font-size: 13px">
                                 <strong>Employee Details:</strong><br>
                                 <strong>Name:</strong> {{ $employee->name }}<br>
-                                <strong>Position:</strong> {{ $employee->position ?? 'To be assigned' }}<br>
+                                <strong>Position:</strong> {{ $employee->designation?->name ?? 'To be assigned' }}<br>
                                 @if($employee->department)
                                     <strong>Department:</strong> {{ $employee->department?->name }}<br>
                                 @endif
