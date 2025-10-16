@@ -6,6 +6,7 @@ use Nnjeim\World\Models\City;
 use Nnjeim\World\Models\Country;
 use Nnjeim\World\Models\Currency;
 use Nnjeim\World\Models\State;
+use Nnjeim\World\Models\Timezone;
 
 class WorldDataController extends Controller
 {
@@ -69,6 +70,18 @@ class WorldDataController extends Controller
             'status' => true,
             'data'   => [
                 'currencies' => $currencies,
+            ],
+        ], 200);
+    }
+
+     public function getAllTimezones()
+    {
+        $timezones = Timezone::all();
+
+        return response()->json([
+            'status' => true,
+            'data'   => [
+                'timezones' => $timezones,
             ],
         ], 200);
     }

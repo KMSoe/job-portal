@@ -28,6 +28,7 @@ Route::prefix('v1/')->group(function () {
     Route::get('cities', [WorldDataController::class, 'getAllCities']);
     Route::get('states', [WorldDataController::class, 'getAllStates']);
     Route::get('currencies', [WorldDataController::class, 'getAllCurrencies']);
+    Route::get('timezones', [WorldDataController::class, 'getAllTimezones']);
 
     Route::get('resume', [TestResumeController::class, 'index']);
 });
