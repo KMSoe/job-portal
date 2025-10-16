@@ -160,7 +160,7 @@ class JobOfferController extends Controller
                 'status' => JobOfferStatusTypes::SENT->value,
             ]);
 
-            $department_ids = JobOfferInformToDepartment::where('job_offer_id', $job_offer->id)->pluck('departments')->toArray();
+            $department_ids = JobOfferInformToDepartment::where('job_offer_id', $job_offer->id)->pluck('department_id')->toArray();
 
             if (count($department_ids) > 0) {
                 $noti_employees = Employee::whereIn('department_id', $department_ids)
