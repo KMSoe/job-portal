@@ -171,6 +171,7 @@ class JobOfferController extends Controller
 
                 Mail::send('recruitment::emails.jobofferinformmail', [
                     'mailData'       => $mailData,
+                    'job_offer'      => $job_offer,
                     'candidate_name' => $job_offer->candidate->name,
                     'job_title'      => $job_offer->application->jobPosting->title,
                 ], function ($message) use ($noti_employees) {

@@ -28,7 +28,7 @@ class JobOfferFormRequest extends FormRequest
             'employment_type'          => ['nullable', Rule::in(EmploymentTypes::values())],
 
             'approve_required'         => 'boolean',
-            'approver_id'              => 'nullable|required_if:approve_required,true|exists:users,id',
+            'approver_id'              => 'exists_or_null:exists,id',
 
             // Dates
             'offer_date'               => 'required|date',
