@@ -138,7 +138,7 @@ class EmployeeRepository
             if ($department_ids) {
                 Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee, 'logoFile' => $logoFile], function($message) use($department_ids) {
                     $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
-                        $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
+                        $query->select('id')->from('employees')->whereIn('department_id', $department_ids);
                     })->get();
 
                     foreach ($noti_employees as $user) {
