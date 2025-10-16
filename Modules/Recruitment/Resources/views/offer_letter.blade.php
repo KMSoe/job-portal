@@ -144,7 +144,12 @@
                   line-height: 1.6;
                   color: #374151;
                 ">
-                            {{ $offer_letter_content }}
+                            <p>
+                                {{ $offer_letter_content }}
+                            </p>
+                        </td>
+                        <td>
+
                         </td>
                     </tr>
 

@@ -13,7 +13,7 @@ class StoreJobApplicationReviewRequest extends FormRequest
     public function rules()
     {
         return [
-            'score'   => 'required|integer|min:0|max:100',
+            'score'   => 'required|integer|min:0|max:10',
             'comment' => 'required|string',
             'status'  => 'in:draft,done',
         ];

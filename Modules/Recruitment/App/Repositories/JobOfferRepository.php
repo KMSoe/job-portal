@@ -231,6 +231,8 @@ class JobOfferRepository
         $jobOfferData['job_application_id']   = $job_application->id;
         $jobOfferData['candicate_id']         = $job_application->applicant_id;
         $jobOfferData['approver_position_id'] = Employee::where('user_id', $jobOfferData['approver_id'] ?? 0)->value('designation_id') ?? 0;
+        $offerLetterTemplate                  = OfferLetterTemplate::findOrFail($data['offer_letter_template_id']);
+        $jobOfferData['offer_letter_content'] = $offerLetterTemplate->template_data['content'] ?? '';
 
         DB::beginTransaction();
 
