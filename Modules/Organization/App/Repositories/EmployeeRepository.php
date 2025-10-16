@@ -2,14 +2,12 @@
 namespace Modules\Organization\App\Repositories;
 
 use App\Models\User;
-use Google\Service\Batch\Job;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
 use Modules\Organization\Transformers\EmployeeResource;
 use Modules\Recruitment\Entities\ChecklistTemplate;
-use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\OnboardingChecklistItem;
 use Modules\Recruitment\Transformers\OnboardingChecklistItemResource;
 use Modules\Storage\App\Classes\LocalStorage;
@@ -30,67 +28,68 @@ class EmployeeRepository
         $perPage = $request->per_page ? $request->per_page : 20;
 
         $data = Employee::with([
-                    'company',
-                    'department',
-                    'designation',
-                    'salaryCurrency',
-                    'onboardingChecklistTemplate',
-                    'onboardingChecklistItems',
-                    'createdBy'
-                ])
-                ->where(function ($query) use ($request, $keyword) {
-                    if ($request->company_id) {
-                        $query->where('company_id', $request->company_id);
-                    }
+            'company',
+            'department',
+            'designation',
+            'salaryCurrency',
+            'onboardingChecklistTemplate',
+            'onboardingChecklistItems',
+            'createdBy:id,name',
+            'updatedBy:id,name',
+        ])
+            ->where(function ($query) use ($request, $keyword) {
+                if ($request->company_id) {
+                    $query->where('company_id', $request->company_id);
+                }
 
-                    if ($request->department_id) {
-                        $query->where('department_id', $request->department_id);
-                    }
+                if ($request->department_id) {
+                    $query->where('department_id', $request->department_id);
+                }
 
-                    if ($request->designation_id) {
-                        $query->where('designation_id', $request->designation_id);
-                    }
+                if ($request->designation_id) {
+                    $query->where('designation_id', $request->designation_id);
+                }
 
-                    if ($keyword != '') {
-                        $query->where(function ($q) use ($keyword) {
-                            $q->where('name', 'LIKE', "%$keyword%")
+                if ($keyword != '') {
+                    $query->where(function ($q) use ($keyword) {
+                        $q->where('name', 'LIKE', "%$keyword%")
                             ->orWhere('preferred_name', 'LIKE', "%$keyword%")
                             ->orWhere('email', 'LIKE', "%$keyword%")
                             ->orWhere('work_mail', 'LIKE', "%$keyword%");
-                        });
-                    }
-                });
-
-            if ($request->sort != null && $request->sort != '') {
-                $sorts = explode(',', $request->input('sort', ''));
-
-                foreach ($sorts as $sortColumn) {
-                    $sortDirection = Str::startsWith($sortColumn, '-') ? 'DESC' : 'ASC';
-                    $sortColumn    = ltrim($sortColumn, '-');
-
-                    $data->orderBy($sortColumn, $sortDirection);
+                    });
                 }
-            } else {
-                $data->orderBy('created_at', 'DESC');
+            });
+
+        if ($request->sort != null && $request->sort != '') {
+            $sorts = explode(',', $request->input('sort', ''));
+
+            foreach ($sorts as $sortColumn) {
+                $sortDirection = Str::startsWith($sortColumn, '-') ? 'DESC' : 'ASC';
+                $sortColumn    = ltrim($sortColumn, '-');
+
+                $data->orderBy($sortColumn, $sortDirection);
             }
+        } else {
+            $data->orderBy('created_at', 'DESC');
+        }
 
-            if ($request->export) {
-                $items = isset($request->only_this_page) && $request->only_this_page == 1
-                    ? $data->skip(($request->page - 1) * $perPage)->take($perPage)->get()
-                    : $data->get();
+        if ($request->export) {
+            $items = isset($request->only_this_page) && $request->only_this_page == 1
+                ? $data->skip(($request->page - 1) * $perPage)->take($perPage)->get()
+                : $data->get();
 
-                return EmployeeResource::collection($items);
-            } else {
-                $data = $data->paginate($perPage);
+            return EmployeeResource::collection($items);
+        } else {
+            $data = $data->paginate($perPage);
 
-                $items = $data->getCollection();
+            $items = $data->getCollection();
 
-                $items = collect($items)->map(function ($item) {
-                    return new EmployeeResource($item);
-                });
+            $items = collect($items)->map(function ($item) {
+                return new EmployeeResource($item);
+            });
 
-                $data = $data->setCollection($items);
-            }
+            $data = $data->setCollection($items);
+        }
 
         return $data;
     }
@@ -104,7 +103,8 @@ class EmployeeRepository
             'salaryCurrency',
             'onboardingChecklistTemplate',
             'onboardingChecklistItems',
-            'createdBy'
+            'createdBy:id,name',
+            'updatedBy:id,name',
         ])->findOrFail($id);
 
         return $department;
@@ -113,29 +113,28 @@ class EmployeeRepository
     public function store($data)
     {
         $user = User::create([
-            'name'          => $data['name'],
-            'email'         => $data['email'],
-            'password'      => Hash::make($data['password']),
+            'name'     => $data['name'],
+            'email'    => $data['email'],
+            'password' => Hash::make($data['password']),
         ]);
 
-        $data['user_id'] = $user->id;
+        $data['user_id']    = $user->id;
         $data['created_by'] = auth()->id();
-        $employee = Employee::create($data);
+        $employee           = Employee::create($data);
 
         if (isset($data['onboarding_checklist_template_id']) && $data['onboarding_checklist_template_id'] != 0) {
             $this->createChecklistItems($data['onboarding_checklist_template_id'], $employee->id);
         }
 
-        if (isset($data['inform_to_departments'])) 
-        {
+        if (isset($data['inform_to_departments'])) {
             $department_ids = $data['inform_to_departments'];
 
             $employee->informToDepartments()->sync($department_ids);
 
-            $logoFile   = $this->storage->getFile($employee->company?->logo);
+            $logoFile = $this->storage->getFile($employee->company?->logo);
 
             if (count($department_ids) > 0) {
-                Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee, 'logoFile' => $logoFile], function($message) use($department_ids) {
+                Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee, 'logoFile' => $logoFile], function ($message) use ($department_ids) {
                     $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
                         $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
                     })->get();
@@ -164,7 +163,7 @@ class EmployeeRepository
                 OnboardingChecklistItem::create([
                     'employee_id'                => $employee_id,
                     'checklist_template_item_id' => $item->id,
-                    'status' => 'not_started'
+                    'status'                     => 'not_started',
                 ]);
             }
         }
@@ -173,7 +172,7 @@ class EmployeeRepository
     public function update($id, $data)
     {
         $data['updated_by'] = auth()->id();
-        $employee = Employee::findOrFail($id);
+        $employee           = Employee::findOrFail($id);
 
         if (isset($data['onboarding_checklist_template_id']) && $data['onboarding_checklist_template_id'] != 0 && $employee->onboarding_checklist_template_id !== $data['onboarding_checklist_template_id']) {
             OnboardingChecklistItem::where('employee_id', $employee->id)->delete();
@@ -200,7 +199,7 @@ class EmployeeRepository
         }
 
         $employee->update($data);
-        
+
         return $employee->fresh();
     }
 
@@ -235,7 +234,7 @@ class EmployeeRepository
     {
         $checklist_item = OnboardingChecklistItem::findOrFail($id);
         $checklist_item->update([
-            'status' => $data['status']
+            'status' => $data['status'],
         ]);
     }
 }

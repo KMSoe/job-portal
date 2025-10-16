@@ -173,17 +173,37 @@ class JobOfferRepository
             $department_ids = $data['inform_departments'];
 
             if (count($department_ids) > 0) {
-                Mail::send('recruitment::emails.jobofferinformmail', ['applicant' => $job_application->applicant, 'job_title' => $job_application->jobPosting->title], function ($message) use ($department_ids) {
-                    $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
-                        $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
-                    })->get();
+                // $logoFile   = $this->storage->getFile($jobOffer->company?->logo);
+                // $mimeType   = $this->storage->getMimeType($jobOffer->company?->logo);
+                // $logoBase64 = 'data:' . $mimeType . ';base64,' . base64_encode($logoFile);
 
-                    foreach ($noti_employees as $user) {
-                        $message->to($user->email);
-                    }
+                // $mailData = [
+                //     'subject'                => $jobOffer->offer_letter_subject,
+                //     'offer_letter_file_path' => $jobOffer->offer_letter_file_path,
+                //     'attachments'            => $jobOffer->attachments,
+                //     'logo'                   => $logoBase64,
+                //     'logoFile'               => $logoFile, // Pass the raw contents
+                //     'logoMime'               => $mimeType,
+                //     'job_offer'              => $jobOffer,
+                //     'candicate_name'         => $jobOffer->candidate?->name,
+                //     'candicate_position'     => $jobOffer->jobPosting?->title,
+                // ];
 
-                    $message->subject('New Job Offer Made');
-                });
+                // Mail::send('recruitment::emails.jobofferinformmail', [
+                //     'mailData'  => $mailData,
+                //     'applicant' => $job_application->applicant,
+                //     'job_title' => $job_application->jobPosting->title,
+                // ], function ($message) use ($department_ids) {
+                //     $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
+                //         $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
+                //     })->get();
+
+                //     foreach ($noti_employees as $user) {
+                //         $message->to($user->email);
+                //     }
+
+                //     $message->subject('New Job Offer Made');
+                // });
 
             }
         }

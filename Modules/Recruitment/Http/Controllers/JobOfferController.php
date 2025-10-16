@@ -10,12 +10,14 @@ use Modules\Organization\App\Enums\EmploymentTypes;
 use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Entities\Designation;
+use Modules\Organization\Entities\Employee;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
 use Modules\Recruitment\App\Mails\JobOfferMail;
 use Modules\Recruitment\App\Services\JobOfferService;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobOffer;
+use Modules\Recruitment\Entities\JobOfferInformToDepartment;
 use Modules\Recruitment\Entities\OfferLetterTemplate;
 use Modules\Recruitment\Http\Requests\JobOfferFormRequest;
 use Modules\Recruitment\Transformers\JobOfferResource;
@@ -157,6 +159,24 @@ class JobOfferController extends Controller
             $job_offer->update([
                 'status' => JobOfferStatusTypes::SENT->value,
             ]);
+
+            $department_ids = JobOfferInformToDepartment::where('job_offer_id', $job_offer->id)->pluck('departments')->toArray();
+
+            Mail::send('recruitment::emails.jobofferinformmail', [
+                'mailData'       => $mailData,
+                'candidate_name' => $job_offer->candidate->name,
+                'job_title'      => $job_offer->application->jobPosting->title,
+            ], function ($message) use ($department_ids) {
+                $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
+                    $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
+                })->get();
+
+                foreach ($noti_employees as $user) {
+                    $message->to($user->email);
+                }
+
+                $message->subject('New Job Offer Made');
+            });
 
             return response()->json([
                 'status'  => true,
