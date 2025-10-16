@@ -1,97 +1,174 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Interview Invitation</title>
-    <style>
-        /* Desktop styles — many clients ignore these, but some use them */
-        @media only screen and (max-width: 600px) {
-        .container { width: 100% !important; padding: 20px !important; }
-        .hero { padding: 30px 18px !important; }
-        .btn { display:block !important; width:100% !important; box-sizing:border-box; }
-        }
-        /* A little reset */
-        body { margin:0; padding:0; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
-        a { color: inherit; text-decoration: none; }
-
-        .brand {
-            font-family: 'Poppins', Arial, sans-serif;
-            font-size: 28px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-decoration: none;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, hsl(217 91% 60%) 0%, hsl(199 89% 48%) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-    </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interview Invitation - Interviewer</title>
 </head>
-<body style="margin:0; padding:0; background:#f4f6f8; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:#172033;">
-  <!-- Centering wrapper -->
-  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f4f6f8; width:100%; min-width:100%;">
-    <tr>
-      <td align="center" style="padding:28px 16px;">
-        <!-- Card -->
-        <table role="presentation" cellpadding="0" cellspacing="0" width="600" class="container" style="width:600px; max-width:100%; background:#ffffff; border-radius:12px; box-shadow:0 6px 20px rgba(23,32,51,0.08); overflow:hidden;">
-          <!-- Header with logo -->
-          <tr>
-            <td style="padding:20px 24px; text-align:left; background:linear-gradient(90deg,#fbfbff,#ffffff);">
-              <a href="/" class="brand gradient-text"><img src="{{ $message->embedData($interview->application->jobPosting->company->logo, 'logo.png') }}" alt="LOGO" style="max-width: 100%; height: auto;"></a>
+
+<body
+    style="
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #f3f4f6;
+    ">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0"
+        style="background-color: #f3f4f6; padding: 32px 16px">
+        <tr>
+            <td align="center">
+                <table width="100%" cellpadding="0" cellspacing="0" border="0"
+                    style="
+              max-width: 800px;
+              background-color: #ffffff;
+              padding: 48px;
+              box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            ">
+                    <!-- Header -->
+                    <tr>
+                        <td style="padding-bottom: 24px; border-bottom: 2px solid #000000">
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td width="50%" valign="top">
+                                        <!-- Logo -->
+                                        <table cellpadding="0" cellspacing="0" border="0">
+                                            <tr>
+                                                <td
+                                                    style="
+                              padding: 8px;
+                              width: 80px;
+                              height: 80px;
+                              text-align: center;
+                              vertical-align: middle;
+                            ">
+                                                    <img src="{{ $message->embedData($logoFile, 'logo.png') }}"
+                                                        alt="{{ $interview->application->jobPosting->company->name }}"
+                                                        style="width: 120px; margin-bottom: 8px;" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="50%" valign="top" align="right">
+                                        <!-- Company Info -->
+                                        <div
+                                            style="
+                          font-size: 11px;
+                          color: #374151;
+                          text-align: right;
+                        ">
+                                            <h1
+                                                style="
+                            margin: 0 0 8px 0;
+                            font-weight: bold;
+                            font-size: 20px;
+                            color: #000000;
+                            text-transform: uppercase;
+                            letter-spacing: 0.05em;
+                          ">
+                                                {{ $interview->application->jobPosting->company->name }}
+                                            </h1>
+                                            <p style="margin: 4px 0">
+                                                {{ $interview->application->jobPosting->company->address }}
+                                            </p>
+                                            <p style="margin: 4px 0">
+                                                @if ($interview->application->jobPosting->company->primary_phone && $interview->application->jobPosting->company->secondary_phone)
+                                                    Tel: {{ $interview->application->jobPosting->company->primary_phone }},
+                                                    {{ $interview->application->jobPosting->company->secondary_phone }}
+                                                @else
+                                                    Tel: {{ $interview->application->jobPosting->company->primary_phone }}
+                                                @endif
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                Hi {{ $interviewer_name }},
+                            </p>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                You have been assigned to conduct an interview for the {{ $interview->application->jobPosting->title }} position at {{ $interview->application->jobPosting->company->name }}. Please find the interview details below.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                <strong>Interview Details:</strong><br>
+                                <strong>Candidate:</strong> {{ $interview->application->applicant->name }}<br>
+                                <strong>Position:</strong> {{ $interview->application->jobPosting->title }}<br>
+                                <strong>Date:</strong> {{ $interview->scheduled_at->format('F j, Y') }}<br>
+                                <strong>Time:</strong> {{ $interview->scheduled_at->format('g:i A') }}<br>
+                                <strong>Location:</strong> {{ $interview->location }}<br>
+                                @if($interview->google_meet_link)
+                                    <strong>Google Meet Link:</strong> <a href="{{ $interview->google_meet_link }}" style="color: #3B82F6;">{{ $interview->google_meet_link }}</a><br>
+                                @endif
+                                <strong>Duration:</strong> {{ $interview->duration_minutes ?? '60' }} minutes
+                            </p>
+                        </td>
+                    </tr>
+
+                    @if($interview->application->applicant->resume_file_path)
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                <strong>Candidate Resume:</strong> Please review the candidate's resume before the interview.
+                            </p>
+                        </td>
+                    </tr>
+                    @endif
+
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                Please confirm your availability for this interview. If you have any conflicts or need to reschedule, please let us know as soon as possible.
+                            </p>
+                        </td>
+                    </tr>
+
+                    @if($interview->notes)
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                <strong>Additional Notes:</strong><br>
+                                {{ $interview->notes }}
+                            </p>
+                        </td>
+                    </tr>
+                    @endif
+
+                    <!-- Footer -->
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                Best regards,
+                            </p>
+                            <div style="margin-top: 8px; font-size: 13px">
+                                <p style="margin: 4px 0; font-weight: 600">{{ $user->name }}</p>
+                                <p style="margin: 4px 0; font-weight: 600">{{ $user->employee?->position ?? 'HR Manager' }}</p>
+                                <p style="margin: 4px 0; font-weight: 600">
+                                    {{ $interview->application->jobPosting->company->name }}
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
             </td>
-          </tr>
-
-          <tr>
-            <td class="hero" style="padding:36px 40px; text-align:left;">
-              <h1 style="margin:0 0 12px 0; font-size:20px; line-height:28px; color:#0f1724; font-weight:600;">
-                Interview Invitation
-              </h1>
-
-              <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
-                Hi {{$interviewer_name}},
-              </p>
-
-              <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
-                I hope this email finds you well. We were impressed by the candidate's background and would like to invite them to interview for the {{$interview->application->jobPosting->title}} role at {{$interview->application->jobPosting->company->name}}. We believe their skills and experiences align well with the responsibilities of the position.
-              </p>
-
-              <p style="margin:0 0 12px 0; font-size:15px; line-height:22px; color:#394b59;">
-                <strong>Interview Details:</strong><br />
-                Date: {{$interview->scheduled_at->format('F j, Y')}}<br />
-                Time: {{$interview->scheduled_at->format('g:i A')}}<br />
-                Location: {{$interview->location}}
-              </p>
-
-              <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
-                Please let us know if this time works for you or if there are any conflicts. We look forward to the opportunity to discuss your potential fit with our team.
-              </p>
-
-              <p style="margin:0; font-size:15px; line-height:22px; color:#394b59;">
-                Best regards,<br />
-                {{ $user->name }}<br />
-                {{ $user->employee?->position ?? 'Recruiter' }}
-              </p>
-            </td>
-          </tr>
-
-
-          <!-- Footer -->
-          <tr>
-            <td style="padding:18px 24px; background:#fbfbff; text-align:left; font-size:13px; color:#8b97a6;">
-              <div style="margin-bottom:8px;">Need help? Reply to this email and we'll get back to you.</div>
-              <div style="color:#a0adbb;">© <span id="year">2025</span> SHIFANOVA. All rights reserved.</div>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+        </tr>
+    </table>
 </body>
+
 </html>
 
 

@@ -74,7 +74,8 @@ class JobApplicationInterviewService
             if ($data['interview_type'] === 'online') {
                 $this->createGoogleMeetEvent($interview, $data);
             } else {
-                Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user], function ($message) use ($interview) {
+                $logoFile   = $this->storage->getFile($interview->application->jobPosting->company?->logo);
+                Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user, 'logoFile' => $logoFile], function ($message) use ($interview) {
                     $message->to($interview->application->applicant->email);
                     $message->subject('Invitation to Interview with ' . $interview->application?->jobPosting?->company?->name . ' for the ' . $interview->application?->jobPosting?->title . ' position');
                 });
@@ -84,7 +85,7 @@ class JobApplicationInterviewService
                     foreach ($interviewers as $interviewer) {
                         $interviewer = $interviewer->user;
                         if ($interviewer) {
-                            Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user, 'interviewer_name' => $interviewer->name], function ($message) use ($interview, $interviewer) {
+                            Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user, 'interviewer_name' => $interviewer->name, 'logoFile' => $logoFile], function ($message) use ($interview, $interviewer) {
                                 $message->to($interviewer->email);
                                 $message->subject('Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position');
                             });
