@@ -38,7 +38,7 @@
             @forelse($items as $index=>$item)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $item->logo_url ?? '-' }}</td>
+                    {{-- <td>{{ $item->logo_url ?? '-' }}</td> --}}
                     <td>{{ $item->name }}</td>
                     <td>{{ $item->registration_name ?? '' }}</td>
                     <td>{{ $item->registration_no ?? '' }}</td>
