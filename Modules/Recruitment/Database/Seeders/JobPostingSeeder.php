@@ -64,7 +64,7 @@ class JobPostingSeeder extends Seeder
 
                 // Compensation (Example: Range Salary)
                 'salary_type'                            => 'Range',
-                'salary_currency_id'                     => $currency->id,
+                'salary_currency_id'                     => $currency?->id,
                 'min_salary'                             => 90000.00,
                 'max_salary'                             => 130000.00,
                 'salary_notes'                           => 'Dependent on experience and location.',

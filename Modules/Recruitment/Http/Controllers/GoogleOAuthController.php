@@ -31,6 +31,8 @@ class GoogleOAuthController extends Controller
         } elseif ($request->filled('job_posting_id')) {
             $id = intval($request->input('job_posting_id'));
             $redirectPath = "/admin/job-posting-list/{$id}";
+        } else {
+            $redirectPath = '/';
         }
 
         if ($redirectPath) {
@@ -85,6 +87,13 @@ class GoogleOAuthController extends Controller
 
         try {
             $token = $this->googleCalendarService->authenticateWithCode($code);
+
+            $user = User::find($userIdFromState);
+            $user->update([
+                'google_access_token' => json_encode($token),
+                'google_refresh_token' => $token['refresh_token'] ?? null,
+                'google_token_expires_at' => now()->addSeconds($token['expires_in']),
+            ]);
 
             $query = http_build_query([
                 'google_calendar_connected' => 1,
