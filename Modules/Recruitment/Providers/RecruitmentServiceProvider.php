@@ -1,10 +1,10 @@
 <?php
-
 namespace Modules\Recruitment\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\ServiceProvider;
 use Modules\Recruitment\App\Console\Commands\InterviewRemainder;
+use Modules\Recruitment\App\Console\Commands\JobOfferReminder;
 
 // use Illuminate\Database\Eloquent\Factory;
 
@@ -43,6 +43,7 @@ class RecruitmentServiceProvider extends ServiceProvider
     {
         $this->commands([
             InterviewRemainder::class,
+            JobOfferReminder::class,
         ]);
     }
 
@@ -54,6 +55,7 @@ class RecruitmentServiceProvider extends ServiceProvider
         $this->app->booted(function () {
             $schedule = $this->app->make(Schedule::class);
             $schedule->command(InterviewRemainder::class)->hourly();
+            $schedule->command(JobOfferReminder::class)->dailyAt("06:00");
         });
     }
 
@@ -65,10 +67,10 @@ class RecruitmentServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('recruitment.php'),
+            __DIR__ . '/../Config/config.php' => config_path('recruitment.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'recruitment'
+            __DIR__ . '/../Config/config.php', 'recruitment'
         );
     }
 
@@ -81,11 +83,11 @@ class RecruitmentServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/recruitment');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
         $this->publishes([
-            $sourcePath => $viewPath
-        ],'views');
+            $sourcePath => $viewPath,
+        ], 'views');
 
         $this->loadViewsFrom(array_merge(array_map(function ($path) {
             return $path . '/modules/recruitment';
@@ -104,7 +106,7 @@ class RecruitmentServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'recruitment');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'recruitment');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'recruitment');
         }
     }
 

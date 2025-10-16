@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class SendReminderForPendingOfferAcceptCommand extends Command
+class JobOfferReminder extends Command
 {
     /**
      * The console command name.
