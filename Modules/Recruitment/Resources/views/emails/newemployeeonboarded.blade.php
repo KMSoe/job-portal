@@ -109,7 +109,7 @@
                                 <strong>Name:</strong> {{ $employee->name }}<br>
                                 <strong>Position:</strong> {{ $employee->position ?? 'To be assigned' }}<br>
                                 @if($employee->department)
-                                    <strong>Department:</strong> {{ $employee->department }}<br>
+                                    <strong>Department:</strong> {{ $employee->department?->name }}<br>
                                 @endif
                                 @if($employee->start_date)
                                     <strong>Start Date:</strong> {{ $employee->start_date->format('F j, Y') }}<br>
