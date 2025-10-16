@@ -120,6 +120,7 @@ class EmployeeRepository
 
         $data['user_id'] = $user->id;
         $data['created_by'] = auth()->id();
+        $data['user_id'] = $user->id;
         $employee = Employee::create($data);
 
         if (isset($data['onboarding_checklist_template_id']) && $data['onboarding_checklist_template_id'] != 0) {
@@ -128,13 +129,13 @@ class EmployeeRepository
 
         if (isset($data['inform_to_departments'])) 
         {
-            $department_ids = $data['inform_to_departments'];
+            $department_ids = is_array($data['inform_to_departments']) ? $data['inform_to_departments'] : explode(',', $data['inform_to_departments']);
 
             $employee->informToDepartments()->sync($department_ids);
 
             $logoFile   = $this->storage->getFile($employee->company?->logo);
 
-            if (count($department_ids) > 0) {
+            if ($department_ids) {
                 Mail::send('recruitment::emails.newemployeeonboarded', ['employee' => $employee, 'logoFile' => $logoFile], function($message) use($department_ids) {
                     $noti_employees = Employee::whereIn('id', function ($query) use ($department_ids) {
                         $query->select('id')->from('employees')->whereIn('department_id', $department_ids)->whereNotNull('user_id');
@@ -207,7 +208,8 @@ class EmployeeRepository
     public function delete($id)
     {
         $employee = Employee::findOrFail($id);
-        User::where('id', $employee->user_id)->delete();
+        $employee->informToDepartments()->detach();
+        $employee->user()->delete();
         $employee->onboardingChecklistItems()->delete();
         $employee->delete();
     }
