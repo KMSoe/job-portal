@@ -50,11 +50,11 @@ class GoogleCalendarService
                 'description' => $eventData['description'],
                 'start' => [
                     'dateTime' => $eventData['start_time'],
-                    'timeZone' => $eventData['timezone'] ?? 'UTC',
+                    'timeZone' => $eventData['timezone'] ?? config('app.timezone', 'UTC'),
                 ],
                 'end' => [
                     'dateTime' => $eventData['end_time'],
-                    'timeZone' => $eventData['timezone'] ?? 'UTC',
+                    'timeZone' => $eventData['timezone'] ?? config('app.timezone', 'UTC'),
                 ],
                 'attendees' => $this->formatAttendees($eventData['attendees']),
                 'reminders' => [
