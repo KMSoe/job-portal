@@ -18,7 +18,17 @@ class JobApplicationInterview extends Model
         'status',
         'notes',
         'google_event_id',
-        'google_meet_link'
+        'google_meet_link',
+        'reminder_sent'
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'scheduled_at' => 'datetime',
     ];
 
     public function application()

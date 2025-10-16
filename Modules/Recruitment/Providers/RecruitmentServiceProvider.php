@@ -3,6 +3,9 @@
 namespace Modules\Recruitment\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
+use Modules\Recruitment\App\Console\Commands\InterviewRemainder;
+
 // use Illuminate\Database\Eloquent\Factory;
 
 class RecruitmentServiceProvider extends ServiceProvider
@@ -14,6 +17,8 @@ class RecruitmentServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->registerCommands();
+        $this->registerCommandSchedules();
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
@@ -29,6 +34,27 @@ class RecruitmentServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+    }
+
+    /**
+     * Register commands in the format of Command::class
+     */
+    protected function registerCommands(): void
+    {
+        $this->commands([
+            InterviewRemainder::class,
+        ]);
+    }
+
+    /**
+     * Register command Schedules.
+     */
+    protected function registerCommandSchedules(): void
+    {
+        $this->app->booted(function () {
+            $schedule = $this->app->make(Schedule::class);
+            $schedule->command(InterviewRemainder::class)->hourly();
+        });
     }
 
     /**

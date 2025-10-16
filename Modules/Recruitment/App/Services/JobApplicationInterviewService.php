@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Modules\Recruitment\App\Services\GoogleCalendarService;
 use Modules\Recruitment\Entities\JobApplicationInterview;
 use Modules\Recruitment\Entities\JobApplicationInterviewInterviewer;
@@ -70,9 +71,25 @@ class JobApplicationInterviewService
 
             // Load relationships needed for Google Meet event creation
             $interview->load('interviewers.user', 'application.applicant', 'application.jobPosting');
+            $user = auth()->user();
 
             if ($data['interview_type'] === 'online') {
                 $this->createGoogleMeetEvent($interview, $data);
+            } else {
+                Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user], function($message) use($interview) {
+                    $message->to($interview->application->applicant->email);
+                    $message->subject('Invitation to Interview with ' . $interview->application?->jobPosting?->company?->name . ' for the ' . $interview->application?->jobPosting?->title . ' position');
+                });
+
+                $interviewers = $interview->interviewers;
+                if ($interviewers) {
+                    $interviewer_mails = $interview->interviewers->pluck('user.email')->unique()->toArray();
+
+                    Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user], function($message) use ($interview, $interviewer_mails) {
+                        $message->to($interviewer_mails);
+                        $message->subject('Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position');
+                    });
+                }
             }
 
             return $interview;
