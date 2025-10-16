@@ -3,7 +3,7 @@ namespace Modules\Recruitment\Transformers\Applicant;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ApplicantSideJobPostingDetailResource extends JsonResource
+class ApplicantJobPostingResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -28,8 +28,6 @@ class ApplicantSideJobPostingDetailResource extends JsonResource
             'title'                                  => $this->title,
             'slug'                                   => $this->slug,
             'salary_text'                            => $applicant ? $this->salary_text : '***',
-            'is_login'                               => $applicant ? true : false,
-            'is_already_applied'                     => ! is_null($this->application_id),
             'experience_level_id'                    => $this->experience_level_id,
             'job_function_id'                        => $this->job_function_id,
             'min_education_level_id'                 => $this->min_education_level_id,
@@ -61,7 +59,18 @@ class ApplicantSideJobPostingDetailResource extends JsonResource
             'published_at'                           => $this->published_at ? $this->published_at->toDateTimeString() : null,
             'deadline_date'                          => $this->deadline_date ? $this->deadline_date->toDateTimeString() : null,
 
+            // Auditing
+            'created_by'                             => $this->createdBy ? $this->createdBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
+            'updated_by'                             => $this->updatedBy ? $this->updatedBy : [
+                "id"   => 0,
+                "name" => '',
+            ],
+
             // Relationships (Eager Loaded)
+
             'company'                                => $this->whenLoaded('company'),
             'department'                             => $this->whenLoaded('department'),
             'designation'                            => $this->whenLoaded('designation'),
@@ -75,6 +84,14 @@ class ApplicantSideJobPostingDetailResource extends JsonResource
             // Compensation relationship
             // This is the direct call you requested, wrapped in whenLoaded
             'salary_currency'                        => $this->whenLoaded('salaryCurrency'),
+
+            // For a collection/many-to-many relationship
+            'skills'                                 => $this->whenLoaded('skills'),
+            'applicants'                             => $this->whenLoaded('applicants'),
+            'applicants_count'                       => $this->applicants_count,
+
+            'created_at'                             => $this->created_at,
+            'updated_at'                             => $this->updated_at,
         ];
     }
 }

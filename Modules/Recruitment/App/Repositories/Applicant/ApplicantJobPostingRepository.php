@@ -9,8 +9,8 @@ use Modules\Recruitment\App\Services\PdfResumeParserService;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Entities\Resume;
+use Modules\Recruitment\Transformers\Applicant\ApplicantJobPostingResource;
 use Modules\Recruitment\Transformers\Applicant\JobApplicationResource;
-use Modules\Recruitment\Transformers\JobPostingResource;
 use Modules\Storage\App\Classes\LocalStorage;
 use Modules\Storage\App\Interfaces\StorageInterface;
 use Storage;
@@ -113,7 +113,7 @@ class ApplicantJobPostingRepository
         $items = $data->getCollection();
 
         $items = collect($items)->map(function ($item) {
-            return new JobPostingResource($item);
+            return new ApplicantJobPostingResource($item);
         });
 
         $data = $data->setCollection($items);
