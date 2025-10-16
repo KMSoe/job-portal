@@ -34,8 +34,10 @@ class CompanyResource extends JsonResource
             'secondary_email'           => $this->secondary_email,
 
             // Location
+            'country_id'                => $this->country_id,
             'country'                   => $this->country,
             'city'                      => $this->city,
+            'city_id'                   => $this->city_id,
             'address'                   => $this->address,
 
             // Audit Timestamps (Optional, but useful)
