@@ -9,14 +9,17 @@ use Illuminate\Support\Facades\Mail;
 use Modules\Recruitment\App\Services\GoogleCalendarService;
 use Modules\Recruitment\Entities\JobApplicationInterview;
 use Modules\Recruitment\Entities\JobApplicationInterviewInterviewer;
+use Modules\Storage\App\Classes\LocalStorage;
 
 class JobApplicationInterviewService
 {
     protected $googleCalendarService;
+    protected $storage;
 
-    public function __construct(GoogleCalendarService $googleCalendarService)
+    public function __construct(GoogleCalendarService $googleCalendarService, LocalStorage $storage)
     {
         $this->googleCalendarService = $googleCalendarService;
+        $this->storage = $storage;
     }
 
     public function findByParams($request)

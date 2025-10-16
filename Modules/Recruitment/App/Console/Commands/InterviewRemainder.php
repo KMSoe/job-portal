@@ -7,11 +7,18 @@ use Illuminate\Support\Facades\Mail;
 use Modules\Calendar\App\Models\ExternalCalendar;
 use Modules\Calendar\App\Services\IcsImportService;
 use Modules\Recruitment\Entities\JobApplicationInterview;
+use Modules\Storage\App\Classes\LocalStorage;
 
 class InterviewRemainder extends Command
 {
     protected $signature = 'interview:remainder';
     protected $description = 'Send reminders for upcoming interviews';
+
+    public function __construct(LocalStorage $storage)
+    {
+        parent::__construct();
+        $this->storage = $storage;
+    }
 
     public function handle()
     {
