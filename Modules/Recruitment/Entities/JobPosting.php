@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\Organization\Entities\Company;
 use Modules\Organization\Entities\Department;
 use Modules\Organization\Entities\Designation;
+use Modules\Recruitment\App\Enums\JobPostingSalaryTypes;
 use Modules\Recruitment\App\Enums\JobPostingStatusTypes;
 use Nnjeim\World\Models\Currency;
 use Spatie\Sluggable\HasSlug;
@@ -85,6 +86,10 @@ class JobPosting extends Model
         'deadline_date'             => 'datetime',
     ];
 
+    protected $appends = [
+        'salary_text'
+    ];
+
     /**
      * Get the options for generating the slug.
      */
@@ -93,6 +98,24 @@ class JobPosting extends Model
         return SlugOptions::create()
             ->generateSlugsFrom('title')
             ->saveSlugsTo('slug');
+    }
+
+    public function getSalaryTextAttribute()
+    {
+        $salary_notes = $this->salary_notes;
+        $currency_code = $this->salaryCurrency?->code;
+
+        if($this->salary_type == JobPostingSalaryTypes::RANGE->value) {
+            return "$currency_code $this->min_salary - $currency_code $this->max_salary $salary_notes";
+        } else if($this->salary_type == JobPostingSalaryTypes::UP_TO->value) {
+            return "Up To $currency_code $this->salary_amount  $salary_notes";
+        } else if($this->salary_type == JobPostingSalaryTypes::AROUND->value) {
+            return "Around $currency_code $this->salary_amount  $salary_notes";
+        } else if($this->salary_type == JobPostingSalaryTypes::FIXED->value) {
+            return "Around $currency_code $this->salary_amount  $salary_notes";
+        } else if($this->salary_type == JobPostingSalaryTypes::NEGOTIABLE->value) {
+            return "Negotiable $salary_notes";
+        } 
     }
 
     public function scopePublishedAndActive(Builder $query): void

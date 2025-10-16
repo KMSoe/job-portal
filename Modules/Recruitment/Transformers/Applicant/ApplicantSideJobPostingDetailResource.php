@@ -27,6 +27,7 @@ class ApplicantSideJobPostingDetailResource extends JsonResource
             // Job Details
             'title'                                  => $this->title,
             'slug'                                   => $this->slug,
+            'salary_text'                            => $this->salary_text,
             'is_login'                               => $applicant ? true : false,
             'is_already_applied'                     => ! is_null($this->application_id),
             'experience_level_id'                    => $this->experience_level_id,
