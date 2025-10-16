@@ -52,15 +52,15 @@ class StoreJobPostingRequest extends FormRequest
 
             // Compensation
             'salary_type'                            => ['required', Rule::in(JobPostingSalaryTypes::values())],
-            'salary_currency_id'                     => 'required_unless:salary_type,negotiable|nullable|exists:currencies,id',
+            'salary_currency_id'                     => 'required_unless:salary_type,Negotiable|nullable|exists:currencies,id',
             'salary_notes'                           => 'nullable|string|max:255',
 
             // Conditional Salary Fields
             // Required if type is up_to, around, or fixed
-            'salary_amount'                          => 'required_if:salary_type,up_to,around,fixed|nullable|numeric|min:0',
+            'salary_amount'                          => 'required_if:salary_type,Up_To,Around,Fixed|nullable|numeric|min:0',
             // Required if type is range
-            'min_salary'                             => 'required_if:salary_type,range|nullable|numeric|min:0',
-            'max_salary'                             => 'required_if:salary_type,range|nullable|numeric|gt:min_salary',
+            'min_salary'                             => 'required_if:salary_type,Range|nullable|numeric|min:0',
+            'max_salary'                             => 'required_if:salary_type,Range|nullable|numeric|gt:min_salary',
 
             // Status and Dates
             'vacancies'                              => 'required|integer|min:1',
