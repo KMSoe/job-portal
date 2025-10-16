@@ -1,6 +1,7 @@
 <?php
 namespace Modules\Recruitment\Entities;
 
+use Database\Factories\ApplicantFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -57,8 +58,13 @@ class Applicant extends Authenticatable implements MustVerifyEmail
     ];
 
     protected $appends = [
-        'photo_url'
+        'photo_url',
     ];
+
+    protected static function newFactory()
+    {
+        return ApplicantFactory::new();
+    }
 
     public function getPhotoUrlAttribute(): ?string
     {

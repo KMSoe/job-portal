@@ -32,6 +32,7 @@ class JobPostingApplicationDetailResource extends JsonResource
                 'id'   => 0,
                 'name' => '',
             ],
+            'updated_at'               => $this->updated_at,
             'reviewers'                => $this->reviewers,
             'interviews'               => $this->interviews,
             'jobOffer'                 => new JobOfferResource($this->jobOffer),
