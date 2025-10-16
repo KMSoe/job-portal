@@ -137,6 +137,7 @@ class EmployeeRepository
             
             if ($department_ids && count($department_ids) > 0) {
                 $noti_employees = Employee::whereIn('department_id', $department_ids)
+                    ->where('id', '!=', $employee->id)
                     ->whereNotNull('email')
                     ->where('email', '!=', '')
                     ->pluck('email')
