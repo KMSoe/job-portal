@@ -29,8 +29,9 @@ class JobPostingApplicationDetailResource extends JsonResource
             'supportiveDocuments'      => $this->supportiveDocuments,
             'recruiter_comment'        => $this->recruiter_comment,
             'last_updated_by'          => $this->lastUpdatedBy ? $this->lastUpdatedBy : [
-                'id'   => 0,
-                'name' => '',
+                'id'        => 0,
+                'name'      => '',
+                'photo_url' => null,
             ],
             'updated_at'               => $this->updated_at,
             'reviewers'                => $this->reviewers,
