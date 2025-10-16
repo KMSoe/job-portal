@@ -1,11 +1,9 @@
 <?php
-
 namespace Modules\Recruitment\App\Services;
 
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Modules\Recruitment\App\Services\GoogleCalendarService;
@@ -24,7 +22,7 @@ class JobApplicationInterviewService
     public function findByParams($request)
     {
         $per_page = $request->input('per_page', 20);
-        $query = JobApplicationInterview::query();
+        $query    = JobApplicationInterview::query();
 
         if ($request->has('search')) {
             $query->where('title', 'like', '%' . $request->input('search') . '%');
@@ -49,21 +47,21 @@ class JobApplicationInterviewService
     {
         try {
             $interview = JobApplicationInterview::create([
-                'title' => $data['title'],
-                'description' => $data['description'] ?? null,
-                'location' => $data['location'] ?? null,
-                'status' => $data['status'] ?? 'scheduled',
-                'application_id' => $data['application_id'],
-                'interview_type' => $data['interview_type'],
-                'scheduled_at' => $data['scheduled_at'],
+                'title'            => $data['title'],
+                'description'      => $data['description'] ?? null,
+                'location'         => $data['location'] ?? null,
+                'status'           => $data['status'] ?? 'scheduled',
+                'application_id'   => $data['application_id'],
+                'interview_type'   => $data['interview_type'],
+                'scheduled_at'     => $data['scheduled_at'],
                 'duration_minutes' => $data['duration_minutes'] ?? 60,
-                'notes' => $data['notes'] ?? null,  
+                'notes'            => $data['notes'] ?? null,
             ]);
 
-            if(isset($data['interviewers']) && is_array($data['interviewers'])) {
+            if (isset($data['interviewers']) && is_array($data['interviewers'])) {
                 foreach ($data['interviewers'] as $user_id) {
                     $interview->interviewers()->create([
-                        'user_id' => $user_id,
+                        'user_id'           => $user_id,
                         'attendance_status' => 'confirmed',
                     ]);
                 }
@@ -76,7 +74,7 @@ class JobApplicationInterviewService
             if ($data['interview_type'] === 'online') {
                 $this->createGoogleMeetEvent($interview, $data);
             } else {
-                Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user], function($message) use($interview) {
+                Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user], function ($message) use ($interview) {
                     $message->to($interview->application->applicant->email);
                     $message->subject('Invitation to Interview with ' . $interview->application?->jobPosting?->company?->name . ' for the ' . $interview->application?->jobPosting?->title . ' position');
                 });
@@ -86,7 +84,7 @@ class JobApplicationInterviewService
                     foreach ($interviewers as $interviewer) {
                         $interviewer = $interviewer->user;
                         if ($interviewer) {
-                            Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user, 'interviewer_name' => $interviewer->name], function($message) use ($interview, $interviewer) {
+                            Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user, 'interviewer_name' => $interviewer->name], function ($message) use ($interview, $interviewer) {
                                 $message->to($interviewer->email);
                                 $message->subject('Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position');
                             });
@@ -108,15 +106,15 @@ class JobApplicationInterviewService
             if ($interviewers->isEmpty()) {
                 throw new Exception("No interviewers assigned to the interview");
             }
-            
-            $interviewer = $interviewers->first();
-            $user = $interviewer->user;
 
-            if (!$user) {
+            $interviewer = $interviewers->first();
+            $user        = $interviewer->user;
+
+            if (! $user) {
                 throw new Exception("Interviewer user not found");
             }
 
-            if (!$user->google_access_token) {
+            if (! $user->google_access_token) {
                 throw new Exception("Interviewer has not connected their Google Calendar");
             }
 
@@ -125,43 +123,47 @@ class JobApplicationInterviewService
             // Load the application with applicant relationship
             $interview->load('application.applicant', 'application.jobPosting');
             $applicant = $interview->application->applicant;
-            
-            if (!$applicant) {
+
+            if (! $applicant) {
                 throw new Exception("Applicant not found for this application");
             }
 
             $attendees = [
                 [
                     'email' => $applicant->email,
-                    'name' => $applicant->name,
+                    'name'  => $applicant->name,
                 ],
             ];
 
             // Add additional attendees if provided
-            if (isset($data['additional_attendees'])) {
-                foreach ($data['additional_attendees'] as $attendee) {
+
+            foreach ($interviewers as $interviewer) {
+                $user = $interviewer->user;
+
+                if ($user) {
                     $attendees[] = [
-                        'email' => $attendee['email'],
-                        'name' => $attendee['name'] ?? null,
+                        'email' => $user->email,
+                        'name'  => $user->name ?? null,
                     ];
                 }
+
             }
 
             $startTime = Carbon::parse($data['scheduled_at']);
-            $endTime = $startTime->copy()->addMinutes($data['duration_minutes'] ?? 60);
+            $endTime   = $startTime->copy()->addMinutes($data['duration_minutes'] ?? 60);
 
             $jobPosting = $interview->application->jobPosting;
-            $jobTitle = $jobPosting ? $jobPosting->title : 'Job Interview';
+            $jobTitle   = $jobPosting ? $jobPosting->title : 'Job Interview';
 
             $eventData = [
-                'summary' => "Job Interview - " . $jobTitle,
-                'description' => "Interview for the position of " . $jobTitle . 
-                                "\n\nCandidate: " . $applicant->name .
-                                "\n\nNotes: " . ($data['notes'] ?? 'N/A'),
-                'start_time' => $startTime->toRfc3339String(),
-                'end_time' => $endTime->toRfc3339String(),
-                'timezone' => $data['timezone'] ?? config('app.timezone'),
-                'attendees' => $attendees,
+                'summary'     => "Job Interview - " . $jobTitle,
+                'description' => "Interview for the position of " . $jobTitle .
+                "\n\nCandidate: " . $applicant->name .
+                "\n\nNotes: " . ($data['notes'] ?? 'N/A'),
+                'start_time'  => $startTime->toRfc3339String(),
+                'end_time'    => $endTime->toRfc3339String(),
+                'timezone'    => $data['timezone'] ?? config('app.timezone'),
+                'attendees'   => $attendees,
             ];
 
             // Create Google Calendar event with Meet
@@ -169,7 +171,7 @@ class JobApplicationInterviewService
 
             // Update interview with Google event details
             $interview->update([
-                'google_event_id' => $result['event_id'],
+                'google_event_id'  => $result['event_id'],
                 'google_meet_link' => $result['meet_link'],
             ]);
 
@@ -197,32 +199,30 @@ class JobApplicationInterviewService
     {
         try {
             $interview = JobApplicationInterview::findOrFail($interviewId);
-            
+
             $interview->update([
-                'title' => $data['title'] ?? $interview->title,
-                'description' => $data['description'] ?? $interview->description,
-                'location' => $data['location'] ?? $interview->location,
-                'status' => $data['status'] ?? $interview->status,
-                'interview_type' => $data['interview_type'] ?? $interview->interview_type,
-                'scheduled_at' => $data['scheduled_at'] ?? $interview->scheduled_at,
+                'title'            => $data['title'] ?? $interview->title,
+                'description'      => $data['description'] ?? $interview->description,
+                'location'         => $data['location'] ?? $interview->location,
+                'status'           => $data['status'] ?? $interview->status,
+                'interview_type'   => $data['interview_type'] ?? $interview->interview_type,
+                'scheduled_at'     => $data['scheduled_at'] ?? $interview->scheduled_at,
                 'duration_minutes' => $data['duration_minutes'] ?? $interview->duration_minutes,
-                'notes' => $data['notes'] ?? $interview->notes,
+                'notes'            => $data['notes'] ?? $interview->notes,
             ]);
 
-            if(isset($data['interviewers']) && is_array($data['interviewers'])) 
-            {
+            if (isset($data['interviewers']) && is_array($data['interviewers'])) {
                 $interview->interviewers()->delete();
                 foreach ($data['interviewers'] as $user_id) {
                     $interview->interviewers()->create([
-                        'user_id' => $user_id,
+                        'user_id'           => $user_id,
                         'attendance_status' => 'confirmed',
                     ]);
                 }
             }
 
             if ($data['interview_type'] === 'online') {
-                if($interview->google_event_id)
-                {
+                if ($interview->google_event_id) {
                     $this->updateGoogleMeetEvent($interview, $data);
                 } else {
                     $this->createGoogleMeetEvent($interview, $data);
@@ -239,21 +239,21 @@ class JobApplicationInterviewService
     {
         try {
             $interviewer = $interview->interviewers()->first();
-            if (!$interviewer) {
+            if (! $interviewer) {
                 throw new Exception("No interviewer assigned to this interview");
             }
-            
+
             $user = $interviewer->user;
             $this->googleCalendarService->setAccessToken($user->google_access_token);
 
             $eventData = [];
-            
+
             if (isset($data['scheduled_at']) || isset($data['duration_minutes'])) {
                 $startTime = Carbon::parse($data['scheduled_at'] ?? $interview->scheduled_at);
-                $endTime = $startTime->copy()->addMinutes($data['duration_minutes'] ?? $interview->duration_minutes);
-                
+                $endTime   = $startTime->copy()->addMinutes($data['duration_minutes'] ?? $interview->duration_minutes);
+
                 $eventData['start_time'] = $startTime->toRfc3339String();
-                $eventData['end_time'] = $endTime->toRfc3339String();
+                $eventData['end_time']   = $endTime->toRfc3339String();
             }
 
             if (isset($data['notes'])) {
@@ -291,19 +291,19 @@ class JobApplicationInterviewService
     public function updateFeedback($data)
     {
         try {
-            $user = auth()->user();
+            $user        = auth()->user();
             $interviewer = JobApplicationInterviewInterviewer::where('interview_id', $data['interview_id'])
-                            ->where('user_id', $user->id)
-                            ->first();
+                ->where('user_id', $user->id)
+                ->first();
 
-            if (!$interviewer) {
+            if (! $interviewer) {
                 throw new Exception("Interviewer not found");
             }
 
             $interviewer->update([
-                'score' => $data['score'] ?? $interviewer->score,
-                'feedback' => $data['feedback'] ?? $interviewer->feedback,
-                'commented_at' => now(),
+                'score'          => $data['score'] ?? $interviewer->score,
+                'feedback'       => $data['feedback'] ?? $interviewer->feedback,
+                'commented_at'   => now(),
                 'comment_status' => $data['comment_status'] ?? 'done',
             ]);
             return $interviewer;

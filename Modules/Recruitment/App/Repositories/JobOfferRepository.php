@@ -11,6 +11,7 @@ use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\JobOfferAttachment;
+use Modules\Recruitment\Entities\OfferLetterTemplate;
 use Modules\Recruitment\Transformers\JobOfferResource;
 use Modules\Storage\App\Classes\LocalStorage;
 use Modules\Storage\App\Interfaces\StorageInterface;
@@ -124,14 +125,24 @@ class JobOfferRepository
         $jobOfferData['candicate_id']         = $job_application->applicant_id;
         $jobOfferData['approver_position_id'] = Employee::where('user_id', $jobOfferData['approver_id'] ?? 0)->value('designation_id') ?? 0;
 
+        $offerLetterTemplate                  = OfferLetterTemplate::findOrFail($data['offer_letter_template_id']);
+        $jobOfferData['offer_letter_content'] = $offerLetterTemplate->template_data['content'] ?? '';
+
         DB::beginTransaction();
 
         $jobOffer = JobOffer::create($jobOfferData);
         $jobOffer = $this->findById($jobOffer->id);
 
-        $offer_letter_file_path = $this->storeOfferLetter($jobOffer, $job_application, Str::slug($job_application->applicant->name) . "-" . Str::slug($job_application->jobPosting->title) . "-" . time());
+        $offer_letter_content = $this->replaceOfferLetterContent($jobOffer);
+
+        $offer_letter_file_path = $this->storeOfferLetter(
+            $jobOffer,
+            $job_application,
+            $offer_letter_content,
+            Str::slug($job_application->applicant->name) . "-" . Str::slug($job_application->jobPosting->title) . "-" . time());
 
         $jobOffer->update([
+            'offer_letter_content'   => $offer_letter_content,
             'offer_letter_file_path' => $offer_letter_file_path,
         ]);
 
@@ -231,9 +242,15 @@ class JobOfferRepository
             $this->storage->delete($jobOffer->offer_letter_file_path);
         }
 
-        $offer_letter_file_path = $this->storeOfferLetter($jobOffer, $job_application, Str::slug($job_application->applicant->name) . "-" . Str::slug($job_application->jobPosting->title) . "-" . time());
+        $offer_letter_content   = $this->replaceOfferLetterContent($jobOffer);
+        $offer_letter_file_path = $this->storeOfferLetter(
+            $jobOffer,
+            $job_application,
+            $offer_letter_content,
+            Str::slug($job_application->applicant->name) . "-" . Str::slug($job_application->jobPosting->title) . "-" . time());
 
         $jobOffer->update([
+            'offer_letter_content'   => $offer_letter_content,
             'offer_letter_file_path' => $offer_letter_file_path,
         ]);
 
@@ -296,7 +313,34 @@ class JobOfferRepository
         DB::commit();
     }
 
-    public function storeOfferLetter($jobOffer, $job_application, $file_name)
+    public function replaceOfferLetterContent($jobOffer)
+    {
+        $replacements = [
+            '{{offer_date}}'            => Carbon::parse($jobOffer->offer_date)->format('d-m-Y'),
+            '{{ref}}'                   => $jobOffer->offer_letter_ref,
+            '{{job_title}}'             => $jobOffer->jobPosting->title,
+            '{{applicant_name}}'        => $jobOffer->candicate?->name,
+            '{{basic_salary}}'          => $jobOffer->template?->is_salary_visible == true ? $jobOffer->basic_salary : '***',
+            '{{company_name}}'          => $jobOffer->company->name,
+            '{{department}}'            => $jobOffer->department->name,
+            '{{designation}}'           => $jobOffer->designation->name,
+            '{{subject}}'               => $jobOffer->offer_letter_subject,
+            '{{approver_name}}'         => $jobOffer->approver?->name,
+            '{{approver_position}}'     => $jobOffer->approverPosition?->name,
+            '{{inform_to_departments}}' => implode(', ', $jobOffer->informedDepartments->pluck('name')->toArray()),
+            '{{cc}}'                    => implode(', ', $jobOffer->ccUsers->pluck('name')->toArray()),
+        ];
+
+        $offer_letter_content = str_replace(
+            array_keys($replacements),     // The search array (the keys: {{...}})
+            array_values($replacements),   // The replace array (the values: 'Data')
+            $jobOffer->offer_letter_content// The subject string
+        );
+
+        return $offer_letter_content;
+    }
+
+    public function storeOfferLetter($jobOffer, $job_application, $offer_letter_content, $file_name)
     {
         // $html = view('recruitment::offer_letter', [
         //     'job_offer'          => $jobOffer,
@@ -332,28 +376,6 @@ class JobOfferRepository
         $logoFile   = $this->storage->getFile($jobOffer->company?->logo);
         $mimeType   = $this->storage->getMimeType($jobOffer->company?->logo);
         $logoBase64 = 'data:' . $mimeType . ';base64,' . base64_encode($logoFile);
-
-        $replacements = [
-            '{{offer_date}}'            => Carbon::parse($jobOffer->offer_date)->format('d-m-Y'),
-            '{{ref}}'                   => $jobOffer->offer_letter_ref,
-            '{{job_title}}'             => $jobOffer->jobPosting->title,
-            '{{applicant_name}}'        => $jobOffer->candicate?->name,
-            '{{basic_salary}}'          => $jobOffer->template?->is_salary_visible == true ? $jobOffer->basic_salary : '***',
-            '{{company_name}}'          => $jobOffer->company->name,
-            '{{department}}'            => $jobOffer->department->name,
-            '{{designation}}'           => $jobOffer->designation->name,
-            '{{subject}}'               => $jobOffer->offer_letter_subject,
-            '{{approver_name}}'         => $jobOffer->approver?->name,
-            '{{approver_position}}'     => $jobOffer->approverPosition?->name,
-            '{{inform_to_departments}}' => implode(', ', $jobOffer->informedDepartments->pluck('name')->toArray()),
-            '{{cc}}'                    => implode(', ', $jobOffer->ccUsers->pluck('name')->toArray()),
-        ];
-
-        $offer_letter_content = str_replace(
-            array_keys($replacements),     // The search array (the keys: {{...}})
-            array_values($replacements),   // The replace array (the values: 'Data')
-            $jobOffer->offer_letter_content// The subject string
-        );
 
         $pdf = Pdf::loadView("recruitment::offer_letter", [
             'logo'                 => $logoBase64,
