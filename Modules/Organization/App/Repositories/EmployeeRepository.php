@@ -127,6 +127,8 @@ class EmployeeRepository
             $this->createChecklistItems($data['onboarding_checklist_template_id'], $employee->id);
         }
 
+        dd($data['inform_to_departments']);
+
         if (isset($data['inform_to_departments'])) 
         {
             $department_ids = is_array($data['inform_to_departments']) ? $data['inform_to_departments'] : explode(',', $data['inform_to_departments']);
