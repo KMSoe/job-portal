@@ -14,8 +14,8 @@ class JobApplicationTrackingRepository
     public function updateStatus($job_application, $status)
     {
         return $job_application->update([
-            'status'     => $status,
-            'updated_by' => auth()->id(),
+            'status'          => $status,
+            'last_updated_by' => auth()->id(),
         ]);
     }
 
@@ -23,7 +23,7 @@ class JobApplicationTrackingRepository
     {
         return $job_application->update([
             'recruiter_comment' => $recruiter_comment,
-            'updated_by'        => auth()->id(),
+            'last_updated_by'   => auth()->id(),
         ]);
     }
 
