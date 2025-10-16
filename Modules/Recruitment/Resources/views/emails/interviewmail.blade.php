@@ -53,23 +53,32 @@
               </h1>
 
               <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
-                Dear {{$interview->application->applicant->name}},</br>
-                I hope this email finds you well. We were impressed by your background and would like to invite you to interview for the {{$interview->application->jobPosting->title}} role at {{$interview->application->jobPosting->company->name}}. We believe your skills and experiences align well with the responsibilities of the position.
-                </br></br>
-                Interview Details:</br></br>
+                Dear {{$interview->application->applicant->name}},
+              </p>
 
-                Date: {{$interview->scheduled_at->format('F j, Y')}}</br>
-                Time: {{$interview->scheduled_at->format('g:i A')}}</br>
-                Location: {{$interview->location}}</br>
+              <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
+                I hope this email finds you well. We were impressed by your background and would like to invite you to interview for the {{$interview->application->jobPosting->title}} role at {{$interview->application->jobPosting->company->name}}. We believe your skills and experiences align well with the responsibilities of the position.
+              </p>
+
+              <p style="margin:0 0 12px 0; font-size:15px; line-height:22px; color:#394b59;">
+                <strong>Interview Details:</strong><br />
+                Date: {{$interview->scheduled_at->format('F j, Y')}}<br />
+                Time: {{$interview->scheduled_at->format('g:i A')}}<br />
+                Location: {{$interview->location}}
+              </p>
+
+              <p style="margin:0 0 20px 0; font-size:15px; line-height:22px; color:#394b59;">
                 Please let us know if this time works for you or if there are any conflicts. We look forward to the opportunity to discuss your potential fit with our team.
-                </br></br>
-                Best regards,
-                </br></br>
-                {{ $user->name }}</br>
+              </p>
+
+              <p style="margin:0; font-size:15px; line-height:22px; color:#394b59;">
+                Best regards,<br />
+                {{ $user->name }}<br />
                 {{ $user->employee?->position ?? 'Recruiter' }}
               </p>
             </td>
           </tr>
+
 
           <!-- Footer -->
           <tr>
