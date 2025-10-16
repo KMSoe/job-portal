@@ -110,7 +110,7 @@
                                 <strong>Position:</strong> {{ $interview->application->jobPosting->title }}<br>
                                 <strong>Date:</strong> {{ $interview->scheduled_at->format('F j, Y') }}<br>
                                 <strong>Time:</strong> {{ $interview->scheduled_at->format('g:i A') }}<br>
-                                <strong>Location:</strong> {{ $interview->location }}<br>
+                                <strong>Location:</strong> {{ $interview->interview_type === 'offline' ? $interview->location : 'Google Meet' }}<br>
                                 @if($interview->google_meet_link)
                                     <strong>Google Meet Link:</strong> <a href="{{ $interview->google_meet_link }}" style="color: #3B82F6;">{{ $interview->google_meet_link }}</a><br>
                                 @endif
