@@ -27,16 +27,15 @@ class JobOfferFormRequest extends FormRequest
             'basic_salary'             => 'nullable|numeric|min:0',
             'employment_type'          => ['nullable', Rule::in(EmploymentTypes::values())],
 
-            // Offer Status and Dates
-            'offer_date'               => 'required|date',
-            'joined_date'              => 'nullable|date|after_or_equal:offer_date',
-
             'approve_required'         => 'boolean',
             'approver_id'              => 'nullable|required_if:approve_required,true|exists:users,id',
 
-            // Attachments (Handles file paths saved temporarily or from another step)
-            'attachments'              => 'nullable|array',
-            'attachments.*'            => ['file'],
+            // Dates
+            'offer_date'               => 'required|date',
+            'joined_date'              => 'nullable|date|after_or_equal:offer_date',
+
+            'offer_letter_subject'     => 'required|string',
+            'offer_letter_ref'         => 'nullable|string',
 
             // Departments to Inform (Pivot Data)
             'inform_departments'       => 'nullable|array',
@@ -49,6 +48,10 @@ class JobOfferFormRequest extends FormRequest
             // CC Users (Pivot Data)
             'bcc_users'                => 'nullable|array',
             'bcc_users.*'              => 'required|exists:users,id',
+
+            // Attachments (Handles file paths saved temporarily or from another step)
+            'attachments'              => 'nullable|array',
+            'attachments.*'            => ['file'],
             'status'                   => ['required', Rule::in(JobOfferStatusTypes::values())],
         ];
     }
