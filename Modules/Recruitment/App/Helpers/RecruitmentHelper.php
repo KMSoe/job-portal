@@ -53,6 +53,8 @@ class RecruitmentHelper
             $view_offer_action = true;
         } else if ($current_status == RecruitmentStageTypes::OFFER_ACCEPTED->value) {
             $onboard_check_action = true;
+        } else if ($current_status == RecruitmentStageTypes::OFFER_Declined->value) {
+            $view_offer_action = true;
         } else if ($current_status == RecruitmentStageTypes::ONBOARDING->value) {
             $create_employee = true;
         }
