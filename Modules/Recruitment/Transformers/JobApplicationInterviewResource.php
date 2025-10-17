@@ -24,6 +24,8 @@ class JobApplicationInterviewResource extends JsonResource
             'scheduled_at' => $this->scheduled_at ? Carbon::parse($this->scheduled_at)
                                     ->setTimezone($this->timezone->name ?? $this->timezone_id ?? config('app.timezone'))
                                     ->format('Y-m-d H:i:s') : null,
+            'scheduled_date' => $this->scheduled_at->toDateString(),
+            'scheduled_time' => $this->scheduled_at->format('H:i:s'),
             'duration_minutes' => $this->duration_minutes,
             'location' => $this->location,
             'status' => $this->status,
