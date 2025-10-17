@@ -21,11 +21,9 @@ class JobApplicationInterviewResource extends JsonResource
             'application_id' => $this->application_id,
             // 'application' => $this->application,
             'interview_type' => $this->interview_type,
-            'scheduled_at' => $this->scheduled_at ? Carbon::parse($this->scheduled_at)
-                                    ->setTimezone($this->timezone->name ?? $this->timezone_id ?? config('app.timezone'))
-                                    ->format('Y-m-d H:i:s') : null,
-            'scheduled_date' => $this->scheduled_at ? $this->scheduled_at->setTimezone($this->timezone->name ?? $this->timezone_id ?? config('app.timezone'))->toDateString() : null,
-            'scheduled_time' => $this->scheduled_at ? $this->scheduled_at->setTimezone($this->timezone->name ?? $this->timezone_id ?? config('app.timezone'))->format('H:i:s') : null,
+            'scheduled_at' => $this->scheduled_at ? Carbon::parse($this->scheduled_at)->format('Y-m-d H:i:s') : null,
+            'scheduled_date' => $this->scheduled_at ? Carbon::parse($this->scheduled_at)->toDateString() : null,
+            'scheduled_time' => $this->scheduled_at ? Carbon::parse($this->scheduled_at)->format('H:i:s') : null,
             'duration_minutes' => $this->duration_minutes,
             'location' => $this->location,
             'status' => $this->status,
