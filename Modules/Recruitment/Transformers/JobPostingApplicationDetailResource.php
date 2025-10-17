@@ -35,7 +35,7 @@ class JobPostingApplicationDetailResource extends JsonResource
             ],
             'updated_at'               => $this->updated_at,
             'reviewers'                => $this->reviewers,
-            'interviews'               => $this->interviews,
+            'interviews'               => JobApplicationInterviewResource::collection($this->interviews),
             'jobOffer'                 => new JobOfferResource($this->jobOffer),
             'job_offer_actions'        => $this->jobOffer ? [
                 'edit_action'                   => $this->jobOffer?->status == JobOfferStatusTypes::DRAFT->value ? true : false,

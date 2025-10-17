@@ -1,6 +1,7 @@
 <?php
 namespace Modules\Recruitment\Transformers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class JobApplicationInterviewResource extends JsonResource
@@ -17,9 +18,10 @@ class JobApplicationInterviewResource extends JsonResource
             'id'        => $this->id,
             'title'     => $this->title,
             'description' => $this->description,
-            'application' => $this->application,
+            'application_id' => $this->application_id,
+            // 'application' => $this->application,
             'interview_type' => $this->interview_type,
-            'scheduled_at' => $this->scheduled_at,
+            'scheduled_at' => $this->scheduled_at ? Carbon::parse($this->scheduled_at)->format('Y-m-d H:i:s') : null,
             'duration_minutes' => $this->duration_minutes,
             'location' => $this->location,
             'status' => $this->status,
