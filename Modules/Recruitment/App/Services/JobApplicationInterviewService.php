@@ -44,7 +44,7 @@ class JobApplicationInterviewService
             $query->whereDate('scheduled_at', '<=', Carbon::parse($request->input('scheduled_to')));
         }
 
-        return $query->with(['application.applicant', 'application.jobPosting', 'interviewers.user'])->paginate($per_page);
+        return $query->with(['application.applicant', 'application.jobPosting', 'interviewers.user', 'timezone'])->paginate($per_page);
     }
 
     public function createInterview($data)
