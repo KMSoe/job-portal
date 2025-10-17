@@ -68,6 +68,7 @@ class JobApplicationInterviewService
                 'scheduled_at'     => $data['scheduled_at'],
                 'duration_minutes' => $data['duration_minutes'] ?? 60,
                 'notes'            => $data['notes'] ?? null,
+                'timezone_id'      => $data['timezone'] ?? null,
             ]);
 
             if (isset($data['interviewers']) && is_array($data['interviewers'])) {
