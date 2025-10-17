@@ -154,8 +154,10 @@ class JobApplicationBoardRepository
             'supportiveDocuments',
             'extractedData',
             'reviewers.reviewer',
-            'interviews.interviewers',
-            'jobOffer' => function ($query) {
+            'interviews' => function ($query) {
+                $query->with(['interviewers', 'timezone']);
+            },
+            'jobOffer'   => function ($query) {
                 $query->with([
                     'company',
                     'department',
