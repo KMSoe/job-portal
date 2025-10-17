@@ -10,6 +10,7 @@ use Modules\Recruitment\App\Services\GoogleCalendarService;
 use Modules\Recruitment\Entities\JobApplicationInterview;
 use Modules\Recruitment\Entities\JobApplicationInterviewInterviewer;
 use Modules\Storage\App\Classes\LocalStorage;
+use Nnjeim\World\Models\Timezone;
 
 class JobApplicationInterviewService
 {
@@ -19,7 +20,7 @@ class JobApplicationInterviewService
     public function __construct(GoogleCalendarService $googleCalendarService, LocalStorage $storage)
     {
         $this->googleCalendarService = $googleCalendarService;
-        $this->storage = $storage;
+        $this->storage               = $storage;
     }
 
     public function findByParams($request)
@@ -51,11 +52,11 @@ class JobApplicationInterviewService
         try {
             $existingInterview = JobApplicationInterview::where('application_id', $data['application_id'])
                 ->where('scheduled_at', $data['scheduled_at'])
-                ->first();  
+                ->first();
 
             if ($existingInterview) {
                 throw new Exception("An interview is already scheduled for this application at the specified time.");
-            }   
+            }
 
             $interview = JobApplicationInterview::create([
                 'title'            => $data['title'],
@@ -85,8 +86,8 @@ class JobApplicationInterviewService
             if ($data['interview_type'] === 'online') {
                 $this->createGoogleMeetEvent($interview, $data);
             }
-            
-            $logoFile   = $this->storage->getFile($interview->application->jobPosting->company?->logo);
+
+            $logoFile = $this->storage->getFile($interview->application->jobPosting->company?->logo);
             Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user, 'logoFile' => $logoFile], function ($message) use ($interview) {
                 $message->to($interview->application->applicant->email);
                 $message->subject('Invitation to Interview with ' . $interview->application?->jobPosting?->company?->name . ' for the ' . $interview->application?->jobPosting?->title . ' position');
@@ -167,6 +168,11 @@ class JobApplicationInterviewService
             $jobPosting = $interview->application->jobPosting;
             $jobTitle   = $jobPosting ? $jobPosting->title : 'Job Interview';
 
+            $timezone = config('app.timezone');
+            if (isset($data['timezone']) && ! empty($data['timezone'])) {
+                $timezone = Timezone::where('id', $data['timezone'])->value('name') ?? config('app.timezone');
+            }
+
             $eventData = [
                 'summary'     => "Job Interview - " . $jobTitle,
                 'description' => "Interview for the position of " . $jobTitle .
@@ -174,7 +180,7 @@ class JobApplicationInterviewService
                 "\n\nNotes: " . ($data['notes'] ?? 'N/A'),
                 'start_time'  => $startTime->toRfc3339String(),
                 'end_time'    => $endTime->toRfc3339String(),
-                'timezone'    => $data['timezone'] ?? config('app.timezone'),
+                'timezone'    => $timezone,
                 'attendees'   => $attendees,
             ];
 
