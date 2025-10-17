@@ -3,9 +3,9 @@ namespace Modules\Recruitment\App\Enums;
 
 enum JobPostingStatusTypes: string {
     case DRAFT            = 'Draft';
-    case PENDING_APPROVAL = 'Pending_Approval';
+    // case PENDING_APPROVAL = 'Pending_Approval';
     case PUBLISHED        = 'Published';
-    case ARCHIVED         = 'Archived';
+    // case ARCHIVED         = 'Archived';
     case CLOSED           = 'Closed';
     public static function values(): array
     {
