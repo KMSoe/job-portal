@@ -29,6 +29,7 @@ class JobApplicationInterviewResource extends JsonResource
             'status' => $this->status,
             'notes' => $this->notes,
             'timezone_id' => $this->timezone_id,
+            'timezone' => $this->timezone?->name,
             'can_comment' => $this->can_comment ?? false,
             'interviewers' => $this->interviewers,
             'google_event_id' => $this->google_event_id,
