@@ -37,7 +37,7 @@ class JobApplicationInterviewRequest extends FormRequest
             'location' => 'nullable|required_if:interview_type,offline|string|max:255',
             'status' => 'nullable|string',
             'notes' => 'nullable|string',
-            'timezone' => 'nullable|string',
+            'timezone' => 'required|string',
             'interviewers' => 'required|array|min:1',
             'interviewers.*' => 'exists:users,id',
         ];
