@@ -52,7 +52,7 @@ class JobOfferFormRequest extends FormRequest
             // Attachments (Handles file paths saved temporarily or from another step)
             'attachments'              => 'nullable|array',
             'attachments.*'            => ['file'],
-            'status'                   => ['required', Rule::in(JobOfferStatusTypes::values())],
+            'status'                   => ['required', Rule::in([JobOfferStatusTypes::DRAFT->value, JobOfferStatusTypes::DONE->value])],
         ];
     }
 
