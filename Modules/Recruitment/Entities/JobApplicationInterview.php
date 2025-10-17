@@ -4,6 +4,7 @@ namespace Modules\Recruitment\Entities;
 
 use Google\Service\Batch\Job;
 use Illuminate\Database\Eloquent\Model;
+use Nnjeim\World\Models\Timezone;
 
 class JobApplicationInterview extends Model
 {
@@ -49,5 +50,10 @@ class JobApplicationInterview extends Model
         return $this->interviewers->contains(function ($interviewer) use ($currentUser) {
             return $interviewer->user_id === $currentUser->id;
         });
+    }
+
+    public function timezone()
+    {
+        return $this->belongsTo(Timezone::class, 'timezone_id');
     }
 }
