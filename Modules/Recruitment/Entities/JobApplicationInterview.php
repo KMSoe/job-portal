@@ -19,7 +19,8 @@ class JobApplicationInterview extends Model
         'notes',
         'google_event_id',
         'google_meet_link',
-        'reminder_sent'
+        'reminder_sent',
+        'timezone_id'
     ];
 
     /**
