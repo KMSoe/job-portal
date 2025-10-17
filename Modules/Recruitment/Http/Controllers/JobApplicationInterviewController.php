@@ -24,7 +24,7 @@ class JobApplicationInterviewController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'interviews' => $interviews,
+                'interviews' => JobApplicationInterviewResource::collection($interviews),
             ],
             'message' => 'success',
         ], 200);
