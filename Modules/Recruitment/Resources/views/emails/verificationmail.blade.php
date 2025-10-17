@@ -81,7 +81,7 @@
                     <tr style="margin: 32px 0 0 0;">
                         <td>
                             <h1 style="background-color:#d3d3d352;text-align:center"><a
-                                    style="text-decoration:none;color:#1c1d1f">272889</a></h1>
+                                    style="text-decoration:none;color:#1c1d1f">{{ $otp }}</a></h1>
                         </td>
                     </tr>
 
