@@ -39,12 +39,18 @@ class JobPostingRepository
                     $query->where('designation_id', $request->designation_id);
                 }
 
-                if ($keyword != '') {
+                if ($keyword != null && $keyword != '') {
                     $query->where(function ($q) use ($keyword) {
-                        $q->where('name', 'LIKE', "%$keyword%")
-                            ->orWhere('description', 'LIKE', "%$keyword%");
+                        $q->where('title', 'LIKE', "%$keyword%")
+                            ->orWhere('summary', 'LIKE', "%$keyword%")
+                            ->orWhere('roles_and_responsibilities', 'LIKE', "%$keyword%")
+                            ->orWhere('requirements', 'LIKE', "%$keyword%");
+                    });
+                    $query->orWhereHas('company', function ($query) use ($keyword) {
+                        $query->where('name', 'LIKE', '%' . $keyword . '%');
                     });
                 }
+
             });
 
         if ($request->sort != null && $request->sort != '') {
