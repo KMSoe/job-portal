@@ -60,12 +60,9 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
 });
 
 Route::middleware(['auth:api,applicant'])->prefix('/v1')->group(function () {
-    Route::resource('skills', SkillController::class);
+    Route::get('skills', [SkillController::class, 'index']);
+    Route::post('skills', [SkillController::class, 'store']);
 });
-
-// Route::middleware(['auth:applicant'])->prefix('/v1')->group(function () {
-//     Route::resource('skills', SkillController::class);
-// });
 
 Route::prefix('/v1')->group(function () {
     Route::get('job-postings', [ApplicantJobPostingController::class, 'index']);
