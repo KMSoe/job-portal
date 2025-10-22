@@ -1,0 +1,4 @@
+- Writing codes to move Departments, Designations, Employee related databases from Spacio to AsDayOne Database Structure
+- Writing codes to move Claims from Spacio to AsDayOne Database Structure
+
+- finding Solutions for Leave Settings, Balances, Taken records

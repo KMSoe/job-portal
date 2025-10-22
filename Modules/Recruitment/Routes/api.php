@@ -14,6 +14,7 @@ use Modules\Recruitment\Http\Controllers\JobApplicationBoardController;
 use Modules\Recruitment\Http\Controllers\JobApplicationInterviewController;
 use Modules\Recruitment\Http\Controllers\JobApplicationReviewController;
 use Modules\Recruitment\Http\Controllers\JobApplicationTrackingController;
+use Modules\Recruitment\Http\Controllers\JobFunctionController;
 use Modules\Recruitment\Http\Controllers\JobOfferAttachmentController;
 use Modules\Recruitment\Http\Controllers\JobOfferController;
 use Modules\Recruitment\Http\Controllers\JobPostingController;
@@ -77,6 +78,9 @@ Route::prefix('/v1')->group(function () {
 
 Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::resource('skills', SkillController::class);
+    Route::resource('job-functions', JobFunctionController::class);
+    Route::get('job-function-sample-download', [JobFunctionController::class, 'downloadSampleExcelFile']);
+    Route::post('job-function/import', [JobFunctionController::class, 'import'])->name('job_functions.import');
 
     Route::resource('job-posting-templates', JobPostingTemplateController::class);
     Route::get('job-posting-templates-page-data', [JobPostingTemplateController::class, 'getPageData']);
