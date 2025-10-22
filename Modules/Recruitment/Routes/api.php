@@ -78,6 +78,9 @@ Route::prefix('/v1')->group(function () {
 
 Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::resource('skills', SkillController::class);
+    Route::get('skill-sample-download', [SkillController::class, 'downloadSampleExcelFile']);
+    Route::post('skill/import', [SkillController::class, 'import'])->name('skills.import');
+
     Route::resource('job-functions', JobFunctionController::class);
     Route::get('job-function-sample-download', [JobFunctionController::class, 'downloadSampleExcelFile']);
     Route::post('job-function/import', [JobFunctionController::class, 'import'])->name('job_functions.import');

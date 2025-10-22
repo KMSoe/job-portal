@@ -1,0 +1,62 @@
+<?php
+namespace Modules\Recruitment\App\Imports;
+
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Maatwebsite\Excel\Concerns\SkipsFailures;
+use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Validators\Failure;
+use Modules\Recruitment\App\Services\SkillService;
+use Modules\Recruitment\Http\Requests\JobFunctionRequest;
+use Modules\Recruitment\Http\Requests\StoreSkillRequest;
+
+class SkillImport implements WithHeadingRow, SkipsEmptyRows, ToCollection, SkipsOnFailure
+{
+    use SkipsFailures;
+    protected $service;
+
+    public function __construct(SkillService $service)
+    {
+        $this->service = $service;
+    }
+
+    public function collection(Collection $rows)
+    {
+        foreach ($rows as $index => $row) {
+            $rules = (new StoreSkillRequest())->rules();
+            $data  = $row->toArray();
+
+            $data['name']        = $row['name'] ?? null;
+            $data['description'] = $row['description'] ?? null;
+
+            $validator = Validator::make($data, $rules);
+
+            if ($validator->fails()) {
+                foreach ($validator->errors()->messages() as $field => $messages) {
+                    $this->onFailure(new Failure(
+                        $index + 2,
+                        $field,
+                        $messages,
+                        $row->toArray()
+                    ));
+                }
+                continue;
+            }
+
+            $this->service->store($data);
+        }
+    }
+
+    public function startRow(): int
+    {
+        return 2;
+    }
+
+    public function chunkSize(): int
+    {
+        return 100;
+    }
+}
