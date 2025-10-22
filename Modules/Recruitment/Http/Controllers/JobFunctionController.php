@@ -74,7 +74,7 @@ class JobFunctionController extends Controller
 
     public function store(JobFunctionRequest $request)
     {
-        $job_function = $this->service->store($request);
+        $job_function = $this->service->store($request->toArray());
 
         return response()->json([
             'status'  => true,
@@ -87,7 +87,7 @@ class JobFunctionController extends Controller
 
     public function update(JobFunctionRequest $request, $id)
     {
-        $job_function = $this->service->update($id, $request);
+        $job_function = $this->service->update($id, $request->toArray());
 
         return response()->json([
             'status'  => true,

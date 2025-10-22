@@ -57,7 +57,7 @@ class SkillController extends Controller
 
     public function store(StoreSkillRequest $request)
     {
-        $skill = $this->service->store($request);
+        $skill = $this->service->store($request->toArray());
 
         return response()->json([
             'status'  => true,
@@ -70,7 +70,7 @@ class SkillController extends Controller
 
     public function update(UpdateSkillRequest $request, $id)
     {
-        $skill = $this->service->update($id, $request);
+        $skill = $this->service->update($id, $request->toArray());
 
         return response()->json([
             'status'  => true,
