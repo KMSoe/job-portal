@@ -88,6 +88,8 @@ Route::middleware(['auth:api'])->prefix('/v1/recruitment')->group(function () {
     Route::resource('job-posting-templates', JobPostingTemplateController::class);
     Route::get('job-posting-templates-page-data', [JobPostingTemplateController::class, 'getPageData']);
     Route::resource('job-postings', JobPostingController::class);
+    Route::get('job-posting-sample-download', [JobPostingController::class, 'downloadSampleExcelFile']);
+    Route::post('job-posting/import', [JobPostingController::class, 'import'])->name('skills.import');
     Route::get('job-postings-page-data', [JobPostingController::class, 'getPageData']);
     Route::get('job-postings-detail-page-data', [JobApplicationBoardController::class, 'getPageData']);
     Route::get('job-postings/{job_posting_id}/applicants', [JobApplicationBoardController::class, 'getApplicants']);
