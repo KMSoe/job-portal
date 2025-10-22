@@ -16,6 +16,7 @@
                 <th scope="col">No</th>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
+                <th scope="col">Is Active</th>
                 <th scope="col">Created At</th>
                 <th scope="col">Updated At</th>
             </tr>
@@ -26,6 +27,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $item->name }}</td>
                     <td>{{ $item->description }}</td>
+                    <td>{{ $item->is_active ? "Yes" : "No" }}</td>
                     <th>{{ $item->created_at === null ? '' : $item->created_at->format('d-m-Y') }}, {{ $item->created_at === null ? '' : $item->created_at->format('H:i:s') }}</th>
                     <th>{{ $item->updated_at === null ? '' : $item->updated_at->format('d-m-Y') }}, {{ $item->updated_at === null ? '' : $item->updated_at->format('H:i:s') }}</th>
                 </tr>

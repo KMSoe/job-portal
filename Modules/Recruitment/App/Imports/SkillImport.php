@@ -10,7 +10,6 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Validators\Failure;
 use Modules\Recruitment\App\Services\SkillService;
-use Modules\Recruitment\Http\Requests\JobFunctionRequest;
 use Modules\Recruitment\Http\Requests\StoreSkillRequest;
 
 class SkillImport implements WithHeadingRow, SkipsEmptyRows, ToCollection, SkipsOnFailure
@@ -31,6 +30,7 @@ class SkillImport implements WithHeadingRow, SkipsEmptyRows, ToCollection, Skips
 
             $data['name']        = $row['name'] ?? null;
             $data['description'] = $row['description'] ?? null;
+            $data['is_active']   = $row['is_active'] == 'Yes' ? true : false;
 
             $validator = Validator::make($data, $rules);
 

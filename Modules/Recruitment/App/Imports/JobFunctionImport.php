@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Recruitment\App\Imports;
 
 use Illuminate\Support\Collection;
@@ -10,8 +9,6 @@ use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Validators\Failure;
-use Modules\Organization\App\Services\DesignationService;
-use Modules\Organization\Http\Requests\StoreDesignationRequest;
 use Modules\Recruitment\App\Services\JobFunctionService;
 use Modules\Recruitment\Http\Requests\JobFunctionRequest;
 
@@ -20,33 +17,32 @@ class JobFunctionImport implements WithHeadingRow, SkipsEmptyRows, ToCollection,
     use SkipsFailures;
     protected $service;
 
-    public function __construct(JobFunctionService $service) {
+    public function __construct(JobFunctionService $service)
+    {
         $this->service = $service;
     }
 
     public function collection(Collection $rows)
     {
-        foreach ($rows as $index => $row) 
-        {
-            $rules = (new JobFunctionRequest())->rules(); 
-            $data = $row->toArray();
+        foreach ($rows as $index => $row) {
+            $rules = (new JobFunctionRequest())->rules();
+            $data  = $row->toArray();
 
-            $data['name'] = $row['name'] ?? null;
+            $data['name']        = $row['name'] ?? null;
             $data['description'] = $row['description'] ?? null;
+            $data['is_active']   = $row['is_active'] == 'Yes' ? true : false;
 
             $validator = Validator::make($data, $rules);
 
-            if ($validator->fails()) 
-            {
-                  foreach ($validator->errors()->messages() as $field => $messages) 
-                  {
+            if ($validator->fails()) {
+                foreach ($validator->errors()->messages() as $field => $messages) {
                     $this->onFailure(new Failure(
                         $index + 2,
-                        $field,      
+                        $field,
                         $messages,
                         $row->toArray()
                     ));
-                  }
+                }
                 continue;
             }
 
@@ -59,8 +55,8 @@ class JobFunctionImport implements WithHeadingRow, SkipsEmptyRows, ToCollection,
         return 2;
     }
 
-    public function chunkSize():int
+    public function chunkSize(): int
     {
         return 100;
-    }    
+    }
 }
