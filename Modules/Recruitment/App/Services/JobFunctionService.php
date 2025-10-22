@@ -9,7 +9,7 @@ class JobFunctionService
 
     public function __construct(JobFunctionRepository $jobFunctionRepository)
     {
-        $this->$jobFunctionRepository = $jobFunctionRepository;
+        $this->jobFunctionRepository = $jobFunctionRepository;
     }
 
     public function findByParams($request)
