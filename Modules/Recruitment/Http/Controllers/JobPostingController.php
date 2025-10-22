@@ -135,7 +135,7 @@ class JobPostingController extends Controller
 
     public function downloadSampleExcelFile()
     {
-        $file = public_path('sample_import_data/skills.xlsx');
+        $file = public_path('sample_import_data/job_postings.xlsx');
         return response()->download($file);
     }
 
