@@ -20,7 +20,7 @@ class JobOfferFormRequest extends FormRequest
             'company_id'               => 'required|exists:companies,id',
             'department_id'            => 'required|exists:departments,id',
             'designation_id'           => 'required|exists:designations,id',
-            'offer_letter_template_id' => 'required|exists:offer_letter_templates,id',
+            'offer_letter_template_id' => 'exists_or_null:offer_letter_templates,id',
 
             // Salary and Employment
             'salary_currency_id'       => 'nullable|exists:currencies,id',
