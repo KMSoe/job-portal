@@ -36,6 +36,7 @@ class JobOfferFormRequest extends FormRequest
 
             'offer_letter_subject'     => 'required|string',
             'offer_letter_ref'         => 'nullable|string',
+            'offer_letter_content'     => 'nullable|string',
 
             // Departments to Inform (Pivot Data)
             'inform_departments'       => 'nullable|array',

@@ -164,16 +164,16 @@ class JobApplicationInterviewService
 
             }
 
-            $startTime = Carbon::parse($data['scheduled_at']);
-            $endTime   = $startTime->copy()->addMinutes($data['duration_minutes'] ?? 60);
-
-            $jobPosting = $interview->application->jobPosting;
-            $jobTitle   = $jobPosting ? $jobPosting->title : 'Job Interview';
-
             $timezone = config('app.timezone');
             if (isset($data['timezone']) && ! empty($data['timezone'])) {
                 $timezone = Timezone::where('id', $data['timezone'])->value('name') ?? config('app.timezone');
             }
+
+            $startTime = Carbon::parse($data['scheduled_at'], $timezone);
+            $endTime   = $startTime->copy()->addMinutes($data['duration_minutes'] ?? 60);
+
+            $jobPosting = $interview->application->jobPosting;
+            $jobTitle   = $jobPosting ? $jobPosting->title : 'Job Interview';
 
             $eventData = [
                 'summary'     => "Job Interview - " . $jobTitle,
