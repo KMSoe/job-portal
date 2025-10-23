@@ -42,4 +42,9 @@ class JobPostingService
         return $this->jobPostingRepostitory->delete($id);
     }
 
+    public function checkUsage($id)
+    {
+        return $this->jobPostingRepostitory->checkUsage($id);
+    }
+
 }

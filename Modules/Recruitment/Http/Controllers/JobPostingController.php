@@ -15,7 +15,6 @@ use Modules\Recruitment\App\Enums\WorkArrangementTypes;
 use Modules\Recruitment\App\Exports\JobPostingExport;
 use Modules\Recruitment\App\Imports\JobPostingImport;
 use Modules\Recruitment\App\Services\JobPostingService;
-use Modules\Recruitment\Entities\Applicant;
 use Modules\Recruitment\Entities\EducationLevel;
 use Modules\Recruitment\Entities\ExperienceLevel;
 use Modules\Recruitment\Entities\JobFunction;
@@ -115,7 +114,7 @@ class JobPostingController extends Controller
 
     public function update(StoreJobPostingRequest $request, JobPosting $jobPosting)
     {
-        $job_posting = $this->service->update($jobPosting, $request->toArray());
+        $this->service->update($jobPosting, $request->toArray());
 
         return response()->json([
             'status'  => true,
@@ -128,6 +127,14 @@ class JobPostingController extends Controller
 
     public function destroy($id)
     {
+        if ($this->service->checkUsage($id)) {
+            return response()->json([
+                'status'  => false,
+                'data'    => [],
+                'message' => 'This Job Posting has applications. Can\'t delete',
+            ], 400);
+        }
+
         $this->service->delete($id);
 
         return response()->json([], 204);

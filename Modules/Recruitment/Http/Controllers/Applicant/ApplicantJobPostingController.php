@@ -97,10 +97,10 @@ class ApplicantJobPostingController extends Controller
         }
     }
 
-    public function applications(Request $request)
+    public function applications()
     {
         $applicant_id = auth()->guard('applicant')->id();
-        $applications = $this->service->getApplications($applicant_id, $request);
+        $applications = $this->service->getApplications($applicant_id);
 
         return response()->json([
             'status'  => true,

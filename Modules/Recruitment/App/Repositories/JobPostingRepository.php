@@ -2,6 +2,7 @@
 namespace Modules\Recruitment\App\Repositories;
 
 use Illuminate\Support\Str;
+use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Transformers\JobPostingResource;
 
@@ -141,6 +142,13 @@ class JobPostingRepository
 
         $jobPosting->skills()->sync([]);
         $jobPosting->delete();
+    }
+
+    public function checkUsage($id)
+    {
+        $count = JobApplication::where('job_posting_id', $id)->count();
+
+        return $count ? true : false;
     }
 
 }

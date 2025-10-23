@@ -221,37 +221,14 @@ class ApplicantJobPostingRepository
         return $application;
     }
 
-    public function getApplications($applicant_id, $request)
+    public function getApplications($applicant_id)
     {
-        $keyword = $request->search ? $request->search : '';
-        $perPage = $request->per_page ? $request->per_page : 20;
-
         $data = JobApplication::with(['jobPosting.company', 'jobOffer'])
             ->where('job_applications.applicant_id', $applicant_id)
-            ->where(function ($query) use ($request, $keyword) {
-                if ($request->status != null) {
-                    $query->where('job_applications.status', $request->status);
-                }
-
-                if ($keyword != '') {
-                    $query->whereHas('jobPosting', function ($query) use ($keyword) {
-                        $query->where('title', 'LIKE', '%' . $keyword . '%');
-                    });
-                }
-
-            })
             ->orderByDesc('job_applications.applied_at')
-            ->paginate($perPage);
+            ->get();
 
-        $items = $data->getCollection();
-
-        $items = collect($items)->map(function ($item) {
-            return new JobApplicationResource($item);
-        });
-
-        $data = $data->setCollection($items);
-
-        return $data;
+        return JobApplicationResource::collection($data);
     }
 
 }
