@@ -226,7 +226,7 @@ class ApplicantJobPostingRepository
         $keyword = $request->search ? $request->search : '';
         $perPage = $request->per_page ? $request->per_page : 20;
 
-        $data = JobApplication::with(['jobPosting.company'])
+        $data = JobApplication::with(['jobPosting.company', 'jobOffer'])
             ->where('job_applications.applicant_id', $applicant_id)
             ->where(function ($query) use ($request, $keyword) {
                 if ($request->status != null) {

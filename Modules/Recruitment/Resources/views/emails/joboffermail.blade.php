@@ -102,6 +102,28 @@
                         </td>
                     </tr>
 
+                    <tr>
+                        <td style="padding:0;">
+                            <div class="me-email-browse-product">
+                                <a href="{{ env('FRONTEND_URL') }}"
+                                    style="
+       font-size: 16px;
+       font-weight: bold;
+       color: #ffffff; /* White text for contrast */
+       background-color: #007bff; /* A standard, professional blue */
+       border: 1px solid #007bff; /* Blue border to match background */
+       border-radius: 5px; /* Added border radius for rounded corners */
+       padding: 10px 20px; /* Added vertical and horizontal padding */
+       display: inline-block; /* Essential for padding/sizing */
+       text-decoration: none; /* Remove underline */
+       margin-top: 16px;
+   ">
+                                    Go To Website
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
                     <!-- Footer -->
                     <tr>
                         <td>
@@ -109,6 +131,8 @@
                                 Yours sincerely,
                             </p>
                             <div style="margin-top: 8px; font-size: 13px">
+                                <p style="margin: 4px 0; font-weight: 600">{{ $job_offer->approver?->name }}
+                                </p>
                                 <p style="margin: 4px 0; font-weight: 600">{{ $job_offer->approverPosition?->name }}
                                 </p>
                                 <p style="margin: 4px 0; font-weight: 600">
@@ -118,24 +142,31 @@
 
                         </td>
                     </tr>
+                    {{--
                     <tr>
                         <td>
-                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                            <p style="margin-top: 16px; font-size: 13px">
                                 Reply for {{ $candicate_name }}
                             </p>
-                            <div style="margin-top: 8px; font-size: 13px">
-                                @component('mail::message')
-                                    @component('mail::button', ['url' => $accept_url])
+                            <div style="font-size: 13px;">
+                
+                                 <span style="display: inline-block; margin-right: 10px;">
+                                    @component('mail::button', ['url' => $accept_url, 'color' => 'success'])
                                         Accept
                                     @endcomponent
+                                </span>
+
+                     
+                                <span style="display: inline-block;">
                                     @component('mail::button', ['url' => $decline_url])
                                         Declined
                                     @endcomponent
-                                @endcomponent
+                                </span>
                             </div>
 
                         </td>
                     </tr>
+                     --}}
                 </table>
             </td>
         </tr>
