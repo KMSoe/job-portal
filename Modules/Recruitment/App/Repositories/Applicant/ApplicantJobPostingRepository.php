@@ -223,7 +223,12 @@ class ApplicantJobPostingRepository
 
     public function getApplications($applicant_id)
     {
-        $data = JobApplication::with(['jobPosting.company', 'jobOffer'])
+        $data = JobApplication::with([
+            'jobPosting' => function($query) {
+                $query->with(['company'])
+                ->whereNotNull('job_postings.deleted_at');
+            }, 
+            'jobOffer'])
             ->where('job_applications.applicant_id', $applicant_id)
             ->orderByDesc('job_applications.applied_at')
             ->get();
