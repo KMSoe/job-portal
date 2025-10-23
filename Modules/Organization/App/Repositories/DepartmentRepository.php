@@ -3,7 +3,9 @@ namespace Modules\Organization\App\Repositories;
 
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Department;
+use Modules\Organization\Entities\Employee;
 use Modules\Organization\Transformers\DepartmentResource;
+use Modules\Recruitment\Entities\JobPosting;
 
 class DepartmentRepository
 {
@@ -15,7 +17,7 @@ class DepartmentRepository
 
         $data = Department::with([
             'company',
-            'createdBy'
+            'createdBy',
         ])
             ->where(function ($query) use ($request, $keyword) {
                 if ($request->company_id) {
@@ -95,6 +97,14 @@ class DepartmentRepository
     {
         $department = Department::findOrFail($id);
         $department->delete();
+    }
+
+    public function checkUsage($id)
+    {
+        $count = JobPosting::where('department_id', $id)->count() +
+        Employee::where('department_id', $id)->count();
+
+        return $count ? true : false;
     }
 
 }

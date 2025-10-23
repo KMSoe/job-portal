@@ -130,6 +130,14 @@ class CompanyController extends Controller
 
     public function destroy($id)
     {
+        if ($this->service->checkUsage($id)) {
+            return response()->json([
+                'status'  => false,
+                'data'    => [],
+                'message' => 'Already in use. Can\'t delete',
+            ], 400);
+        }
+
         $this->service->delete($id);
 
         return response()->json([], 204);

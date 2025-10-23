@@ -3,7 +3,10 @@ namespace Modules\Organization\App\Repositories;
 
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Company;
+use Modules\Organization\Entities\Department;
+use Modules\Organization\Entities\Employee;
 use Modules\Organization\Transformers\CompanyResource;
+use Modules\Recruitment\Entities\JobPosting;
 
 class CompanyRepository
 {
@@ -88,5 +91,14 @@ class CompanyRepository
     {
         $company = Company::findOrFail($id);
         $company->delete();
+    }
+
+    public function checkUsage($id)
+    {
+        $count = Department::where('company_id', $id)->count() +
+        JobPosting::where('company_id', $id)->count() +
+        Employee::where('company_id', $id)->count();
+
+        return $count ? true : false;
     }
 }

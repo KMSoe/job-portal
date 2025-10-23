@@ -39,4 +39,9 @@ class DesignationService
         return $this->designationRepository->delete($id);
     }
 
+    public function checkUsage($id)
+    {
+        return $this->designationRepository->checkUsage($id);
+    }
+
 }

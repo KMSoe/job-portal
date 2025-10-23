@@ -8,7 +8,6 @@ use Maatwebsite\Excel\Facades\Excel;
 use Modules\Organization\App\Exports\DesignationExport;
 use Modules\Organization\App\Imports\DesignationImport;
 use Modules\Organization\App\Services\DesignationService;
-use Modules\Organization\Entities\Department;
 use Modules\Organization\Http\Requests\StoreDesignationRequest;
 use Modules\Organization\Http\Requests\UpdateDesignationRequest;
 use Modules\Organization\Transformers\DesignationResource;
@@ -104,6 +103,14 @@ class DesignationController extends Controller
 
     public function destroy($id)
     {
+        if ($this->service->checkUsage($id)) {
+            return response()->json([
+                'status'  => false,
+                'data'    => [],
+                'message' => 'Already in use. Can\'t delete',
+            ], 400);
+        }
+
         $this->service->delete($id);
 
         return response()->json([], 204);

@@ -37,4 +37,9 @@ class DepartmentService
     {
         return $this->departmentRepository->delete($id);
     }
+
+    public function checkUsage($id)
+    {
+        return $this->departmentRepository->checkUsage($id);
+    }
 }

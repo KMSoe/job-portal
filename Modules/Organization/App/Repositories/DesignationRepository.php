@@ -2,7 +2,9 @@
 namespace Modules\Organization\App\Repositories;
 
 use Modules\Organization\Entities\Designation;
+use Modules\Organization\Entities\Employee;
 use Modules\Organization\Transformers\DesignationResource;
+use Modules\Recruitment\Entities\JobPosting;
 
 class DesignationRepository
 {
@@ -12,17 +14,17 @@ class DesignationRepository
         $perPage = $request->per_page ? $request->per_page : 20;
 
         $data = Designation::where(function ($query) use ($request, $keyword) {
-                if ($request->company_id) {
-                    $query->where('company_id', $request->company_id);
-                }
+            if ($request->company_id) {
+                $query->where('company_id', $request->company_id);
+            }
 
-                if ($keyword != '') {
-                    $query->where(function ($q) use ($keyword) {
-                        $q->where('name', 'LIKE', "%$keyword%")
-                            ->orWhere('description', 'LIKE', "%$keyword%");
-                    });
-                }
-            });
+            if ($keyword != '') {
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', "%$keyword%")
+                        ->orWhere('description', 'LIKE', "%$keyword%");
+                });
+            }
+        });
 
         if ($request->sort != null && $request->sort != '') {
             $sorts = explode(',', $request->input('sort', ''));
@@ -86,6 +88,14 @@ class DesignationRepository
     {
         $designation = Designation::findOrFail($id);
         $designation->delete();
+    }
+
+    public function checkUsage($id)
+    {
+        $count = JobPosting::where('designation_id', $id)->count() +
+        Employee::where('designation_id', $id)->count();
+
+        return $count ? true : false;
     }
 
 }

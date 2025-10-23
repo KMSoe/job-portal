@@ -9,7 +9,6 @@ use Modules\Organization\App\Exports\DepartmentExport;
 use Modules\Organization\App\Imports\DepartmentImport;
 use Modules\Organization\App\Services\DepartmentService;
 use Modules\Organization\Entities\Company;
-use Modules\Organization\Entities\Department;
 use Modules\Organization\Http\Requests\StoreDepartmentRequest;
 use Modules\Organization\Http\Requests\UpdateDepartmentRequest;
 use Modules\Organization\Transformers\DepartmentResource;
@@ -105,6 +104,14 @@ class DepartmentController extends Controller
 
     public function destroy($id)
     {
+        if ($this->service->checkUsage($id)) {
+            return response()->json([
+                'status'  => false,
+                'data'    => [],
+                'message' => 'Already in use. Can\'t delete',
+            ], 400);
+        }
+
         $this->service->delete($id);
 
         return response()->json([], 204);

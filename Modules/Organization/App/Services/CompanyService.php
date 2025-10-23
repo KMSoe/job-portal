@@ -37,4 +37,8 @@ class CompanyService
         return $this->companyRepository->delete($id);
     }
 
+    public function checkUsage($id)
+    {
+        return $this->companyRepository->checkUsage($id);
+    }
 }
