@@ -318,7 +318,7 @@ class JobApplicationInterviewService
                 ->first();
 
             if (! $interviewer) {
-                throw new Exception("Interviewer not found");
+                throw new Exception("You are not authorized to submit this interview feedback.");
             }
 
             $interviewer->update([
