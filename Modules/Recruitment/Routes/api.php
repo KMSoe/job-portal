@@ -56,11 +56,11 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
     Route::post('job-postings/{id}/apply', [ApplicantJobPostingController::class, 'apply']);
     Route::get('applications', [ApplicantJobPostingController::class, 'applications']);
 
-    Route::get('job-offers/{id}/accept', [ApplicantJobPostingApplicationController::class, 'markAsOfferAccepted'])
-        ->name('job-offer.accept-action');
+    Route::post('job-offers/{id}/accept', [ApplicantJobPostingApplicationController::class, 'markAsOfferAccepted'])
+        ->name('job-offer.accept');
 
-    Route::get('job-offers/{id}/decline-action', [ApplicantJobPostingApplicationController::class, 'markedAsOfferDeclined'])
-        ->name('job-offer.decline-action');
+    Route::post('job-offers/{id}/decline', [ApplicantJobPostingApplicationController::class, 'markedAsOfferDeclined'])
+        ->name('job-offer.decline');
 
     Route::post('skills', [ApplicantSkillController::class, 'store']);
     Route::resource('work-experiences', ApplicantWorkExperienceController::class);
