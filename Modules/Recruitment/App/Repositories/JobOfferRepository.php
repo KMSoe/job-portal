@@ -4,14 +4,12 @@ namespace Modules\Recruitment\App\Repositories;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Modules\Organization\Entities\Employee;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\Entities\JobApplication;
 use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\JobOfferAttachment;
-use Modules\Recruitment\Entities\OfferLetterTemplate;
 use Modules\Recruitment\Transformers\JobOfferResource;
 use Modules\Storage\App\Classes\LocalStorage;
 use Modules\Storage\App\Interfaces\StorageInterface;
@@ -109,8 +107,11 @@ class JobOfferRepository
 
     public function store($data)
     {
-        $data['created_by'] = auth()->id();
-        $data['status']     = $data['status'] ?? JobOfferStatusTypes::DRAFT->value;
+        $user = auth()->user();
+
+        $data['approver_id'] = $user->id;
+        $data['created_by']  = $user->id;
+        $data['status']      = $data['status'] ?? JobOfferStatusTypes::DRAFT->value;
 
         $jobOfferData = array_diff_key($data, array_flip([
             'attachments',
@@ -237,6 +238,7 @@ class JobOfferRepository
 
     public function update($id, $data)
     {
+        $user     = auth()->user();
         $jobOffer = JobOffer::findOrFail($id);
 
         $jobOfferData = array_diff_key($data, array_flip([
@@ -250,6 +252,7 @@ class JobOfferRepository
         $jobOfferData['job_posting_id']       = $job_application->job_posting_id;
         $jobOfferData['job_application_id']   = $job_application->id;
         $jobOfferData['candicate_id']         = $job_application->applicant_id;
+        $jobOfferData['approver_id']          = $user->id;
         $jobOfferData['approver_position_id'] = Employee::where('user_id', $jobOfferData['approver_id'] ?? 0)->value('designation_id') ?? 0;
         // $offerLetterTemplate                  = OfferLetterTemplate::findOrFail($data['offer_letter_template_id']);
         // $jobOfferData['offer_letter_content'] = $offerLetterTemplate->template_data['content'] ?? '';

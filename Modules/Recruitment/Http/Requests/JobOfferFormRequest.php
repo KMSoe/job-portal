@@ -27,8 +27,8 @@ class JobOfferFormRequest extends FormRequest
             'basic_salary'             => 'nullable|numeric|min:0',
             'employment_type'          => ['nullable', Rule::in(EmploymentTypes::values())],
 
-            'approve_required'         => 'boolean',
-            'approver_id'              => 'exists_or_null:users,id',
+            // 'approve_required'         => 'boolean',
+            // 'approver_id'              => 'exists_or_null:users,id',
 
             // Dates
             'offer_date'               => 'required|date',
