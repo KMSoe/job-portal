@@ -157,7 +157,7 @@ class JobOfferRepository
             foreach ($attachments as $key => $attachment) {
                 $uploadedFile = $attachment;
 
-                $filePath = $this->storage->store('offer_attachments', $uploadedFile);
+                $filePath = $this->storage->store('offer_attachments', $uploadedFile, $uploadedFile->getClientOriginalName());
 
                 $attachment = JobOfferAttachment::create([
                     'job_offer_id' => $jobOffer->id,
@@ -296,7 +296,7 @@ class JobOfferRepository
             foreach ($attachments as $key => $attachment) {
                 $uploadedFile = $attachment;
 
-                $filePath = $this->storage->store('offer_attachments', $uploadedFile);
+                $filePath = $this->storage->store('offer_attachments', $uploadedFile, $uploadedFile->getClientOriginalName());
 
                 $attachment = JobOfferAttachment::create([
                     'job_offer_id' => $jobOffer->id,

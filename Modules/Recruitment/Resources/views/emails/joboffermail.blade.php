@@ -118,6 +118,24 @@
 
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <p style="margin: 16px 0 0 0; font-size: 13px">
+                                Reply for {{ $candicate_name }}
+                            </p>
+                            <div style="margin-top: 8px; font-size: 13px">
+                                @component('mail::message')
+                                    @component('mail::button', ['url' => $accept_url])
+                                        Accept
+                                    @endcomponent
+                                    @component('mail::button', ['url' => $decline_url])
+                                        Declined
+                                    @endcomponent
+                                @endcomponent
+                            </div>
+
+                        </td>
+                    </tr>
                 </table>
             </td>
         </tr>

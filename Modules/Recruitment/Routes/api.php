@@ -59,6 +59,19 @@ Route::middleware(['auth:applicant'])->prefix('/v1/applicant')->group(function (
     Route::resource('work-experiences', ApplicantWorkExperienceController::class);
 });
 
+Route::prefix('/v1/applicant')->name('applicant.')->group(function () {
+    Route::get('job-offers/{id}/accept-action', [JobOfferController::class, 'markAsOfferAccepted'])
+        ->name('job-offer.accept-action')
+        ->middleware('signed'); // Crucial for security
+
+    Route::get('job-offers/{id}/decline-action', [JobOfferController::class, 'markedAsOfferDeclined'])
+        ->name('job-offer.decline-action')
+        ->middleware('signed'); // Crucial for security
+
+    // Route::patch('job-offers/{id}/mark-as-offer-accepted', [JobOfferController::class, 'markAsOfferAccepted'])->name('job-offer.accept');
+    // Route::patch('job-offers/{id}/mark-as-offer-declined', [JobOfferController::class, 'markedAsOfferDeclined'])->name('job-offer.decline');
+});
+
 Route::middleware(['auth:api,applicant'])->prefix('/v1')->group(function () {
     Route::get('skills', [SkillController::class, 'index']);
     Route::post('skills', [SkillController::class, 'store']);
