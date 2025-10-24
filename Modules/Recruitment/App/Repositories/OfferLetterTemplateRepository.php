@@ -2,6 +2,7 @@
 namespace Modules\Recruitment\App\Repositories;
 
 use Illuminate\Support\Str;
+use Modules\Recruitment\Entities\JobOffer;
 use Modules\Recruitment\Entities\OfferLetterTemplate;
 use Modules\Recruitment\Transformers\OfferLetterTemplateResource;
 
@@ -63,8 +64,8 @@ class OfferLetterTemplateRepository
 
     public function store($data)
     {
-        $data['created_by'] = auth()->id();
-        $offerLetterTemplate            = OfferLetterTemplate::create($data);
+        $data['created_by']  = auth()->id();
+        $offerLetterTemplate = OfferLetterTemplate::create($data);
 
         return $offerLetterTemplate;
     }
@@ -80,6 +81,13 @@ class OfferLetterTemplateRepository
     {
         $offerLetterTemplate = OfferLetterTemplate::findOrFail($id);
         $offerLetterTemplate->delete();
+    }
+
+    public function checkUsage($id)
+    {
+        $count = JobOffer::where('offer_letter_template_id', $id)->count();
+
+        return $count ? true : false;
     }
 
 }

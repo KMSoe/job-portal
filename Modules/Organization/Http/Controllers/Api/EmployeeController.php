@@ -43,7 +43,7 @@ class EmployeeController extends Controller
         return response()->json([
             'status' => true,
             'data'   => [
-                'departments'        => Department::select(['id', 'name'])->get(),
+                'departments'        => Department::where('is_active', true)->select(['id', 'name'])->get(),
                 'designations'       => Designation::select(['id', 'name'])->get(),
                 'employment_types'   => EmploymentTypes::toArray(),
                 'gender'             => GenderTypes::toArray(),

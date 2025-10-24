@@ -14,6 +14,14 @@ class JobPostingRepository
         $keyword = $request->search ? $request->search : '';
         $perPage = $request->per_page ? $request->per_page : 20;
 
+        $company_ids = collect(explode(",", $request->company_id))->filter(function ($company_id) {
+            return $company_id;
+        })->values();
+
+        $department_ids = collect(explode(",", $request->department_id))->filter(function ($department_id) {
+            return $department_id;
+        })->values();
+
         $data = JobPosting::with([
             'company',
             'department',
@@ -27,17 +35,13 @@ class JobPostingRepository
             'applicants',
         ])
             ->withCount(['applicants'])
-            ->where(function ($query) use ($request, $keyword) {
-                if ($request->company_id) {
-                    $query->where('company_id', $request->company_id);
+            ->where(function ($query) use ($request, $company_ids, $department_ids, $keyword) {
+                if (count($company_ids) > 0 && strtolower($request->company_id) != 'all') {
+                    $query->whereIn('company_id', $company_ids);
                 }
 
-                if ($request->department_id) {
-                    $query->where('department_id', $request->department_id);
-                }
-
-                if ($request->designation_id) {
-                    $query->where('designation_id', $request->designation_id);
+                if (count($department_ids) > 0 && strtolower($request->department_id) != 'all') {
+                    $query->whereIn('department_id', $department_ids);
                 }
 
                 if ($keyword != null && $keyword != '') {

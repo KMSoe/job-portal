@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Recruitment\App\Services;
 
 use Modules\Recruitment\App\Repositories\SkillRepository;
@@ -36,6 +35,11 @@ class SkillService
     public function delete($id)
     {
         return $this->skillRepository->delete($id);
+    }
+
+    public function checkUsage($id)
+    {
+        return $this->skillRepository->checkUsage($id);
     }
 
 }

@@ -176,7 +176,7 @@ class JobApplicationInterviewService
             $jobTitle   = $jobPosting ? $jobPosting->title : 'Job Interview';
 
             $eventData = [
-                'summary'     => "Job Interview - " . $jobTitle,
+                'summary'     => $interview->title,
                 'description' => "Interview for the position of " . $jobTitle .
                 "\n\nCandidate: " . $applicant->name .
                 "\n\nNotes: " . ($data['notes'] ?? 'N/A'),

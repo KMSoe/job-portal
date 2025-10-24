@@ -68,9 +68,9 @@ class JobPostingController extends Controller
         return response()->json([
             'status'  => true,
             'data'    => [
-                'templates'         => JobPostingTemplate::all(),
+                'templates'         => JobPostingTemplate::where('is_active', true)->get(),
                 'companies'         => Company::select('id', 'name')->get(),
-                'departments'       => Department::select('id', 'name', 'company_id')->get(),
+                'departments'       => Department::where('is_active', true)->select('id', 'name', 'company_id')->get(),
                 'designations'      => Designation::select('id', 'name')->get(),
                 'experience_levels' => ExperienceLevel::all(),
                 'job_functions'     => JobFunction::all(),
@@ -80,7 +80,7 @@ class JobPostingController extends Controller
                 'salary_types'      => JobPostingSalaryTypes::values(),
                 'statuses'          => JobPostingStatusTypes::values(),
                 'currencies'        => Currency::all(),
-                'skills'            => Skill::all(),
+                'skills'            => Skill::where('is_active', true)->get(),
             ],
             'message' => 'success',
         ], 200);

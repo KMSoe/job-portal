@@ -37,4 +37,9 @@ class JobPostingTemplateService
     {
         return $this->jobPostingTemplateRepostitory->delete($id);
     }
+
+    public function checkUsage($id)
+    {
+        return $this->jobPostingTemplateRepostitory->checkUsage($id);
+    }
 }

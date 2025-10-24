@@ -55,9 +55,9 @@ class JobOfferController extends Controller
             'status'  => true,
             'data'    => [
                 'companies'              => Company::all(),
-                'departments'            => Department::all(),
+                'departments'            => Department::where('is_active', true)->get(),
                 'designations'           => Designation::all(),
-                'offer_letter_templates' => OfferLetterTemplate::all(),
+                'offer_letter_templates' => OfferLetterTemplate::where('is_active', true)->get(),
                 'currencies'             => Currency::all(),
                 'employment_types'       => EmploymentTypes::values(),
                 'users'                  => User::all(),

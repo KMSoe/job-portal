@@ -2,6 +2,8 @@
 namespace Modules\Recruitment\App\Repositories;
 
 use Illuminate\Support\Str;
+use Modules\Recruitment\Entities\ApplicantSkill;
+use Modules\Recruitment\Entities\JobPostingSkill;
 use Modules\Recruitment\Entities\Skill;
 
 class SkillRepository
@@ -67,5 +69,13 @@ class SkillRepository
     {
         $skill = Skill::findOrFail($id);
         $skill->delete();
+    }
+
+    public function checkUsage($id)
+    {
+        $count = JobPostingSkill::where('skill_id', $id)->count() +
+        ApplicantSkill::where('skill_id', $id)->count();
+
+        return $count ? true : false;
     }
 }

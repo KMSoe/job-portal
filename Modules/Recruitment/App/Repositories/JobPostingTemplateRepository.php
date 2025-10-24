@@ -2,6 +2,7 @@
 namespace Modules\Recruitment\App\Repositories;
 
 use Illuminate\Support\Str;
+use Modules\Recruitment\Entities\JobPosting;
 use Modules\Recruitment\Entities\JobPostingTemplate;
 use Modules\Recruitment\Transformers\JobPostingTemplateResource;
 
@@ -80,6 +81,13 @@ class JobPostingTemplateRepository
     {
         $jobPostingTemplate = JobPostingTemplate::findOrFail($id);
         $jobPostingTemplate->delete();
+    }
+
+    public function checkUsage($id)
+    {
+        $count = JobPosting::where('template_id', $id)->count();
+
+        return $count ? true : false;
     }
 
 }

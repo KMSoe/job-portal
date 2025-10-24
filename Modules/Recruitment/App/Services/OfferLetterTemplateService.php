@@ -37,4 +37,9 @@ class OfferLetterTemplateService
     {
         return $this->offerLetterTemplateRepostitory->delete($id);
     }
+
+    public function checkUsage($id)
+    {
+        return $this->offerLetterTemplateRepostitory->checkUsage($id);
+    }
 }
