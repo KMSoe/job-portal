@@ -4,6 +4,7 @@ namespace Modules\Recruitment\App\Repositories;
 use Google\Service\BinaryAuthorization\Check;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Modules\Organization\Entities\Employee;
 use Modules\Recruitment\Entities\ChecklistTemplate;
 use Modules\Recruitment\Entities\ChecklistTemplateItem;
 use Modules\Recruitment\Transformers\ChecklistTemplateResource;
@@ -28,14 +29,13 @@ class ChecklistTemplateRepository
         $checklists = ChecklistTemplate::query();
 
         // Filter by search
-        if(isset($request['search'])) 
-        {
+        if (isset($request['search'])) {
             $checklists->where(function ($query) use ($request) {
                 $query->where('name', 'like', '%' . $request['search'] . '%')
                     ->orWhereHas('items', function ($q) use ($request) {
                         $q->where('name', 'like', '%' . $request['search'] . '%');
                     });
-                });
+            });
         }
 
         // Sort With Columns
@@ -64,7 +64,7 @@ class ChecklistTemplateRepository
         $data = $checklists->getCollection()->map(function ($item) {
             return new ChecklistTemplateResource($item);
         });
-        
+
         return $checklists->setCollection($data);
     }
 
@@ -82,7 +82,7 @@ class ChecklistTemplateRepository
     public function create(array $data)
     {
         $data['created_by'] = Auth::guard('api')->user()->id;
-        $checklist = ChecklistTemplate::create($data);
+        $checklist          = ChecklistTemplate::create($data);
 
         if (isset($data['items'])) {
             $this->createItem($checklist, $data);
@@ -97,7 +97,7 @@ class ChecklistTemplateRepository
     public function update($id, array $data)
     {
         $data['updated_by'] = Auth::guard('api')->user()->id;
-        $checklist = ChecklistTemplate::findOrFail($id);
+        $checklist          = ChecklistTemplate::findOrFail($id);
         $checklist->update($data);
 
         if (isset($data['items'])) {
@@ -120,7 +120,8 @@ class ChecklistTemplateRepository
     /**
      * Bulk Delete
      */
-    public function bulkDelete(array $ids) {
+    public function bulkDelete(array $ids)
+    {
         $checklists = ChecklistTemplate::whereIn('id', $ids)->get();
         foreach ($checklists as $checklist) {
             $checklist->items()->delete();
@@ -128,13 +129,19 @@ class ChecklistTemplateRepository
         }
     }
 
+    public function checkUsage($id)
+    {
+        $count = Employee::where('onboarding_checklist_template_id', $id)->count();
+
+        return $count ? true : false;
+    }
+
     public function createItem(ChecklistTemplate $checklist, array $data)
     {
-        foreach ($data['items'] as $item) 
-        {
+        foreach ($data['items'] as $item) {
             ChecklistTemplateItem::firstOrCreate([
                 'checklist_template_id' => $checklist->id,
-                'name' => $item['name'],
+                'name'                  => $item['name'],
             ]);
         }
     }

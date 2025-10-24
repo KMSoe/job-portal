@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Recruitment\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -14,7 +13,8 @@ class ChecklistTemplateController extends Controller
 {
     protected $repo;
 
-    public function __construct(ChecklistTemplateRepository $repo) {
+    public function __construct(ChecklistTemplateRepository $repo)
+    {
         $this->repo = $repo;
     }
 
@@ -28,7 +28,7 @@ class ChecklistTemplateController extends Controller
         return response()->json([
             'status' => true,
             'data'   => [
-                'checklist_templates'      => $checklists,
+                'checklist_templates' => $checklists,
             ],
         ], 200);
     }
@@ -43,11 +43,11 @@ class ChecklistTemplateController extends Controller
             $checklist = $this->repo->create($request->all());
 
             return response()->json([
-                'status' => true,
-                'data'   => [
+                'status'  => true,
+                'data'    => [
                     'checklist_template' => new ChecklistTemplateResource($checklist),
                 ],
-                'message' => 'Successfully saved'
+                'message' => 'Successfully saved',
             ], 201);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -79,11 +79,11 @@ class ChecklistTemplateController extends Controller
             $checklist = $this->repo->update($id, $request->all());
 
             return response()->json([
-                'status' => true,
-                'data'   => [
+                'status'  => true,
+                'data'    => [
                     'checklist_template' => new ChecklistTemplateResource($checklist),
                 ],
-                'message' => 'Successfully updated'
+                'message' => 'Successfully updated',
             ], 200);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
@@ -95,6 +95,14 @@ class ChecklistTemplateController extends Controller
      */
     public function destroy(string $id)
     {
+        if ($this->repo->checkUsage($id)) {
+            return response()->json([
+                'status'  => false,
+                'data'    => [],
+                'message' => 'Already in use. Can\'t delete',
+            ], 400);
+        }
+
         try {
             $this->repo->delete($id);
             return response()->json([
@@ -106,10 +114,11 @@ class ChecklistTemplateController extends Controller
         }
     }
 
-    public function bulkDelete(Request $request) {
+    public function bulkDelete(Request $request)
+    {
         $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'exists:checklist_templates,id'
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:checklist_templates,id',
         ]);
         try {
             $this->repo->bulkDelete($request->ids);
@@ -122,7 +131,7 @@ class ChecklistTemplateController extends Controller
     public function updateItem(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name'                   => 'required|string|max:255',
             'is_attachment_required' => 'required|boolean',
         ]);
 
@@ -130,11 +139,11 @@ class ChecklistTemplateController extends Controller
             $item = $this->repo->updateItem($id, $request->all());
 
             return response()->json([
-                'status' => true,
-                'data'   => [
+                'status'  => true,
+                'data'    => [
                     'checklist_template_item' => new ChecklistTemplateItemResource($item),
                 ],
-                'message' => 'Successfully updated'
+                'message' => 'Successfully updated',
             ], 200);
         } catch (\Throwable $th) {
             return response()->json(['success' => false, 'message' => $th->getMessage()], Response::HTTP_BAD_REQUEST);
