@@ -13,6 +13,7 @@ class InterviewRemainder extends Command
 {
     protected $signature = 'interview:remainder';
     protected $description = 'Send reminders for upcoming interviews';
+    protected $storage;
 
     public function __construct(LocalStorage $storage)
     {

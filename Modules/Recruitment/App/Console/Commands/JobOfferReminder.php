@@ -61,17 +61,11 @@ class JobOfferReminder extends Command
             ->get();
 
         foreach ($job_offers as $key => $job_offer) {
-            $logoFile   = $this->storage->getFile($job_offer->company?->logo);
-            $mimeType   = $this->storage->getMimeType($job_offer->company?->logo);
-            $logoBase64 = 'data:' . $mimeType . ';base64,' . base64_encode($logoFile);
-
             $mailData = [
-                'subject'                => "$job_offer->offer_letter_subject - Reminder",
+                'subject'                => $job_offer->offer_letter_subject,
                 'offer_letter_file_path' => $job_offer->offer_letter_file_path,
                 'attachments'            => $job_offer->attachments,
-                'logo'                   => $logoBase64,
-                'logoFile'               => $logoFile, // Pass the raw contents
-                'logoMime'               => $mimeType,
+                'logo_path'              => $job_offer->company?->logo,
                 'job_offer'              => $job_offer,
                 'candicate_name'         => $job_offer->candidate?->name,
                 'candicate_position'     => $job_offer->jobPosting?->title,
