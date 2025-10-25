@@ -196,7 +196,7 @@
                                     </td>
                                 </tr>
                             </table>
-                            
+
                             <div style="margin-top: 4px; font-size: 13px">
                                 <p style="margin: 0; font-weight: 600">{{ $job_offer->approverPosition?->name }}
                                 </p>
@@ -215,12 +215,14 @@
                   ">
                                 <p style="margin: 4px 0">
                                     <strong>To:
-                                        @foreach ($job_offer->informedDepartments as $department)
-                                            {{ $department->name }}@if (!$loop->last)
-                                                ,
-                                            @endif
-                                        @endforeach
-                                        Department(s)
+                                        @if (count($job_offer->informedDepartments))
+                                            @foreach ($job_offer->informedDepartments as $department)
+                                                {{ $department->name }}@if (!$loop->last)
+                                                    ,
+                                                @endif
+                                            @endforeach
+                                            Department(s)
+                                        @endif
                                     </strong>
                                 </p>
                                 <p style="margin: 4px 0">
