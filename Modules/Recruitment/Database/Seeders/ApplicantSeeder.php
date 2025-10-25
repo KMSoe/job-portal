@@ -36,7 +36,7 @@ class ApplicantSeeder extends Seeder
             'name'                => 'Kaung Myat Soe',
             'email'               => 'kaungmyatsoe.m192@gmail.com',
             'photo'               => $kmsFilePath,
-            'password'            => Hash::make('password@123'),
+            'password'            => Hash::make('password'),
             'email_verified_at'   => now(),
             'job_title'           => 'Web Developer',
             'phone_dial_code'     => '+95',
@@ -80,10 +80,10 @@ class ApplicantSeeder extends Seeder
 
         $yemyatFilePath = $storage->store('applicant_profiles', $localFile);
         $yemyat         = Applicant::create([
-            'name'                => 'Ye Myat Sandi Oo',
-            'email'               => 'yemyatsandi@gmail.com',
+            'name'                => 'Test Applicant',
+            'email'               => 'test.applicant@gmail.com',
             'photo'               => $yemyatFilePath,
-            'password'            => Hash::make('password@123'),
+            'password'            => Hash::make('password'),
             'email_verified_at'   => now(),
             'job_title'           => 'Web Developer',
             'phone_dial_code'     => '+95',
@@ -101,7 +101,7 @@ class ApplicantSeeder extends Seeder
 
         $resume = Resume::create([
             'applicant_id' => $yemyat->id,
-            'resume_name'  => "yemyatsandi.pdf",
+            'resume_name'  => "yemyat.pdf",
             'file_path'    => $filePath,
             'size'         => $fileSize,
             'uploaded_at'  => now(),
@@ -125,58 +125,12 @@ class ApplicantSeeder extends Seeder
             ]
         );
 
-        $thuyainFilePath = $storage->store('applicant_profiles', $localFile);
-        $thuyain         = Applicant::create([
-            'name'                => 'Thuyain Soe',
-            'email'               => 'thuyainsoe163361@gmail.com',
-            'photo'               => $thuyainFilePath,
-            'password'            => Hash::make('password@123'),
-            'email_verified_at'   => now(),
-            'job_title'           => 'Web Developer',
-            'phone_dial_code'     => '+95',
-            'phone_no'            => '9986507935',
-            'open_to_work'        => true,
-            'experience_level_id' => 1,
-            'job_function_id'     => 1,
-            'salary_currency_id'  => 1,
-            'expected_salary'     => 200000,
-        ]);
-        $thuyainRresumeLocalFilePath = public_path('sample_files/thuyain.pdf');
-        $thuyainResumeLocalFile      = new File($thuyainRresumeLocalFilePath);
-        $fileSize                    = $thuyainResumeLocalFile->getSize();
-        $filePath                    = $storage->store('resumes', $thuyainResumeLocalFile);
-
-        $resume = Resume::create([
-            'applicant_id' => $thuyain->id,
-            'resume_name'  => "thuyainsoe.pdf",
-            'file_path'    => $filePath,
-            'size'         => $fileSize,
-            'uploaded_at'  => now(),
-            'is_default'   => true,
-        ]);
-        ApplicantWorkExperience::firstOrCreate(
-            [
-                'applicant_id' => $thuyain->id,
-                'company_name' => 'Alpha Solutions Tech',
-            ],
-            [
-                'job_title'           => 'Senior Laravel Developer',
-                'job_function_id'     => $jobFunction->id,
-                'experience_level_id' => $expLevel->id,
-                'country_id'          => $country->id,
-                'from_date'           => '2021-01-15',
-                'to_date'             => null,
-                'is_current'          => true,
-                'job_description'     => 'Led a team of three developers in building scalable microservices using Laravel and AWS.',
-            ]
-        );
-
         $naingaungFilePath = $storage->store('applicant_profiles', $localFile);
         $naingaung         = Applicant::create([
             'name'                => 'Naing Aung Zaw',
             'email'               => 'naingaung9863@gmail.com',
             'photo'               => $naingaungFilePath,
-            'password'            => Hash::make('password@123'),
+            'password'            => Hash::make('password'),
             'email_verified_at'   => now(),
             'job_title'           => 'Web Developer',
             'phone_dial_code'     => '+95',
