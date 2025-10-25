@@ -132,20 +132,6 @@ class JobOfferRepository
         DB::beginTransaction();
 
         $jobOffer = JobOffer::create($jobOfferData);
-        $jobOffer = $this->findById($jobOffer->id);
-
-        $offer_letter_content = $this->replaceOfferLetterContent($jobOffer);
-
-        $offer_letter_file_path = $this->storeOfferLetter(
-            $jobOffer,
-            $job_application,
-            $offer_letter_content,
-            Str::slug($job_application->applicant->name) . "-" . Str::slug($job_application->jobPosting->title) . "-" . time());
-
-        $jobOffer->update([
-            'offer_letter_content'   => $offer_letter_content,
-            'offer_letter_file_path' => $offer_letter_file_path,
-        ]);
 
         if (! empty($data['attachments'])) {
             // JobOfferAttachment::whereIn('id', $data['attachments'])
@@ -231,6 +217,21 @@ class JobOfferRepository
             $jobOffer->bccUsers()->attach($bccSyncData);
         }
 
+        $jobOffer = $this->findById($jobOffer->id);
+
+        $offer_letter_content = $this->replaceOfferLetterContent($jobOffer);
+
+        $offer_letter_file_path = $this->storeOfferLetter(
+            $jobOffer,
+            $job_application,
+            $offer_letter_content,
+            Str::slug($job_application->applicant->name) . "-" . Str::slug($job_application->jobPosting->title) . "-" . time());
+
+        $jobOffer->update([
+            'offer_letter_content'   => $offer_letter_content,
+            'offer_letter_file_path' => $offer_letter_file_path,
+        ]);
+
         DB::commit();
 
         return $jobOffer;
@@ -260,24 +261,6 @@ class JobOfferRepository
         DB::beginTransaction();
 
         $jobOffer->update($jobOfferData);
-
-        $jobOffer = $this->findById($id);
-
-        if ($jobOffer->offer_letter_file_path) {
-            $this->storage->delete($jobOffer->offer_letter_file_path);
-        }
-
-        $offer_letter_content   = $this->replaceOfferLetterContent($jobOffer);
-        $offer_letter_file_path = $this->storeOfferLetter(
-            $jobOffer,
-            $job_application,
-            $offer_letter_content,
-            Str::slug($job_application->applicant->name) . "-" . Str::slug($job_application->jobPosting->title) . "-" . time());
-
-        $jobOffer->update([
-            'offer_letter_content'   => $offer_letter_content,
-            'offer_letter_file_path' => $offer_letter_file_path,
-        ]);
 
         if (isset($data['deleted_attachment_ids']) && is_array($data['deleted_attachment_ids']) && count($data['deleted_attachment_ids']) > 0) {
             $deleted_job_offer_attachments = JobOfferAttachment::whereIn('id', $data['deleted_attachment_ids'])->get();
@@ -334,6 +317,24 @@ class JobOfferRepository
             }
             $jobOffer->bccUsers()->sync($bccSyncData);
         }
+
+        $jobOffer = $this->findById($id);
+
+        if ($jobOffer->offer_letter_file_path) {
+            $this->storage->delete($jobOffer->offer_letter_file_path);
+        }
+
+        $offer_letter_content   = $this->replaceOfferLetterContent($jobOffer);
+        $offer_letter_file_path = $this->storeOfferLetter(
+            $jobOffer,
+            $job_application,
+            $offer_letter_content,
+            Str::slug($job_application->applicant->name) . "-" . Str::slug($job_application->jobPosting->title) . "-" . time());
+
+        $jobOffer->update([
+            'offer_letter_content'   => $offer_letter_content,
+            'offer_letter_file_path' => $offer_letter_file_path,
+        ]);
 
         DB::commit();
     }

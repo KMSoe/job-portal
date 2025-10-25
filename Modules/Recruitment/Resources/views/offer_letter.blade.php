@@ -147,7 +147,7 @@
                   color: #374151;
                 ">
                             <p>
-                                {{ $offer_letter_content }}
+                                {!! $offer_letter_content !!}
                             </p>
                         </td>
                         <td>
