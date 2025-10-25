@@ -34,15 +34,8 @@
                                         <!-- Logo -->
                                         <table cellpadding="0" cellspacing="0" border="0">
                                             <tr>
-                                                <td
-                                                    style="
-                              padding: 8px;
-                              width: 80px;
-                              height: 80px;
-                              text-align: center;
-                              vertical-align: middle;
-                            ">
-                                                    <img src="{{ $message->embedData($logoFile, 'logo.png') }}"
+                                                <td>
+                                                    <img src="{{ $message->embed($logo_path) }}"
                                                         alt="{{ $interview->application->jobPosting->company->name }}"
                                                         style="width: 120px; margin-bottom: 8px;" />
                                                 </td>
@@ -72,11 +65,15 @@
                                                 {{ $interview->application->jobPosting->company->address }}
                                             </p>
                                             <p style="margin: 4px 0">
-                                                @if ($interview->application->jobPosting->company->primary_phone && $interview->application->jobPosting->company->secondary_phone)
-                                                    Tel: {{ $interview->application->jobPosting->company->primary_phone }},
+                                                @if (
+                                                    $interview->application->jobPosting->company->primary_phone &&
+                                                        $interview->application->jobPosting->company->secondary_phone)
+                                                    Tel:
+                                                    {{ $interview->application->jobPosting->company->primary_phone }},
                                                     {{ $interview->application->jobPosting->company->secondary_phone }}
                                                 @else
-                                                    Tel: {{ $interview->application->jobPosting->company->primary_phone }}
+                                                    Tel:
+                                                    {{ $interview->application->jobPosting->company->primary_phone }}
                                                 @endif
                                             </p>
                                         </div>
@@ -93,11 +90,14 @@
                             </p>
                         </td>
                     </tr>
-                    
+
                     <tr>
                         <td>
                             <p style="margin: 16px 0 0 0; font-size: 13px">
-                                I hope this email finds you well. We were impressed by your background and would like to invite you to interview for the {{ $interview->application->jobPosting->title }} role at {{ $interview->application->jobPosting->company->name }}. We believe your skills and experiences align well with the responsibilities of the position.
+                                I hope this email finds you well. We were impressed by your background and would like to
+                                invite you to interview for the {{ $interview->application->jobPosting->title }} role at
+                                {{ $interview->application->jobPosting->company->name }}. We believe your skills and
+                                experiences align well with the responsibilities of the position.
                             </p>
                         </td>
                     </tr>
@@ -108,9 +108,11 @@
                                 <strong>Interview Details:</strong><br>
                                 <strong>Date:</strong> {{ $interview->scheduled_at->format('F j, Y') }}<br>
                                 <strong>Time:</strong> {{ $interview->scheduled_at->format('g:i A') }}<br>
-                                <strong>Location:</strong> {{ $interview->interview_type === 'offline' ? $interview->location : 'Google Meet' }}<br>
-                                @if($interview->google_meet_link)
-                                    <strong>Google Meet Link:</strong> <a href="{{ $interview->google_meet_link }}" style="color: #3B82F6;">{{ $interview->google_meet_link }}</a><br>
+                                <strong>Location:</strong>
+                                {{ $interview->interview_type === 'offline' ? $interview->location : 'Google Meet' }}<br>
+                                @if ($interview->google_meet_link)
+                                    <strong>Google Meet Link:</strong> <a href="{{ $interview->google_meet_link }}"
+                                        style="color: #3B82F6;">{{ $interview->google_meet_link }}</a><br>
                                 @endif
                                 <strong>Duration:</strong> {{ $interview->duration_minutes ?? '60' }} minutes
                             </p>
@@ -120,20 +122,21 @@
                     <tr>
                         <td>
                             <p style="margin: 16px 0 0 0; font-size: 13px">
-                                Please let us know if this time works for you or if there are any conflicts. We look forward to the opportunity to discuss your potential fit with our team.
+                                Please let us know if this time works for you or if there are any conflicts. We look
+                                forward to the opportunity to discuss your potential fit with our team.
                             </p>
                         </td>
                     </tr>
 
-                    @if($interview->notes)
-                    <tr>
-                        <td>
-                            <p style="margin: 16px 0 0 0; font-size: 13px">
-                                <strong>Additional Notes:</strong><br>
-                                {{ $interview->notes }}
-                            </p>
-                        </td>
-                    </tr>
+                    @if ($interview->notes)
+                        <tr>
+                            <td>
+                                <p style="margin: 16px 0 0 0; font-size: 13px">
+                                    <strong>Additional Notes:</strong><br>
+                                    {{ $interview->notes }}
+                                </p>
+                            </td>
+                        </tr>
                     @endif
 
                     <!-- Footer -->
@@ -144,7 +147,8 @@
                             </p>
                             <div style="margin-top: 8px; font-size: 13px">
                                 <p style="margin: 4px 0; font-weight: 600">{{ $user->name }}</p>
-                                <p style="margin: 4px 0; font-weight: 600">{{ $user->employee?->position ?? 'Recruiter' }}</p>
+                                <p style="margin: 4px 0; font-weight: 600">
+                                    {{ $user->employee?->position ?? 'Recruiter' }}</p>
                                 <p style="margin: 4px 0; font-weight: 600">
                                     {{ $interview->application->jobPosting->company->name }}
                                 </p>
@@ -158,9 +162,3 @@
 </body>
 
 </html>
-
-
-
-
-
-

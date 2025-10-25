@@ -42,7 +42,7 @@
                               text-align: center;
                               vertical-align: middle;
                             ">
-                                                    <img src="{{ $message->embedData($mailData['logoFile'], 'logo.png') }}"
+                                                    <img src="{{ $message->embed($logo_path) }}"
                                                         alt="{{ $job_offer->company->name }}"
                                                         style="width: 120px; margin-bottom: 8px;" />
                                                 </td>
@@ -97,7 +97,7 @@
                         <td>
                             <p style="margin: 16px 0 0 0; font-size: 13px">
                                 A job offer has been successfully made to the applicant,
-                                <strong>{{ $candidate_name }}</strong>, for the **{{ $job_title }}** role at
+                                <strong>{{ $candicate_name }}</strong>, for the **{{ $candicate_position }}** role at
                                 {{ $job_offer->department->name }} Department,
                                 {{ $job_offer?->company?->name }}.<br><br>
                                 Please monitor the offer status and prepare for the next steps in the

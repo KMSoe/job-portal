@@ -13,6 +13,7 @@ use Modules\Organization\Entities\Designation;
 use Modules\Organization\Entities\Employee;
 use Modules\Recruitment\App\Enums\JobOfferStatusTypes;
 use Modules\Recruitment\App\Enums\RecruitmentStageTypes;
+use Modules\Recruitment\App\Mails\JobOfferInformToDepartmentsMail;
 use Modules\Recruitment\App\Mails\JobOfferMail;
 use Modules\Recruitment\App\Services\JobOfferService;
 use Modules\Recruitment\Entities\JobApplication;
@@ -133,18 +134,16 @@ class JobOfferController extends Controller
 
     public function send(Request $request, $job_offer_id)
     {
-        $job_offer  = $this->service->findById($job_offer_id);
-        $logoFile   = $this->storage->getFile($job_offer->company?->logo);
-        $mimeType   = $this->storage->getMimeType($job_offer->company?->logo);
-        $logoBase64 = 'data:' . $mimeType . ';base64,' . base64_encode($logoFile);
+        $job_offer = $this->service->findById($job_offer_id);
+        // $logoFile   = $this->storage->getFile($job_offer->company?->logo);
+        // $mimeType   = $this->storage->getMimeType($job_offer->company?->logo);
+        // $logoBase64 = 'data:' . $mimeType . ';base64,' . base64_encode($logoFile);
 
         $mailData = [
             'subject'                => $job_offer->offer_letter_subject,
             'offer_letter_file_path' => $job_offer->offer_letter_file_path,
             'attachments'            => $job_offer->attachments,
-            'logo'                   => $logoBase64,
-            'logoFile'               => $logoFile, // Pass the raw contents
-            'logoMime'               => $mimeType,
+            'logo_path'              => $job_offer->company?->logo,
             'job_offer'              => $job_offer,
             'candicate_name'         => $job_offer->candidate?->name,
             'candicate_position'     => $job_offer->jobPosting?->title,
@@ -169,15 +168,9 @@ class JobOfferController extends Controller
                     ->pluck('email')
                     ->toArray();
 
-                Mail::send('recruitment::emails.jobofferinformmail', [
-                    'mailData'       => $mailData,
-                    'job_offer'      => $job_offer,
-                    'candidate_name' => $job_offer->candidate->name,
-                    'job_title'      => $job_offer->application->jobPosting->title,
-                ], function ($message) use ($noti_employees) {
-                    $message->to($noti_employees);
-                    $message->subject('New Job Offer Made');
-                });
+                Mail::to($noti_employees)
+                    ->send(new JobOfferInformToDepartmentsMail($mailData));
+
             }
 
             return response()->json([

@@ -42,7 +42,7 @@
                               text-align: center;
                               vertical-align: middle;
                             ">
-                                                    <img src="{{ $message->embedData($logoFile, 'logo.png') }}"
+                                                    <img src="{{ $message->embed($logo_path, 'logo.png') }}"
                                                         alt="{{ $interview->application->jobPosting->company->name }}"
                                                         style="width: 120px; margin-bottom: 8px;" />
                                                 </td>

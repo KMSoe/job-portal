@@ -4,8 +4,11 @@ namespace Modules\Recruitment\App\Services;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Modules\Recruitment\App\Mails\JobApplicationInterviewerMail;
+use Modules\Recruitment\App\Mails\JobApplicationInterviewInvitationMail;
 use Modules\Recruitment\App\Services\GoogleCalendarService;
 use Modules\Recruitment\Entities\JobApplicationInterview;
 use Modules\Recruitment\Entities\JobApplicationInterviewInterviewer;
@@ -58,6 +61,7 @@ class JobApplicationInterviewService
                 throw new Exception("An interview is already scheduled for this application at the specified time.");
             }
 
+            DB::beginTransaction();
             $interview = JobApplicationInterview::create([
                 'title'            => $data['title'],
                 'description'      => $data['description'] ?? null,
@@ -88,28 +92,40 @@ class JobApplicationInterviewService
                 $this->createGoogleMeetEvent($interview, $data);
             } else {
 
-                $logoFile = $this->storage->getFile($interview->application->jobPosting->company?->logo);
-                Mail::send('recruitment::emails.interviewmail', ['interview' => $interview, 'user' => $user, 'logoFile' => $logoFile], function ($message) use ($interview) {
-                    $message->to($interview->application->applicant->email);
-                    $message->subject('Invitation to Interview with ' . $interview->application?->jobPosting?->company?->name . ' for the ' . $interview->application?->jobPosting?->title . ' position');
-                });
+                Mail::to([$interview->application->applicant->email])
+                    ->send(new JobApplicationInterviewInvitationMail([
+                        'subject'   => 'Invitation to Interview with ' . $interview->application?->jobPosting?->company?->name . ' for the ' . $interview->application?->jobPosting?->title . ' position',
+                        'interview' => $interview,
+                        'user'      => $user,
+                        'logo_path' => $interview->application->jobPosting->company?->logo,
+                    ]));
 
                 $interviewers = $interview->interviewers;
+
                 if ($interviewers) {
                     foreach ($interviewers as $interviewer) {
                         $interviewer = $interviewer->user;
                         if ($interviewer) {
-                            Mail::send('recruitment::emails.interviewermail', ['interview' => $interview, 'user' => $user, 'interviewer_name' => $interviewer->name, 'logoFile' => $logoFile], function ($message) use ($interview, $interviewer) {
-                                $message->to($interviewer->email);
-                                $message->subject('Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position');
-                            });
+                            Mail::to([$interviewer->email])
+                                ->send(new JobApplicationInterviewerMail([
+                                    'subject'          => 'Invitation to Interview with ' . $interview->application->applicant->name . ' for the ' . $interview->application->jobPosting->title . ' position',
+                                    'interview'        => $interview,
+                                    'user'             => $user,
+                                    'interviewer_name' => $interviewer->name,
+                                    'logo_path'        => $interview->application->jobPosting->company?->logo,
+                                ]));
                         }
                     }
+
                 }
+
             }
+
+            DB::commit();
 
             return $interview;
         } catch (Exception $e) {
+            DB::rollBack();
             throw new Exception("Failed to create interview: " . $e->getMessage());
         }
     }
